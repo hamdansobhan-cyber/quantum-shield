@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quantum Shield</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+body{
+
+height:100vh;
+overflow:hidden;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:#020617;
+color:white;
+
+background-image:
+linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+
+background-size:40px 40px;
+
+position:relative;
+
+}
+
+body::before{
+
+content:"";
+position:absolute;
+width:650px;
+height:650px;
+background:#06b6d4;
+filter:blur(180px);
+opacity:.18;
+left:-200px;
+top:-150px;
+
+}
+
+body::after{
+
+content:"";
+position:absolute;
+width:650px;
+height:650px;
+background:#6366f1;
+filter:blur(180px);
+opacity:.18;
+right:-200px;
+bottom:-150px;
+
+}
+
+.container{
+
+width:1200px;
+height:700px;
+
+display:flex;
+
+border-radius:35px;
+
+overflow:hidden;
+
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(255,255,255,.08);
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 0 40px rgba(0,0,0,.45);
+
+z-index:10;
+
+}
+
+.left{
+
+flex:1;
+
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+
+padding:60px;
+
+position:relative;
+
+}
+
+.left h1{
+
+font-size:55px;
+
+margin-top:20px;
+
+color:#38bdf8;
+
+}
+
+.left p{
+
+margin-top:20px;
+
+line-height:1.8;
+
+text-align:center;
+
+color:#94a3b8;
+
+font-size:15px;
+
+max-width:420px;
+
+}
+
+.logo{
+
+font-size:90px;
+
+animation:float 3s infinite ease-in-out;
+
+}
+
+@keyframes float{
+
+0%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0);}
+
+}
+
+.features{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:18px;
+
+margin-top:45px;
+
+width:100%;
+
+}
+
+.card{
+
+padding:18px;
+
+background:rgba(255,255,255,.03);
+
+border-radius:15px;
+
+border:1px solid rgba(255,255,255,.06);
+
+}
+
+.card h3{
+
+color:#38bdf8;
+
+margin-bottom:8px;
+
+font-size:15px;
+
+}
+
+.card p{
+
+font-size:12px;
+
+text-align:left;
+
+margin:0;
+
+}
+
+.right{
+
+width:430px;
+
+background:rgba(2,6,23,.75);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:40px;
+
+}
+
+.login-box{
+
+width:100%;
+
+}
+
+.login-box h2{
+
+font-size:35px;
+
+color:#38bdf8;
+
+margin-bottom:12px;
+
+}
+
+.login-box p{
+
+color:#94a3b8;
+
+font-size:13px;
+
+margin-bottom:35px;
+
+line-height:1.7;
+
+}
+
+.btn{
+
+width:100%;
+
+padding:18px;
+
+border:none;
+
+border-radius:16px;
+
+font-size:15px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+margin-bottom:20px;
+
+transition:.3s;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:12px;
+
+text-decoration:none;
+
+}
+
+.google{
+
+background:white;
+
+color:#111827;
+
+}
+
+.google:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 0 20px rgba(255,255,255,.25);
+
+}
+
+.guest{
+
+background:linear-gradient(90deg,#06b6d4,#6366f1);
+
+color:white;
+
+}
+
+.guest:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 0 20px rgba(56,189,248,.4);
+
+}
+
+.or{
+
+text-align:center;
+
+margin:20px 0;
+
+color:#64748b;
+
+font-size:13px;
+
+}
+
+.security{
+
+margin-top:35px;
+
+padding:20px;
+
+border-radius:15px;
+
+background:rgba(34,197,94,.08);
+
+border:1px solid rgba(34,197,94,.15);
+
+font-size:12px;
+
+line-height:1.8;
+
+color:#22c55e;
+
+}
+
+.footer{
+
+margin-top:35px;
+
+text-align:center;
+
+font-size:11px;
+
+color:#64748b;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<div class="logo">🛡️</div>
+
+<h1>Quantum Shield</h1>
+
+<p>
+
+Enterprise AI-powered Network Vulnerability Scanner
+designed to simplify cybersecurity assessments,
+identify threats, analyze vulnerabilities and generate
+professional security reports.
+
+</p>
+
+<div class="features">
+
+<div class="card">
+
+<h3>🛰 Live Scanning</h3>
+
+<p>Real-time vulnerability detection using Nmap and Nikto.</p>
+
+</div>
+
+<div class="card">
+
+<h3>🤖 AI Analysis</h3>
+
+<p>AI-generated recommendations and risk assessments.</p>
+
+</div>
+
+<div class="card">
+
+<h3>🌎 Threat Intelligence</h3>
+
+<p>Global attack monitoring and visualization.</p>
+
+</div>
+
+<div class="card">
+
+<h3>📄 PDF Reports</h3>
+
+<p>Generate professional vulnerability reports instantly.</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="login-box">
+
+<h2>Welcome</h2>
+
+<p>
+
+Sign in with your Google account to save your scans and
+reports, or continue as a guest for a quick vulnerability scan.
+
+</p>
+
+<!-- GOOGLE LOGIN -->
+<a href="/login/google" class="btn google">
+
+<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+
+Continue with Google
+
+</a>
+
+<div class="or">
+
+──────── OR ────────
+
+</div>
+
+<!-- GUEST LOGIN -->
+
+<a href="/dashboard" class="btn guest">
+
+Continue as Guest
+
+</a>
+
+<div class="security">
+
+🔒 Secure OAuth Authentication<br>
+🛡 No passwords stored on our servers<br>
+✔ Enterprise-grade encrypted connection
+
+</div>
+
+<div class="footer">
+
+Quantum Shield Security Platform © 2026
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
