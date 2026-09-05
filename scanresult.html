@@ -1,0 +1,1558 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scan Results - Quantum Shield</title>
+
+    <!-- Quantum Shield Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+
+            background-size: 40px 40px;
+        }
+
+
+        /* =========================================================
+           MAIN LAYOUT
+        ========================================================= */
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+
+            background: rgba(5,10,25,0.96);
+
+            border-right: 1px solid rgba(255,255,255,0.05);
+
+            padding: 35px 22px;
+
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 800;
+
+            color: #38bdf8;
+
+            margin-bottom: 65px;
+
+            letter-spacing: 2px;
+
+            text-shadow:
+                0 0 20px rgba(56,189,248,0.35);
+        }
+
+        .logo span {
+            display: block;
+
+            font-size: 9px;
+
+            color: #64748b;
+
+            letter-spacing: 3px;
+
+            margin-top: 5px;
+        }
+
+        .menu a {
+            display: block;
+
+            text-decoration: none;
+
+            color: #94a3b8;
+
+            padding: 15px 16px;
+
+            border-radius: 15px;
+
+            transition: 0.25s ease;
+
+            font-size: 12px;
+
+            margin-bottom: 10px;
+
+            border: 1px solid transparent;
+        }
+
+        .menu a:hover {
+            background: rgba(56,189,248,0.08);
+
+            color: #38bdf8;
+
+            transform: translateX(5px);
+        }
+
+        .menu a.active {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(56,189,248,0.14),
+                    rgba(99,102,241,0.08)
+                );
+
+            color: #38bdf8;
+
+            border: 1px solid rgba(56,189,248,0.15);
+
+            box-shadow:
+                0 0 20px rgba(56,189,248,0.05);
+        }
+
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .content {
+            flex: 1;
+
+            padding: 40px;
+
+            padding-bottom: 100px;
+
+            max-width: 1500px;
+
+            margin: 0 auto;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 25px;
+
+            margin-bottom: 35px;
+
+            flex-wrap: wrap;
+        }
+
+        .header-left h1 {
+            font-size: 42px;
+
+            font-weight: 800;
+
+            color: #38bdf8;
+
+            letter-spacing: 1px;
+
+            text-shadow:
+                0 0 20px rgba(56,189,248,0.3);
+        }
+
+        .header-left p {
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-top: 10px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        /* =========================================================
+           STATUS BADGE
+        ========================================================= */
+
+        .status-badge {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 13px 18px;
+
+            border-radius: 14px;
+
+            background: rgba(34,197,94,0.08);
+
+            border: 1px solid rgba(34,197,94,0.2);
+
+            color: #4ade80;
+
+            font-size: 11px;
+
+            letter-spacing: 0.7px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 12px rgba(34,197,94,0.8);
+        }
+
+
+        /* =========================================================
+           REPORT BUTTON
+        ========================================================= */
+
+        .report-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 13px 18px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #06b6d4,
+                    #6366f1
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            transition: 0.25s ease;
+
+            box-shadow:
+                0 0 18px rgba(56,189,248,0.12);
+        }
+
+        .report-btn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 0 25px rgba(56,189,248,0.25);
+        }
+
+
+        /* =========================================================
+           HERO RESULT PANEL
+        ========================================================= */
+
+        .result-hero {
+            display: grid;
+
+            grid-template-columns: 1.5fr 1fr;
+
+            gap: 22px;
+
+            margin-bottom: 22px;
+        }
+
+        .hero-card {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(15,23,42,0.95),
+                    rgba(7,15,30,0.88)
+                );
+
+            border: 1px solid rgba(255,255,255,0.06);
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.28);
+        }
+
+        .hero-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: -100px;
+            right: -100px;
+
+            width: 260px;
+            height: 260px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(56,189,248,0.12),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+        }
+
+        .hero-label {
+            color: #64748b;
+
+            font-size: 10px;
+
+            letter-spacing: 1.7px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+        .target {
+            font-size: 23px;
+
+            font-weight: 700;
+
+            color: #f8fafc;
+
+            word-break: break-word;
+        }
+
+        .target-meta {
+            margin-top: 12px;
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .mini-badge {
+            padding: 8px 11px;
+
+            border-radius: 9px;
+
+            background: rgba(255,255,255,0.04);
+
+            border: 1px solid rgba(255,255,255,0.06);
+
+            color: #94a3b8;
+
+            font-size: 9px;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================================================
+           THREAT SCORE
+        ========================================================= */
+
+        .score-card {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+        }
+
+        .score-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .score-number {
+            font-size: 64px;
+
+            font-weight: 800;
+
+            line-height: 1;
+
+            color: #38bdf8;
+
+            text-shadow:
+                0 0 25px rgba(56,189,248,0.25);
+        }
+
+        .score-number span {
+            font-size: 18px;
+
+            color: #64748b;
+
+            font-weight: 500;
+        }
+
+        .score-caption {
+            color: #64748b;
+
+            font-size: 9px;
+
+            margin-top: 10px;
+
+            letter-spacing: 1px;
+        }
+
+        .score-ring {
+            width: 125px;
+            height: 125px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #07101e 56%,
+                    transparent 57%
+                ),
+                conic-gradient(
+                    #38bdf8 0deg,
+                    #6366f1 250deg,
+                    rgba(255,255,255,0.05) 250deg
+                );
+
+            box-shadow:
+                0 0 30px rgba(56,189,248,0.08);
+
+            position: relative;
+        }
+
+        .score-ring::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 7px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(56,189,248,0.12);
+        }
+
+        .ring-icon {
+            font-size: 25px;
+
+            color: #38bdf8;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =========================================================
+           STAT CARDS
+        ========================================================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background:
+                rgba(15,23,42,0.78);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            border-radius: 20px;
+
+            padding: 22px;
+
+            transition: 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(56,189,248,0.18);
+        }
+
+        .stat-title {
+            color: #64748b;
+
+            font-size: 9px;
+
+            letter-spacing: 1.2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            color: #f8fafc;
+
+            font-size: 19px;
+
+            font-weight: 700;
+        }
+
+        .stat-icon {
+            float: right;
+
+            font-size: 18px;
+
+            opacity: 0.5;
+
+            color: #38bdf8;
+        }
+
+
+        /* =========================================================
+           MAIN SECTION
+        ========================================================= */
+
+        .section {
+            background:
+                rgba(15,23,42,0.78);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            border-radius: 24px;
+
+            padding: 28px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.22);
+        }
+
+        .section-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+
+            flex-wrap: wrap;
+        }
+
+        .section-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #38bdf8;
+
+            font-size: 16px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .section-title::before {
+            content: "";
+
+            width: 4px;
+            height: 20px;
+
+            border-radius: 5px;
+
+            background:
+                linear-gradient(
+                    #38bdf8,
+                    #6366f1
+                );
+
+            box-shadow:
+                0 0 12px rgba(56,189,248,0.4);
+        }
+
+        .result-count {
+            padding: 8px 12px;
+
+            border-radius: 9px;
+
+            background: rgba(56,189,248,0.06);
+
+            border:
+                1px solid rgba(56,189,248,0.1);
+
+            color: #38bdf8;
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+
+            border-radius: 15px;
+
+            border:
+                1px solid rgba(255,255,255,0.05);
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 700px;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 16px 18px;
+
+            background:
+                rgba(2,6,23,0.75);
+
+            color: #64748b;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+        td {
+            padding: 17px 18px;
+
+            color: #cbd5e1;
+
+            font-size: 10px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.04);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background:
+                rgba(56,189,248,0.035);
+        }
+
+        .port {
+            color: #38bdf8;
+
+            font-weight: 700;
+
+            font-size: 12px;
+        }
+
+        .service {
+            color: #f8fafc;
+
+            font-weight: 600;
+        }
+
+        .version {
+            color: #64748b;
+        }
+
+
+        /* =========================================================
+           RISK BADGES
+        ========================================================= */
+
+        .risk {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 7px 10px;
+
+            border-radius: 8px;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.7px;
+        }
+
+        .risk::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+        }
+
+        .risk.high,
+        .risk.critical {
+            color: #f87171;
+
+            background:
+                rgba(239,68,68,0.09);
+
+            border:
+                1px solid rgba(239,68,68,0.15);
+        }
+
+        .risk.high::before,
+        .risk.critical::before {
+            background: #ef4444;
+
+            box-shadow:
+                0 0 8px rgba(239,68,68,0.7);
+        }
+
+        .risk.medium {
+            color: #fbbf24;
+
+            background:
+                rgba(245,158,11,0.08);
+
+            border:
+                1px solid rgba(245,158,11,0.15);
+        }
+
+        .risk.medium::before {
+            background: #f59e0b;
+        }
+
+        .risk.low {
+            color: #4ade80;
+
+            background:
+                rgba(34,197,94,0.08);
+
+            border:
+                1px solid rgba(34,197,94,0.14);
+        }
+
+        .risk.low::before {
+            background: #22c55e;
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 55px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+            width: 58px;
+            height: 58px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 18px;
+
+            background:
+                rgba(34,197,94,0.08);
+
+            border:
+                1px solid rgba(34,197,94,0.14);
+
+            color: #4ade80;
+
+            font-size: 23px;
+        }
+
+        .empty h3 {
+            color: #e2e8f0;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+        .empty p {
+            font-size: 10px;
+
+            color: #64748b;
+        }
+
+
+        /* =========================================================
+           FOOTER ACTIONS
+        ========================================================= */
+
+        .actions {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 10px;
+        }
+
+        .actions-left {
+            color: #475569;
+
+            font-size: 9px;
+
+            letter-spacing: 0.5px;
+        }
+
+        .buttons {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 13px 18px;
+
+            border-radius: 13px;
+
+            text-decoration: none;
+
+            font-size: 10px;
+
+            transition: 0.25s ease;
+        }
+
+        .primary {
+            background:
+                linear-gradient(
+                    90deg,
+                    #06b6d4,
+                    #6366f1
+                );
+
+            color: white;
+
+            box-shadow:
+                0 0 18px rgba(56,189,248,0.1);
+        }
+
+        .primary:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 0 25px rgba(56,189,248,0.22);
+        }
+
+        .secondary {
+            background:
+                rgba(255,255,255,0.04);
+
+            color: #94a3b8;
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+        .secondary:hover {
+            color: #38bdf8;
+
+            border-color:
+                rgba(56,189,248,0.2);
+
+            background:
+                rgba(56,189,248,0.05);
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .content {
+                padding: 30px;
+            }
+
+            .result-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+
+        @media (max-width: 750px) {
+
+            .container {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+
+                min-height: auto;
+
+                padding: 20px;
+
+                border-right: none;
+
+                border-bottom:
+                    1px solid rgba(255,255,255,0.05);
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .menu {
+                display: flex;
+
+                gap: 8px;
+
+                overflow-x: auto;
+            }
+
+            .menu a {
+                white-space: nowrap;
+
+                margin-bottom: 0;
+            }
+
+            .content {
+                padding: 22px 16px;
+            }
+
+            .header-left h1 {
+                font-size: 30px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .score-card {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .score-ring {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            QS
+            <span>QUANTUM SHIELD</span>
+        </div>
+
+        <nav class="menu">
+
+            <a href="/home">
+                Dashboard
+            </a>
+
+            <a href="/scan-config" class="active">
+                Scan Configuration
+            </a>
+
+            <a href="/scan-history">
+                Scan History
+            </a>
+
+            <a href="#">
+                Reconnaissance
+            </a>
+
+            <a href="#">
+                Vulnerability Analysis
+            </a>
+
+            <a href="#">
+                Infrastructure Monitoring
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================================================
+         CONTENT
+    ========================================================== -->
+
+    <main class="content">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="header-left">
+
+                <h1>Scan Results</h1>
+
+                <p>
+                    Security assessment completed successfully
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    SCAN COMPLETED
+                </div>
+
+                <a href="/download_report" class="report-btn">
+                    ↓ DOWNLOAD REPORT
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             HERO
+        ====================================================== -->
+
+        <div class="result-hero">
+
+
+            <!-- TARGET CARD -->
+
+            <div class="hero-card">
+
+                <div class="hero-label">
+                    TARGET ASSET
+                </div>
+
+                <div class="target">
+                    {{ target }}
+                </div>
+
+                <div class="target-meta">
+
+                    <div class="mini-badge">
+                        SCAN TYPE:
+                        {{ scan_type|upper }}
+                    </div>
+
+                    <div class="mini-badge">
+                        ANALYSIS:
+                        COMPLETED
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SCORE CARD -->
+
+            <div class="hero-card score-card">
+
+                <div class="score-info">
+
+                    <div class="hero-label">
+                        THREAT SCORE
+                    </div>
+
+                    <div class="score-number">
+                        {{ threat_score }}
+                        <span>/100</span>
+                    </div>
+
+                    <div class="score-caption">
+                        SECURITY RISK INDEX
+                    </div>
+
+                </div>
+
+
+                <div class="score-ring">
+
+                    <div class="ring-icon">
+                        ◉
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             STATISTICS
+        ====================================================== -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Threat Level
+
+                    <span class="stat-icon">
+                        ⚠
+                    </span>
+                </div>
+
+                <div class="stat-value">
+                    {{ threat_level }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Detected Services
+
+                    <span class="stat-icon">
+                        ◈
+                    </span>
+                </div>
+
+                <div class="stat-value">
+                    {{ results|length }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Scan Status
+
+                    <span class="stat-icon">
+                        ✓
+                    </span>
+                </div>
+
+                <div class="stat-value">
+                    Complete
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Assessment
+
+                    <span class="stat-icon">
+                        ⌁
+                    </span>
+                </div>
+
+                <div class="stat-value">
+                    Security Scan
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             DETECTED SERVICES
+        ====================================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title">
+                    Detected Services & Ports
+                </div>
+
+                <div class="result-count">
+                    {{ results|length }} RESULTS
+                </div>
+
+            </div>
+
+
+            {% if results %}
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            PORT
+                        </th>
+
+                        <th>
+                            STATE
+                        </th>
+
+                        <th>
+                            SERVICE
+                        </th>
+
+                        <th>
+                            VERSION
+                        </th>
+
+                        <th>
+                            RISK
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for item in results %}
+
+                    <tr>
+
+                        <td>
+                            <span class="port">
+                                {{ item.port }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ item.state|default('Detected') }}
+                        </td>
+
+                        <td>
+                            <span class="service">
+                                {{ item.service }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="version">
+                                {{ item.version|default('—') }}
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <span class="risk
+                                {% if item.risk == 'HIGH' or item.risk == 'CRITICAL' %}
+                                    high
+                                {% elif item.risk == 'MEDIUM' %}
+                                    medium
+                                {% else %}
+                                    low
+                                {% endif %}
+                            ">
+
+                                {{ item.risk|default('LOW')|upper }}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    No Exposed Services Detected
+                </h3>
+
+                <p>
+                    The scan did not identify any accessible services
+                    or ports requiring attention.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             SCAN SUMMARY
+        ====================================================== -->
+
+        <section class="section">
+
+            <div class="section-header">
+
+                <div class="section-title">
+                    Assessment Summary
+                </div>
+
+            </div>
+
+
+            <div style="
+                display:grid;
+                grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+                gap:15px;
+            ">
+
+
+                <div style="
+                    padding:20px;
+                    border-radius:15px;
+                    background:rgba(255,255,255,0.025);
+                    border:1px solid rgba(255,255,255,0.05);
+                ">
+
+                    <div style="
+                        color:#64748b;
+                        font-size:9px;
+                        letter-spacing:1px;
+                        margin-bottom:9px;
+                    ">
+                        TARGET
+                    </div>
+
+                    <div style="
+                        color:#e2e8f0;
+                        font-size:12px;
+                        font-weight:600;
+                        word-break:break-word;
+                    ">
+                        {{ target }}
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    padding:20px;
+                    border-radius:15px;
+                    background:rgba(255,255,255,0.025);
+                    border:1px solid rgba(255,255,255,0.05);
+                ">
+
+                    <div style="
+                        color:#64748b;
+                        font-size:9px;
+                        letter-spacing:1px;
+                        margin-bottom:9px;
+                    ">
+                        SCAN TYPE
+                    </div>
+
+                    <div style="
+                        color:#e2e8f0;
+                        font-size:12px;
+                        font-weight:600;
+                    ">
+                        {{ scan_type|upper }}
+                    </div>
+
+                </div>
+
+
+                <div style="
+                    padding:20px;
+                    border-radius:15px;
+                    background:rgba(255,255,255,0.025);
+                    border:1px solid rgba(255,255,255,0.05);
+                ">
+
+                    <div style="
+                        color:#64748b;
+                        font-size:9px;
+                        letter-spacing:1px;
+                        margin-bottom:9px;
+                    ">
+                        THREAT LEVEL
+                    </div>
+
+                    <div style="
+                        color:#38bdf8;
+                        font-size:12px;
+                        font-weight:600;
+                    ">
+                        {{ threat_level }}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ACTIONS
+        ====================================================== -->
+
+        <div class="actions">
+
+            <div class="actions-left">
+                QUANTUM SHIELD SECURITY ENGINE
+            </div>
+
+            <div class="buttons">
+
+                <a href="/scan-config" class="button primary">
+                    + NEW SCAN
+                </a>
+
+                <a href="/home" class="button secondary">
+                    ← DASHBOARD
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
+```

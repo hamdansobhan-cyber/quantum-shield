@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Shield Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* LIVE THREAT FEED LOGIC */
+const liveThreats = [
+"[CRITICAL] Malware callback traffic detected",
+"[WARNING] Port scanning behavior identified",
+"[INFO] Infrastructure health stable",
+"[CRITICAL] CVE exploitation attempt blocked",
+"[WARNING] Suspicious SSH authentication detected",
+"[INFO] Threat engine updated successfully"
+];
+
+setInterval(() => {
+    const feed = document.querySelector('.attack-feed');
+    if(feed){
+        const div = document.createElement('div');
+        const types = ['critical-log','warning-log','info-log'];
+        const randomType = types[Math.floor(Math.random()*types.length)];
+        div.className = `attack-log ${randomType}`;
+        div.innerText = liveThreats[Math.floor(Math.random()*liveThreats.length)];
+        feed.prepend(div);
+        if(feed.children.length > 6){
+            feed.removeChild(feed.lastChild);
+        }
+    }
+}, 4000);
+</script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
+}
+body{
+    background:#020617;
+    color:white;
+    overflow-x:hidden;
+    background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:40px 40px;
+}
+.loading-screen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#020617;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+    transition:1s ease;
+}
+.loading-title{
+    font-size:62px;
+    color:#38bdf8;
+    margin-bottom:40px;
+    text-shadow:0 0 25px rgba(56,189,248,0.4);
+}
+.progress-container{
+    width:430px;
+    height:16px;
+    background:rgba(255,255,255,0.05);
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#06b6d4,#6366f1);
+    transition:0.3s;
+}
+.loading-text{
+    font-size:14px;
+    color:#94a3b8;
+    margin-bottom:16px;
+}
+.loading-percent{
+    font-size:22px;
+    color:#38bdf8;
+}
+.container{
+    display:flex;
+    min-height:100vh;
+    opacity:0;
+    transition:1s ease;
+}
+.sidebar{
+    width:230px;
+    background:rgba(5,10,25,0.96);
+    border-right:1px solid rgba(255,255,255,0.05);
+    padding:35px 22px;
+}
+.logo{
+    font-size:56px;
+    font-weight:800;
+    color:#38bdf8;
+    margin-bottom:70px;
+}
+.menu a{
+    display:block;
+    text-decoration:none;
+    color:#94a3b8;
+    padding:16px 18px;
+    border-radius:16px;
+    transition:0.25s ease;
+    font-size:14px;
+    margin-bottom:14px;
+}
+.menu a:hover{
+    background:rgba(56,189,248,0.08);
+    color:#38bdf8;
+    transform:translateX(6px);
+}
+.content{
+    flex:1;
+    padding:40px;
+    padding-bottom:120px;
+}
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+.header h1{
+    font-size:64px;
+    font-weight:800;
+    color:#38bdf8;
+}
+.header p{
+    margin-top:10px;
+    color:#94a3b8;
+    font-size:15px;
+}
+.scan-badge{
+    display:inline-block;
+    padding:16px 24px;
+    border-radius:16px;
+    background:linear-gradient(90deg,#06b6d4,#6366f1);
+    font-size:13px;
+    margin-bottom:15px;
+}
+.download-btn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:14px;
+    text-decoration:none;
+    background:linear-gradient(90deg,#22c55e,#16a34a);
+    color:white;
+    font-size:13px;
+    transition:0.25s ease;
+    box-shadow:0 0 18px rgba(34,197,94,0.18);
+}
+.download-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 0 22px rgba(34,197,94,0.3);
+}
+.analytics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:35px;
+}
+.analytics-card{
+    padding:30px;
+    border-radius:24px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+    transition:0.3s;
+}
+.analytics-card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(56,189,248,0.18);
+}
+.analytics-card h2{
+    font-size:13px;
+    color:#94a3b8;
+    margin-bottom:16px;
+}
+.analytics-card h1{
+    font-size:48px;
+    color:#38bdf8;
+}
+.chart-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 35px;
+    align-items: stretch;
+}
+.chart-card, .timeline-card {
+    padding: 30px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+}
+.chart-card h2, .timeline-card h2{
+    margin-bottom:24px;
+    color:#38bdf8;
+}
+.timeline{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+.timeline-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.03);
+}
+.timeline-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#22c55e;
+}
+.intel-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-bottom:35px;
+}
+.intel-card{
+    padding:30px;
+    border-radius:24px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+}
+.intel-card h2{
+    margin-bottom:22px;
+    color:#38bdf8;
+}
+.cve-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:16px;
+}
+.cve-item h3{
+    font-size:15px;
+    margin-bottom:6px;
+}
+.cve-item p{
+    font-size:12px;
+    color:#cbd5e1;
+}
+.cve-item span{
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+}
+.critical{ background:rgba(239,68,68,0.12); }
+.critical span{ background:#ef4444; color:white; }
+.high-risk{ background:rgba(249,115,22,0.12); }
+.high-risk span{ background:#f97316; color:white; }
+.medium-risk{ background:rgba(250,204,21,0.12); }
+.medium-risk span{ background:#facc15; color:black; }
+
+.recommendation{
+    padding:16px;
+    border-radius:16px;
+    margin-bottom:14px;
+    background:rgba(56,189,248,0.06);
+    color:#cbd5e1;
+    font-size:13px;
+}
+.history-card{
+    padding:30px;
+    border-radius:24px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+    margin-bottom:35px;
+}
+.history-card h2{
+    margin-bottom:22px;
+    color:#38bdf8;
+}
+.live-status{
+    padding:8px 14px;
+    border-radius:999px;
+    background:rgba(34,197,94,0.15);
+    color:#22c55e;
+    font-size:11px;
+}
+.table-container{
+    border-radius:24px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+    margin-bottom:35px;
+}
+.table-title{
+    padding:22px;
+    font-size:22px;
+    color:#38bdf8;
+    background:rgba(255,255,255,0.03);
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+th{
+    padding:20px;
+    text-align:left;
+    background:rgba(255,255,255,0.02);
+    color:#38bdf8;
+    font-size:14px;
+}
+td{
+    padding:18px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    font-size:14px;
+    color:#cbd5e1;
+}
+.risk{
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:12px;
+    display:inline-block;
+}
+.low{ background:rgba(34,197,94,0.15); color:#22c55e; }
+.medium{ background:rgba(250,204,21,0.15); color:#facc15; }
+.high{ background:rgba(239,68,68,0.15); color:#ef4444; }
+
+.terminal{
+    border-radius:24px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+}
+.terminal-header{
+    padding:22px;
+    background:rgba(255,255,255,0.03);
+    color:#38bdf8;
+    font-size:20px;
+}
+.terminal-body{
+    padding:24px;
+    background:#020617;
+    height:400px;
+    overflow-y:auto;
+}
+.terminal-line{
+    padding:12px 16px;
+    margin-bottom:10px;
+    border-radius:12px;
+    background:rgba(56,189,248,0.08);
+    font-size:13px;
+    color:#38bdf8;
+    opacity:0;
+    transform:translateY(10px);
+    animation:fadeIn 0.5s forwards;
+}
+@keyframes fadeIn{
+    to{ opacity:1; transform:translateY(0px); }
+}
+@media(max-width:1100px){
+    .chart-section, .intel-grid{ grid-template-columns:1fr; }
+    .container{ flex-direction:column; }
+    .sidebar{ width:100%; }
+}
+
+.attack-map-card{
+    padding:30px;
+    border-radius:24px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+    margin-bottom:35px;
+    overflow:hidden;
+}
+.attack-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+}
+.attack-header h2{ color:#38bdf8; }
+.attack-live{
+    padding:10px 18px;
+    border-radius:999px;
+    background:rgba(239,68,68,0.15);
+    color:#ef4444;
+    font-size:12px;
+    animation:pulseLive 1.5s infinite;
+}
+@keyframes pulseLive{
+    0%{opacity:0.5;} 50%{opacity:1;} 100%{opacity:0.5;}
+}
+.world-map-wrapper {
+    width: 100%;
+    height: 480px;
+    background: radial-gradient(circle at center, rgba(8,36,80,0.5), rgba(2,6,23,1));
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 24px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+#globeCanvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+.attack-feed{ display:flex; flex-direction:column; gap:14px; }
+.attack-log{ padding:16px; border-radius:16px; font-size:13px; }
+.critical-log{ background:rgba(239,68,68,0.12); color:#ef4444; }
+.warning-log{ background:rgba(250,204,21,0.12); color:#facc15; }
+.info-log{ background:rgba(56,189,248,0.12); color:#38bdf8; }
+
+/* AI CHAT WINDOW LAYOUT RULES */
+.ai-chat-launcher {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #4f46e5);
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.ai-chat-launcher:hover {
+    transform: scale(1.08) rotate(15deg);
+    box-shadow: 0 0 35px rgba(6, 182, 212, 0.7);
+}
+.ai-chat-launcher svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+}
+.ai-chat-window {
+    position: fixed;
+    bottom: 115px;
+    right: 30px;
+    width: 420px;
+    height: 540px;
+    background: rgba(5, 12, 32, 0.98);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 30px rgba(6, 182, 212, 0.15);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+    transform: translateY(40px) scale(0.92);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.ai-chat-window.active {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+.ai-chat-header {
+    background: rgba(255,255,255,0.03);
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.ai-chat-header h3 {
+    font-size: 16px;
+    color: #38bdf8;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ai-status-indicator {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22c55e;
+}
+.ai-chat-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.ai-chat-close:hover { color: #ef4444; }
+.ai-chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scroll-behavior: smooth;
+}
+.ai-msg {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.ai-msg.bot {
+    background: rgba(56, 189, 248, 0.08);
+    color: #e2e8f0;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+}
+.ai-msg.user {
+    background: linear-gradient(135deg, #06b6d4, #4f46e5);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.ai-chat-input-area {
+    padding: 16px;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    gap: 10px;
+}
+.ai-chat-input-area input {
+    flex: 1;
+    background: rgba(2, 6, 23, 0.8);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 14px 18px;
+    border-radius: 14px;
+    color: white;
+    font-size: 13px;
+    outline: none;
+}
+.ai-chat-input-area input:focus {
+    border-color: #06b6d4;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+.ai-chat-send {
+    background: #06b6d4;
+    border: none;
+    color: white;
+    padding: 0 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+.ai-chat-send:hover {
+    background: #0891b2;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+}
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 15px;
+}
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background: #38bdf8;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+/* ========================================= */
+/* ATTACK REPLAY */
+/* ========================================= */
+
+.replay-card{
+    max-width:100%;
+
+    padding:35px;
+    border-radius:28px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid rgba(255,255,255,0.05);
+    margin:35px 0;
+    position:relative;
+    overflow:hidden;
+}
+
+.replay-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.replay-header h2{
+    font-size:32px;
+    color:#38bdf8;
+    margin-bottom:10px;
+}
+
+.replay-header p{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+#replayBtn{
+    height:56px;
+    padding:0 30px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(135deg,#06b6d4,#6366f1);
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+#replayBtn:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 25px rgba(56,189,248,0.3);
+}
+
+.attack-timeline{
+    position:relative;
+    padding-left:50px;
+}
+
+.timeline-line{
+    position:absolute;
+    left:14px;
+    top:0;
+    width:4px;
+    height:100%;
+    background:linear-gradient(to bottom,#38bdf8,#6366f1);
+    border-radius:999px;
+}
+
+.attack-event{
+    position:relative;
+    margin-bottom:35px;
+    opacity:0;
+    transform:translateX(-40px);
+    transition:0.8s ease;
+}
+
+.attack-event.show{
+    opacity:1;
+    transform:translateX(0);
+}
+
+.event-dot{
+    position:absolute;
+    left:-42px;
+    top:8px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    box-shadow:0 0 18px currentColor;
+}
+
+.event-content{
+    padding:24px;
+    border-radius:22px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.event-time{
+    font-size:12px;
+    margin-bottom:12px;
+    color:#94a3b8;
+}
+
+.event-content h3{
+    margin-bottom:10px;
+    font-size:20px;
+    color:white;
+}
+
+.event-content p{
+    line-height:1.7;
+    font-size:14px;
+    color:#cbd5e1;
+}
+
+.critical-event .event-dot{
+    background:#ef4444;
+    color:#ef4444;
+}
+
+.critical-event .event-content{
+    border-left:5px solid #ef4444;
+}
+
+.warning-event .event-dot{
+    background:#facc15;
+    color:#facc15;
+}
+
+.warning-event .event-content{
+    border-left:5px solid #facc15;
+}
+
+.info-event .event-dot{
+    background:#38bdf8;
+    color:#38bdf8;
+}
+
+.info-event .event-content{
+    border-left:5px solid #38bdf8;
+}
+
+/* Scan-specific intelligence: same dashboard shell/Earth, different result body */
+/* Threat chart sizing + truthful empty state */
+.risk-chart-wrapper{
+    position:relative;
+    height:320px;
+    width:100%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.risk-chart-wrapper canvas{
+    width:100% !important;
+    height:100% !important;
+}
+.risk-chart-empty{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:8px;
+}
+.risk-chart-empty[hidden]{display:none}
+.risk-empty-icon{
+    width:52px;
+    height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    color:#22c55e;
+    border:1px solid rgba(34,197,94,.35);
+    background:rgba(34,197,94,.08);
+    box-shadow:0 0 22px rgba(34,197,94,.10);
+    font-size:25px;
+    margin-bottom:8px;
+}
+.risk-chart-empty strong{
+    color:#cbd5e1;
+    font-size:13px;
+    letter-spacing:1.5px;
+}
+.risk-chart-empty span{
+    color:#64748b;
+    font-size:10px;
+}
+#scanSpecificDashboard{margin:24px 0;padding:26px;border-radius:18px;background:linear-gradient(135deg,rgba(12,20,35,.95),rgba(5,12,24,.94));border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 40px rgba(0,0,0,.2)}
+.ssd-head{display:flex;justify-content:space-between;gap:20px;margin-bottom:22px}.ssd-kicker{font-size:9px;letter-spacing:2px;opacity:.45}.ssd-head h2{margin:6px 0;font-size:22px}.ssd-head p{margin:0;font-size:12px;opacity:.45}.ssd-pill{height:max-content;padding:8px 12px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:1.2px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2)}
+.ssd-panel{display:none}.ssd-panel.active{display:block;animation:ssdIn .3s ease}@keyframes ssdIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.ssd-panel-title{display:flex;align-items:center;gap:13px;margin-bottom:16px}.ssd-panel-title>span{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.05);font-size:20px}.ssd-panel-title small{font-size:9px;letter-spacing:1.7px;opacity:.45}.ssd-panel-title h3{margin:4px 0 0;font-size:17px}
+.ssd-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}.ssd-stats>div{min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.ssd-stats small{font-size:8px;letter-spacing:1.2px;opacity:.45;margin-bottom:7px}.ssd-stats b{font-size:23px;max-width:100%;overflow-wrap:anywhere}.ssd-target{font-size:12px!important}.ssd-stats .danger b,.risk-high{color:#ef4444}.ssd-stats .warning b,.risk-medium{color:#facc15}.ssd-stats .safe b,.risk-low{color:#22c55e}
+.ssd-table{width:100%;border-collapse:collapse;border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden}.ssd-table th{text-align:left;padding:12px 14px;font-size:8px;letter-spacing:1.2px;opacity:.45;border-bottom:1px solid rgba(255,255,255,.06)}.ssd-table td{padding:12px 14px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}.ssd-table tr:last-child td{border-bottom:0}.open{color:#22c55e;font-weight:800}.empty{text-align:center!important;opacity:.4}.ssd-analysis,.ssd-cves{padding:16px;margin-top:14px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}.ssd-analysis small,.ssd-cves>small{font-size:8px;letter-spacing:1.3px;opacity:.45}.ssd-analysis p{margin:8px 0 0;font-size:11px;line-height:1.55;opacity:.7}.ssd-cves span{display:inline-block;margin:9px 6px 0 0;padding:5px 8px;border-radius:7px;font-size:9px;color:#fca5a5;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}
+@media(max-width:800px){.ssd-stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:500px){.ssd-stats{grid-template-columns:1fr}.ssd-head{flex-direction:column}}
+
+</style>
+</head>
+
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-title">Quantum Shield</div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="loading-text" id="loadingText">Initializing Threat Intelligence Engine...</div>
+    <div class="loading-percent" id="loadingPercent">0%</div>
+</div>
+
+<div class="container" id="mainContainer">
+    <div class="sidebar">
+        <div class="logo">VAP</div>
+        <div class="menu">
+            <a href="/">Dashboard Home</a>
+            <a href="#">Threat Intelligence</a>
+            <a href="#">Network Reconnaissance</a>
+            <a href="#">Vulnerability Analysis</a>
+            <a href="#">Infrastructure Monitoring</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="header">
+            <div>
+                <h1>Threat Dashboard</h1>
+                <p>Target: {{ target }}</p>
+            </div>
+            <div>
+                <div class="scan-badge">{{ scan_type|upper }} SCAN</div>
+                <br>
+                <a href="/download_report" class="download-btn">Download PDF Report</a>
+            </div>
+        </div>
+
+        <div class="analytics">
+            <div class="analytics-card"><h2>OPEN PORTS</h2><h1>{{ results|length }}</h1></div>
+            <div class="analytics-card"><h2>THREAT SCORE</h2><h1>{{ threat_score }}</h1></div>
+            <div class="analytics-card"><h2>THREAT LEVEL</h2><h1>{{ threat_level }}</h1></div>
+            <div class="analytics-card"><h2>SCAN STATUS</h2><h1>LIVE</h1></div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-card">
+                <h2>Threat Distribution</h2>
+                <div class="risk-chart-wrapper">
+                    <canvas id="riskChart"></canvas>
+                    <div id="riskChartEmpty" class="risk-chart-empty" hidden>
+                        <div class="risk-empty-icon">✓</div>
+                        <strong>NO THREAT FINDINGS</strong>
+                        <span>This scan returned no risk-rated findings.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-card">
+                <h2>Scan Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot"></div>Host Discovery Completed</div>
+                    <div class="timeline-item"><div class="timeline-dot"></div>Port Enumeration Completed</div>
+                    <div class="timeline-item"><div class="timeline-dot"></div>Service Detection Completed</div>
+                    <div class="timeline-item"><div class="timeline-dot"></div>Threat Intelligence Generated</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="intel-grid">
+            <div class="intel-card">
+                <h2>CVE Intelligence Feed</h2>
+                <div class="cve-item critical">
+                    <div><h3>CVE-2023-23397</h3><p>Microsoft Outlook Privilege Escalation</p></div>
+                    <span>CRITICAL</span>
+                </div>
+                <div class="cve-item high-risk">
+                    <div><h3>CVE-2021-41773</h3><p>Apache Path Traversal Vulnerability</p></div>
+                    <span>HIGH</span>
+                </div>
+                <div class="cve-item medium-risk">
+                    <div><h3>CVE-2022-22965</h3><p>Spring4Shell Remote Code Execution</p></div>
+                    <span>MEDIUM</span>
+                </div>
+            </div>
+            <div class="intel-card">
+                <h2>AI Security Recommendations</h2>
+                <div class="recommendation">• Disable unused exposed services</div>
+                <div class="recommendation">• Harden SSH configuration policies</div>
+                <div class="recommendation">• Upgrade outdated Apache services</div>
+                <div class="recommendation">• Enable WAF and firewall filtering</div>
+                <div class="recommendation">• Schedule recurring vulnerability assessments</div>
+            </div>
+        </div>
+
+        
+        <section id="scanSpecificDashboard" class="scan-specific-dashboard">
+
+            <div class="ssd-head">
+                <div>
+                    <span class="ssd-kicker">SCAN INTELLIGENCE</span>
+                    <h2 id="ssdTitle">Current Scan</h2>
+                    <p>Only results from the scan you performed are displayed.</p>
+                </div>
+                <span class="ssd-pill">{{ scan_type|default('UNKNOWN')|upper }}</span>
+            </div>
+
+            <div class="ssd-panel" id="ssdQuick">
+                <div class="ssd-panel-title"><span>⚡</span><div><small>QUICK SCAN</small><h3>Network Exposure</h3></div></div>
+                <div class="ssd-stats">
+                    <div><small>OPEN PORTS</small><b>{{ scan_meta.open_ports|default(results|length) }}</b></div>
+                    <div><small>SERVICES</small><b>{{ scan_meta.services|default(0) }}</b></div>
+                    <div><small>HOST STATUS</small><b>ONLINE</b></div>
+                    <div><small>TARGET</small><b class="ssd-target">{{ target }}</b></div>
+                </div>
+                <table class="ssd-table"><thead><tr><th>PORT</th><th>STATE</th><th>SERVICE</th></tr></thead><tbody>
+                {% for r in results %}<tr><td>{{ r.port }}</td><td class="open">OPEN</td><td>{{ r.service }}</td></tr>{% else %}<tr><td colspan="3" class="empty">No open ports detected.</td></tr>{% endfor %}
+                </tbody></table>
+            </div>
+
+            <div class="ssd-panel" id="ssdVersion">
+                <div class="ssd-panel-title"><span>🔍</span><div><small>VERSION DETECTION</small><h3>Service Intelligence</h3></div></div>
+                <div class="ssd-stats">
+                    <div><small>SERVICES</small><b>{{ scan_meta.services|default(0) }}</b></div>
+                    <div><small>VERSIONS FOUND</small><b>{{ results|length }}</b></div>
+                    <div><small>OPEN PORTS</small><b>{{ scan_meta.open_ports|default(results|length) }}</b></div>
+                    <div><small>TARGET</small><b class="ssd-target">{{ target }}</b></div>
+                </div>
+                <table class="ssd-table"><thead><tr><th>PORT</th><th>SERVICE</th><th>VERSION</th></tr></thead><tbody>
+                {% for r in results %}<tr><td>{{ r.port }}</td><td>{{ r.service }}</td><td>{{ r.version }}</td></tr>{% else %}<tr><td colspan="3" class="empty">No service/version information detected.</td></tr>{% endfor %}
+                </tbody></table>
+            </div>
+
+            <div class="ssd-panel" id="ssdOS">
+                <div class="ssd-panel-title"><span>🖥️</span><div><small>OS DETECTION</small><h3>Target Fingerprint</h3></div></div>
+                <div class="ssd-stats">
+                    <div><small>DETECTED OS</small><b>{{ scan_meta.os_name|default('Not detected') }}</b></div>
+                    <div><small>DEVICE TYPE</small><b>{{ scan_meta.device_type|default('Unknown') }}</b></div>
+                    <div><small>CONFIDENCE</small><b>{{ scan_meta.os_confidence|default('N/A') }}</b></div>
+                    <div><small>TARGET</small><b class="ssd-target">{{ target }}</b></div>
+                </div>
+                <div class="ssd-analysis"><small>OS ANALYSIS</small><p>{{ scan_meta.os_details|default('No operating-system information was returned.') }}</p></div>
+            </div>
+
+            <div class="ssd-panel" id="ssdVuln">
+                <div class="ssd-panel-title"><span>🛡️</span><div><small>VULNERABILITY SCAN</small><h3>Threat Assessment</h3></div></div>
+                <div class="ssd-stats">
+                    <div class="danger"><small>HIGH</small><b>{{ high_count|default(0) }}</b></div>
+                    <div class="warning"><small>MEDIUM</small><b>{{ medium_count|default(0) }}</b></div>
+                    <div class="safe"><small>LOW</small><b>{{ low_count|default(0) }}</b></div>
+                    <div><small>THREAT SCORE</small><b>{{ threat_score|default(0) }}/100</b></div>
+                </div>
+                {% if scan_meta.cves|default([])|length %}
+                <div class="ssd-cves"><small>CVE REFERENCES FROM THIS SCAN</small><div>{% for cve in scan_meta.cves %}<span>{{ cve }}</span>{% endfor %}</div></div>
+                {% endif %}
+                <table class="ssd-table"><thead><tr><th>PORT</th><th>SERVICE</th><th>VERSION</th><th>RISK</th></tr></thead><tbody>
+                {% for r in results %}<tr><td>{{ r.port }}</td><td>{{ r.service }}</td><td>{{ r.version }}</td><td class="risk-{{ r.risk|lower }}">{{ r.risk }}</td></tr>{% else %}<tr><td colspan="4" class="empty">No vulnerability findings detected.</td></tr>{% endfor %}
+                </tbody></table>
+            </div>
+        </section>
+
+<div class="history-card">
+            <h2>Recent Operations</h2>
+            <table>
+                <tr><th>TARGET</th><th>SCAN TYPE</th><th>THREAT SCORE</th><th>STATUS</th></tr>
+                <tr><td>{{ target }}</td><td>{{ scan_type|upper }}</td><td>{{ threat_score }}</td><td><span class="live-status">ACTIVE</span></td></tr>
+                
+            </table>
+        </div>
+
+        <div class="attack-map-card">
+            <div class="attack-header"><h2>Global Cyber Threat Map</h2><div class="attack-live">LIVE ROTATION</div></div>
+            <div class="world-map-wrapper">
+                <canvas id="globeCanvas" width="450" height="450"></canvas>
+            </div>
+            <div class="attack-feed">
+                <div class="attack-log critical-log">[CRITICAL] Suspicious traffic detected from Russia</div>
+                <div class="attack-log warning-log">[WARNING] SSH brute-force attempt detected</div>
+                <div class="attack-log info-log">[INFO] Firewall successfully blocked malicious IP</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-title">Detected Services & Ports</div>
+            <table>
+                <tr><th>PORT</th><th>STATE</th><th>SERVICE</th><th>VERSION</th><th>RISK</th></tr>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.port }}</td>
+                    <td>{{ result.state }}</td>
+                    <td>{{ result.service }}</td>
+                    <td>{{ result.version }}</td>
+                    <td>
+                        <span class="risk {% if result.risk == 'HIGH' or result.risk == 'CRITICAL' %}high{% elif result.risk == 'MEDIUM' %}medium{% else %}low{% endif %}">
+                        {{ result.risk }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="terminal">
+            <div class="terminal-header">LIVE THREAT TERMINAL</div>
+            <div class="terminal-body" id="terminalBody"></div>
+        </div>
+    </div>
+</div>
+<!-- ATTACK REPLAY HERE -->
+<div class="replay-card">
+
+    <div class="replay-header">
+
+        <div>
+            <h2>Attack Replay Timeline</h2>
+            <p>Historical attack sequence reconstruction</p>
+        </div>
+
+        <button id="replayBtn">
+            ▶ START REPLAY
+        </button>
+
+    </div>
+
+    <div class="attack-timeline">
+
+        <div class="timeline-line"></div>
+
+        <div class="attack-event critical-event">
+            <div class="event-dot"></div>
+
+            <div class="event-content">
+                <div class="event-time">10:32:11</div>
+                <h3>Reconnaissance Detected</h3>
+                <p>External host initiated aggressive port enumeration</p>
+            </div>
+        </div>
+
+        <div class="attack-event warning-event">
+            <div class="event-dot"></div>
+
+            <div class="event-content">
+                <div class="event-time">10:32:14</div>
+                <h3>SSH Service Exposure</h3>
+                <p>OpenSSH service identified on port 22</p>
+            </div>
+        </div>
+
+        <div class="attack-event critical-event">
+            <div class="event-dot"></div>
+
+            <div class="event-content">
+                <div class="event-time">10:32:17</div>
+                <h3>Vulnerability Correlation</h3>
+                <p>CVE-2024-6387 mapped against exposed SSH daemon</p>
+            </div>
+        </div>
+
+        <div class="attack-event info-event">
+            <div class="event-dot"></div>
+
+            <div class="event-content">
+                <div class="event-time">10:32:20</div>
+                <h3>AI Threat Analysis</h3>
+                <p>AI engine generated mitigation recommendations</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="ai-chat-launcher" id="aiChatLauncher" onclick="toggleChatWindow()">
+    <svg viewBox="0 0 24 24">
+        <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm1 15.5v-2h-2v2h2zm0-3.5c0-1.66 1.34-3 3-3 1.66 0 3 1.34 3 3 0 1-1 1.73-1.6 2.3-.5.47-.9 1.1-.9 1.7h-2c0-.83.42-1.54.96-2.04C16.82 13.56 17 13.25 17 13c0-.55-.45-1-1-1s-1 .45-1 1h-2zM6.13 8.32l1.41-1.41 2.13 2.12-1.42 1.42-2.12-2.13zm11.74-1.41l1.41 1.41-2.12 2.12-1.42-1.41 2.13-2.12z"/>
+    </svg>
+</div>
+
+<div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+        <h3><div class="ai-status-indicator"></div> Quantum Shield AI Agent</h3>
+        <button class="ai-chat-close" onclick="toggleChatWindow()">✕</button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+        <div class="ai-msg bot">
+            Greetings. I am the Quantum Shield integrated open-ended security copilot. Ask me anything regarding active scan vulnerabilities, system traffic metrics, report configurations, or remediation sequences.
+        </div>
+    </div>
+    <div class="ai-chat-input-area">
+        <input type="text" id="aiChatInput" placeholder="Ask anything regarding your scan findings or requirements..." onkeypress="handleChatKey(event)">
+        <button class="ai-chat-send" onclick="sendUserMessage()">SEND</button>
+    </div>
+</div>
+
+<script>
+/* LOADING SCREEN SYSTEM INITIALIZER */
+const progressBar = document.getElementById('progressBar');
+const loadingPercent = document.getElementById('loadingPercent');
+const loadingText = document.getElementById('loadingText');
+
+const loadingMessages = [
+    "Initializing Threat Intelligence Engine...",
+    "Enumerating Open Ports...",
+    "Analyzing Infrastructure...",
+    "Running Vulnerability Correlation...",
+    "Generating Threat Intelligence...",
+    "Deploying Security Dashboard..."
+];
+
+let progress = 0;
+const interval = setInterval(() => {
+    progress += 1;
+    progressBar.style.width = progress + "%";
+    loadingPercent.innerText = progress + "%";
+
+    if(progress < 20){ loadingText.innerText = loadingMessages[0]; }
+    else if(progress < 40){ loadingText.innerText = loadingMessages[1]; }
+    else if(progress < 60){ loadingText.innerText = loadingMessages[2]; }
+    else if(progress < 80){ loadingText.innerText = loadingMessages[3]; }
+    else if(progress < 95){ loadingText.innerText = loadingMessages[4]; }
+    else{ loadingText.innerText = loadingMessages[5]; }
+
+    if(progress >= 100){
+        clearInterval(interval);
+        document.getElementById('loadingScreen').style.opacity = "0";
+        setTimeout(() => {
+            document.getElementById('loadingScreen').style.display = "none";
+            document.getElementById('mainContainer').style.opacity = "1";
+        }, 1000);
+    }
+}, 28);
+
+const terminalLines = [
+    "[INFO] Initializing Quantum Shield SOC Engine...",
+    "[SUCCESS] Infrastructure reconnaissance started...",
+    "[INFO] Enumerating target services...",
+    "[SUCCESS] Port discovery completed...",
+    "[INFO] Correlating vulnerability intelligence...",
+    "[WARNING] Potential attack surface identified...",
+    "[SUCCESS] Threat scoring generated...",
+    "[SUCCESS] Security dashboard deployed..."
+];
+
+const terminalBody = document.getElementById('terminalBody');
+let index = 0;
+
+function addTerminalLine(){
+    if(index < terminalLines.length){
+        const div = document.createElement('div');
+        div.className = 'terminal-line';
+        div.innerText = terminalLines[index];
+        terminalBody.appendChild(div);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        index++;
+        setTimeout(addTerminalLine, 700);
+    }
+}
+setTimeout(addTerminalLine, 3500);
+
+/* DOM EXECUTOR MODULES */
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('riskChart');
+    const emptyState = document.getElementById('riskChartEmpty');
+
+    // Use ONLY the real values returned by Flask for this scan.
+    // No hard-coded fallback values are used.
+    const lowValue = Number("{{ low_count|default(0) }}") || 0;
+    const medValue = Number("{{ medium_count|default(0) }}") || 0;
+    const highValue = Number("{{ high_count|default(0) }}") || 0;
+
+    const totalFindings = lowValue + medValue + highValue;
+
+    if (totalFindings === 0) {
+        // A zero-result scan should not produce an empty/broken-looking chart.
+        // Show a truthful empty state instead.
+        if (ctx) ctx.style.display = 'none';
+        if (emptyState) emptyState.hidden = false;
+    } else {
+        if (ctx) ctx.style.display = 'block';
+        if (emptyState) emptyState.hidden = true;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['LOW', 'MEDIUM', 'HIGH'],
+                datasets: [{
+                    data: [lowValue, medValue, highValue],
+                    backgroundColor: ['#22c55e', '#facc15', '#ef4444'],
+                    borderWidth: 0,
+                    hoverOffset: 18
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'white',
+                            font: { family: 'Orbitron', size: 13 },
+                            padding: 24
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw || 0;
+                                return ' ' + context.label + ': ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    /* Show ONLY the result panel for the scan that was performed */
+    const selectedScanType = "{{ scan_type|default('')|lower }}";
+    const ssdPanels = {
+        quick: document.getElementById("ssdQuick"),
+        version: document.getElementById("ssdVersion"),
+        os: document.getElementById("ssdOS"),
+        vuln: document.getElementById("ssdVuln")
+    };
+
+    Object.values(ssdPanels).forEach(p => p && p.classList.remove("active"));
+
+    let ssdMode = "quick";
+    if (selectedScanType.includes("vuln")) ssdMode = "vuln";
+    else if (selectedScanType.includes("version") || selectedScanType.includes("service")) ssdMode = "version";
+    else if (selectedScanType.includes("os") || selectedScanType.includes("operating")) ssdMode = "os";
+
+    if (ssdPanels[ssdMode]) ssdPanels[ssdMode].classList.add("active");
+
+    const ssdTitle = document.getElementById("ssdTitle");
+    if (ssdTitle) {
+        ssdTitle.textContent = {
+            quick: "Quick Scan Intelligence",
+            version: "Service Version Intelligence",
+            os: "Operating System Intelligence",
+            vuln: "Vulnerability Intelligence"
+        }[ssdMode];
+    }
+
+    // GLOBE ROTATION ENGINE
+    const canvas = document.getElementById('globeCanvas');
+    const gctx = canvas.getContext('2d');
+    const radius = 185;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    let rotationAngle = 0;
+
+    const geographicMap = [
+        {lat: 75, lon: -100, w: 70, h: 15}, {lat: 60, lon: -110, w: 80, h: 20}, {lat: 45, lon: -100, w: 65, h: 20}, 
+        {lat: 35, lon: -95, w: 50, h: 15}, {lat: 24, lon: -102, w: 18, h: 16}, {lat: 65, lon: -150, w: 30, h: 15},
+        {lat: 74, lon: -40, w: 35, h: 20},
+        {lat: -5, lon: -60, w: 38, h: 20}, {lat: -15, lon: -58, w: 34, h: 20}, {lat: -30, lon: -62, w: 22, h: 22}, {lat: -48, lon: -68, w: 12, h: 20},
+        {lat: 25, lon: 15, w: 45, h: 18}, {lat: 12, lon: 20, w: 55, h: 18}, {lat: 0, lon: 24, w: 32, h: 22}, 
+        {lat: -15, lon: 26, w: 22, h: 20}, {lat: -28, lon: 24, w: 16, h: 14}, {lat: -20, lon: 46, w: 6, h: 14},
+        {lat: 62, lon: 15, w: 30, h: 12}, {lat: 50, lon: 10, w: 45, h: 18}, {lat: 42, lon: 15, w: 40, h: 12},
+        {lat: 68, lon: 95, w: 120, h: 16}, {lat: 56, lon: 90, w: 130, h: 18}, {lat: 44, lon: 85, w: 100, h: 20}, 
+        {lat: 32, lon: 75, w: 80, h: 22}, {lat: 22, lon: 45, w: 25, h: 18}, {lat: 24, lon: 80, w: 24, h: 16}, 
+        {lat: 34, lon: 105, w: 35, h: 24}, {lat: 55, lon: 160, w: 25, h: 20}, {lat: 15, lon: 100, w: 18, h: 14}, 
+        {lat: 10, lon: 120, w: 16, h: 18}, {lat: 36, lon: 138, w: 8, h: 18},
+        {lat: -22, lon: 134, w: 38, h: 20}, {lat: -32, lon: 136, w: 32, h: 14}, {lat: -42, lon: 172, w: 6, h: 14}
+    ];
+
+    const landPoints = [];
+    geographicMap.forEach(region => {
+        for (let lat = region.lat - region.h/2; lat < region.lat + region.h/2; lat += 2.2) {
+            for (let lon = region.lon - region.w/2; lon < region.lon + region.w/2; lon += 2.2) {
+                let radLat = lat * Math.PI / 180;
+                let radLon = lon * Math.PI / 180;
+                landPoints.push({ lat: radLat, lon: radLon });
+            }
+        }
+    });
+
+    let beacons = [
+        { lat: 55.7 * Math.PI / 180, lon: 37.6 * Math.PI / 180, color: '#ef4444', text: 'CN/RU Border Threat', life: 1.0 }, 
+        { lat: 38.9 * Math.PI / 180, lon: -77.0 * Math.PI / 180, color: '#facc15', text: 'US Target Core', life: 0.6 },
+        { lat: 1.3 * Math.PI / 180, lon: 103.8 * Math.PI / 180, color: '#38bdf8', text: 'APAC Main Relay', life: 0.3 }
+    ];
+
+    function renderLoop() {
+        gctx.clearRect(0, 0, canvas.width, canvas.height);
+        rotationAngle += 0.004;
+
+        gctx.beginPath();
+        gctx.arc(cx, cy, radius + 12, 0, Math.PI * 2);
+        let radialGlow = gctx.createRadialGradient(cx, cy, radius - 20, cx, cy, radius + 15);
+        radialGlow.addColorStop(0, 'rgba(56, 189, 248, 0)');
+        radialGlow.addColorStop(0.88, 'rgba(6, 182, 212, 0.03)');
+        radialGlow.addColorStop(1, 'rgba(56, 189, 248, 0.3)');
+        gctx.fillStyle = radialGlow;
+        gctx.fill();
+
+        gctx.beginPath();
+        gctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        gctx.fillStyle = '#020714';
+        gctx.strokeStyle = 'rgba(56, 189, 248, 0.1)';
+        gctx.lineWidth = 1;
+        gctx.fill();
+        gctx.stroke();
+
+        for (let lat = -75; lat <= 75; lat += 15) {
+            let rLat = lat * Math.PI / 180;
+            let y3d = Math.sin(rLat) * radius;
+            let rLevel = Math.cos(rLat) * radius;
+            
+            gctx.beginPath();
+            for (let deg = 0; deg <= 180; deg += 5) {
+                let rad = deg * Math.PI / 180;
+                let x3d = Math.sin(rad) * rLevel;
+                let screenX = cx + x3d;
+                let screenY = cy - y3d;
+                if (deg === 0) gctx.moveTo(screenX, screenY);
+                else gctx.lineTo(screenX, screenY);
+            }
+            gctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+            gctx.stroke();
+        }
+
+        for (let lonDeg = 0; lonDeg < 360; lonDeg += 30) {
+            gctx.beginPath();
+            let firstPoint = true;
+            for (let latDeg = -90; latDeg <= 90; latDeg += 5) {
+                let rLat = latDeg * Math.PI / 180;
+                let currentLon = (lonDeg * Math.PI / 180) + rotationAngle;
+                
+                let z3d = Math.cos(rLat) * Math.cos(currentLon);
+                if (z3d >= 0) {
+                    let x3d = Math.cos(rLat) * Math.sin(currentLon) * radius;
+                    let y3d = Math.sin(rLat) * radius;
+                    let screenX = cx + x3d;
+                    let screenY = cy - y3d;
+                    
+                    if (firstPoint) {
+                        gctx.moveTo(screenX, screenY);
+                        firstPoint = false;
+                    } else {
+                        gctx.lineTo(screenX, screenY);
+                    }
+                }
+            }
+            gctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+            gctx.stroke();
+        }
+
+        landPoints.forEach(pt => {
+            let transformedLon = pt.lon + rotationAngle;
+            let x = Math.cos(pt.lat) * Math.sin(transformedLon);
+            let y = Math.sin(pt.lat);
+            let z = Math.cos(pt.lat) * Math.cos(transformedLon);
+
+            if (z > 0) {
+                let screenX = cx + x * radius;
+                let screenY = cy - y * radius;
+                gctx.fillStyle = `rgba(56, 189, 248, ${0.12 + z * 0.73})`;
+                gctx.fillRect(screenX, screenY, 2, 2);
+            }
+        });
+
+        beacons.forEach(b => {
+            let transformedLon = b.lon + rotationAngle;
+            let x = Math.cos(b.lat) * Math.sin(transformedLon);
+            let y = Math.sin(b.lat);
+            let z = Math.cos(b.lat) * Math.cos(transformedLon);
+
+            if (z > 0) {
+                let screenX = cx + x * radius;
+                let screenY = cy - y * radius;
+
+                b.life -= 0.01;
+                if (b.life <= 0) b.life = 1.0;
+
+                gctx.beginPath();
+                gctx.arc(screenX, screenY, 4 + (1.0 - b.life) * 22, 0, Math.PI * 2);
+                gctx.strokeStyle = b.color;
+                gctx.lineWidth = 2 * b.life;
+                gctx.stroke();
+
+                gctx.beginPath();
+                gctx.arc(screenX, screenY, 4, 0, Math.PI * 2);
+                gctx.fillStyle = b.color;
+                gctx.fill();
+
+                gctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                gctx.font = '10px Orbitron';
+                gctx.fillText(b.text, screenX + 10, screenY + 3);
+            }
+        });
+
+        requestAnimationFrame(renderLoop);
+    }
+    renderLoop();
+});
+
+// ===================================================
+/* ASYNCHRONOUS LIVE AI STREAM ENGINE */
+// ===================================================
+function toggleChatWindow() {
+    document.getElementById('aiChatWindow').classList.toggle('active');
+}
+
+function handleChatKey(event) {
+    if (event.key === 'Enter') {
+        sendUserMessage();
+    }
+}
+
+async function sendUserMessage() {
+    const inputField = document.getElementById('aiChatInput');
+    const msgText = inputField.value.trim();
+    if (!msgText) return;
+
+    // Display user chat log
+    appendMessage(msgText, 'user');
+    inputField.value = '';
+
+    // Create and anchor typing block animation
+    const msgBox = document.getElementById('aiChatMessages');
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'ai-msg bot typing-indicator';
+    typingIndicator.id = 'aiTyping';
+    typingIndicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    msgBox.appendChild(typingIndicator);
+    msgBox.scrollTop = msgBox.scrollHeight;
+
+    // Dispatch async stream payload down to flask API router
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query: msgText })
+        });
+        
+        const data = await response.json();
+        
+        document.getElementById('aiTyping').remove();
+        appendMessage(data.response, 'bot');
+        
+    } catch (error) {
+        document.getElementById('aiTyping').remove();
+        appendMessage("Central core communication drop. Confirm your API Key configuration inside app.py.", 'bot');
+    }
+}
+
+function appendMessage(text, sender) {
+    const msgBox = document.getElementById('aiChatMessages');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `ai-msg ${sender}`;
+    msgDiv.innerText = text;
+    msgBox.appendChild(msgDiv);
+    msgBox.scrollTop = msgBox.scrollHeight;
+}
+</script>
+
+</body>
+</html>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const btn=document.getElementById("replayBtn");
+ if(btn){
+   btn.textContent="↻ REPLAY ANIMATION";
+ }
+ const events=[...document.querySelectorAll(".attack-event")];
+ function play(){
+   events.forEach(e=>e.classList.remove("show"));
+   events.forEach((e,i)=>{
+      setTimeout(()=>e.classList.add("show"),i*900);
+   });
+ }
+ if(events.length){
+    setTimeout(play,600);
+    setInterval(play,20000);
+ }
+ if(btn){
+   btn.onclick=(e)=>{e.preventDefault();play();};
+ }
+});
+</script>

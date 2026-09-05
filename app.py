@@ -32,25 +32,19 @@ else:
     gemini_client = None
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
-
+app.secret_key = "QuantumShield2026"
 oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
-
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-
+    client_id="995917231976-pd5vu6fgb0um9u0si09umtuu81vgbnjl.apps.googleusercontent.com",
+    client_secret="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",
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
-
     client_kwargs={
-        "scope": "openid email profile"
+        "scope":"openid email profile"
     }
 )
 DB_FILE = "scans.db"
-
 USER_DB = "users.db"
 
 
@@ -63,13 +57,9 @@ def is_valid_target(target):
     Command Injection and directory traversal attempts via form values.
     Accepts standard IPv4 addresses and valid domain names.
     """
-    # Defensive regex for standard IPv4 address formatting
     ip_pattern = r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-    
-    # Defensive regex for standard fully-qualified domain formatting
     domain_pattern = r"^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$"
     
-    # Extra block check to prevent local loopback exploitation if required
     if target.strip().lower() in ["localhost", "127.0.0.1", "0.0.0.0", "::1"]:
         return False
         
@@ -107,39 +97,30 @@ init_db()
 def init_user_db():
     conn = sqlite3.connect(USER_DB)
     cursor = conn.cursor()
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users(
-
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-
             username TEXT NOT NULL,
-
             email TEXT UNIQUE NOT NULL,
-
             password TEXT NOT NULL,
-
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
         )
     """)
-
     conn.commit()
     conn.close()
 
 init_user_db()
 
 # ==========================================
-# ENTERPRISE RECONNAISSANCE ENGINE (REAL NMAP)
+# ENTERPRISE RECONNAISSANCE ENGINE (REAL NMAP & NIKTO)
 # ==========================================
 def execute_real_nmap(target, scan_type):
     """
-    Executes an actual network scan against the target.
-    Falls back gracefully to a detailed programmatic generation if nmap binary is missing.
+    Executes an actual network scan against the target using Nmap.
+    Falls back gracefully to detailed procedural generation if nmap binary is missing.
     """
     args = ["nmap"]
     
-    # Map engine arguments based on requested scan paradigm
     if scan_type == "quick":
         args += ["-F", target]
     elif scan_type == "version":
@@ -152,7 +133,6 @@ def execute_real_nmap(target, scan_type):
         args += [target]
 
     try:
-        # Run live binary execution safely with a 45-second hardware timeout constraint
         process = subprocess.run(args, capture_output=True, text=True, timeout=45)
         if process.returncode == 0 and "Nmap scan report" in process.stdout:
             return parse_nmap_raw_text(process.stdout, target, scan_type)
@@ -160,6 +140,22 @@ def execute_real_nmap(target, scan_type):
         pass
         
     return execute_procedural_fallback(target, scan_type)
+
+
+def execute_real_nikto(target):
+    """
+    Executes an actual Nikto web vulnerability scan against the target.
+    Falls back gracefully if the nikto binary is missing.
+    """
+    args = ["nikto", "-h", target, "-nointeractive"]
+    try:
+        process = subprocess.run(args, capture_output=True, text=True, timeout=60)
+        if process.stdout and ("Nikto" in process.stdout or "+" in process.stdout):
+            return parse_nikto_raw_text(process.stdout, target)
+    except Exception:
+        pass
+        
+    return execute_nikto_fallback(target)
 
 
 def parse_nmap_raw_text(stdout, target, scan_type):
@@ -242,6 +238,65 @@ def parse_nmap_raw_text(stdout, target, scan_type):
     }
     return stdout, results, score, level, low, med, high, meta
 
+
+def parse_nikto_raw_text(stdout, target):
+    results = []
+    high = med = low = 0
+    cves = []
+
+    for line in stdout.splitlines():
+        line_str = line.strip()
+        if line_str.startswith("+"):
+            finding_text = line_str[1:].strip()
+            
+            risk = "LOW"
+            low += 1
+            
+            lower_text = finding_text.lower()
+            if any(k in lower_text for k in ["rce", "sql", "vulnerability", "exploit", "backdoor", "default file", "credential", "password", "injection"]):
+                risk = "HIGH"
+                high += 1
+                low -= 1
+            elif any(k in lower_text for k in ["auth", "header", "outdated", "version", "config", "sensitive", "cookie", "ssl"]):
+                risk = "MEDIUM"
+                med += 1
+                low -= 1
+                
+            for cve in re.findall(r"\bCVE-\d{4}-\d{4,7}\b", line_str, re.I):
+                cve = cve.upper()
+                if cve not in cves:
+                    cves.append(cve)
+                    
+            results.append({
+                "port": "80/443 (HTTP/S)",
+                "state": "open",
+                "service": "WEB-SERVER",
+                "version": finding_text[:50] + "..." if len(finding_text) > 50 else finding_text,
+                "risk": risk
+            })
+
+    score = min(100, high * 45 + med * 25 + low * 10)
+    if score >= 66:
+        level = "CRITICAL"
+    elif score >= 36:
+        level = "HIGH"
+    elif score >= 16:
+        level = "MEDIUM"
+    else:
+        level = "LOW"
+
+    meta = {
+        "open_ports": len(results),
+        "services": 1,
+        "os_name": "Web Server Target",
+        "os_details": "Nikto Web Vulnerability Assessment Scanner",
+        "os_confidence": "N/A",
+        "device_type": "Web Application / Server",
+        "cves": cves
+    }
+    return stdout, results, score, level, low, med, high, meta
+
+
 def execute_procedural_fallback(target, scan_type):
     raw = (
         "[ERROR] Nmap execution was unavailable.\n"
@@ -257,17 +312,29 @@ def execute_procedural_fallback(target, scan_type):
     return raw, [], 0, "LOW", 0, 0, 0, meta
 
 
+def execute_nikto_fallback(target):
+    raw = (
+        "[ERROR] Nikto execution was unavailable or timed out.\n"
+        f"[INFO] Target: {target}\n"
+        "[INFO] Ensure 'nikto' is installed and available in the system PATH.\n"
+    )
+    meta = {
+        "open_ports": 0, "services": 0,
+        "os_name": "Not available",
+        "os_details": "Nikto was unavailable; no web scan was performed.",
+        "os_confidence": "N/A", "device_type": "Unknown", "cves": []
+    }
+    return raw, [], 0, "LOW", 0, 0, 0, meta
+
+
 @app.route('/')
 def login():
     return render_template("login.html")
 
 @app.route("/home")
 def scan_home():
-
     if "manual_user" not in session and "user" not in session:
-
         return redirect("/")
-
     return render_template("index.html")
 
 @app.route("/login/google")
@@ -278,77 +345,46 @@ def login_google():
 
 @app.route("/authorize")
 def authorize():
-
     token = google.authorize_access_token()
-
     user = token["userinfo"]
-
     session["user"] = user
-
     return redirect("/home")
 
 
 @app.route("/signup")
 def signup():
-
     return render_template("signup.html")
 
 @app.route("/register", methods=["POST"])
 def register():
-
     username = request.form["username"].strip()
-
     email = request.form["email"].strip().lower()
-
     password = request.form["password"]
-
     confirm = request.form["confirm_password"]
 
     if password != confirm:
-        return render_template(
-            "signup.html",
-            error="Passwords do not match."
-        )
+        return render_template("signup.html", error="Passwords do not match.")
 
     conn = sqlite3.connect(USER_DB)
-
     cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT * FROM users WHERE email=?",
-        (email,)
-    )
-
+    cursor.execute("SELECT * FROM users WHERE email=?", (email,))
     user = cursor.fetchone()
 
     if user:
         conn.close()
-
-        return render_template(
-            "signup.html",
-            error="Email already exists."
-        )
+        return render_template("signup.html", error="Email already exists.")
 
     hashed = generate_password_hash(password)
-
     cursor.execute(
-        """
-        INSERT INTO users
-        (username,email,password)
-        VALUES(?,?,?)
-        """,
-        (username,email,hashed)
+        "INSERT INTO users (username,email,password) VALUES(?,?,?)",
+        (username, email, hashed)
     )
-
     conn.commit()
-
     conn.close()
-
     return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def manual_login():
-
     if request.method == "GET":
         return render_template("login.html")
 
@@ -357,38 +393,25 @@ def manual_login():
 
     conn = sqlite3.connect(USER_DB)
     cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT id, username, email, password FROM users WHERE email=?",
-        (email,)
-    )
-
+    cursor.execute("SELECT id, username, email, password FROM users WHERE email=?", (email,))
     user = cursor.fetchone()
-
     conn.close()
 
     if user is None:
-        return render_template(
-            "login.html",
-            error="❌ Account not found."
-        )
+        return render_template("login.html", error="❌ Account not found.")
 
     if not check_password_hash(user[3], password):
-        return render_template(
-            "login.html",
-            error="❌ Incorrect password."
-        )
+        return render_template("login.html", error="❌ Incorrect password.")
 
     session["manual_user"] = {
         "id": user[0],
         "username": user[1],
         "email": user[2]
     }
-
     return redirect("/home")
+
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
-
     if request.method == "GET":
         return render_template("forgetpassword.html")
 
@@ -397,65 +420,48 @@ def forgot_password():
     confirm_password = request.form.get("confirm_password", "")
 
     if new_password != confirm_password:
-        return render_template(
-            "forgetpassword.html",
-            error="Passwords do not match."
-        )
+        return render_template("forgetpassword.html", error="Passwords do not match.")
 
     conn = sqlite3.connect(USER_DB)
     cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT id FROM users WHERE email=?",
-        (email,)
-    )
-
+    cursor.execute("SELECT id FROM users WHERE email=?", (email,))
     user = cursor.fetchone()
 
     if user is None:
         conn.close()
-        return render_template(
-            "forgetpassword.html",
-            error="Account not found."
-        )
+        return render_template("forgetpassword.html", error="Account not found.")
 
     hashed_password = generate_password_hash(new_password)
-
-    cursor.execute(
-        "UPDATE users SET password=? WHERE email=?",
-        (hashed_password, email)
-    )
-
+    cursor.execute("UPDATE users SET password=? WHERE email=?", (hashed_password, email))
     conn.commit()
     conn.close()
-
     return redirect("/")
+
 @app.route("/logout")
 def logout():
-
     session.clear()
-
     return redirect("/")
 
 @app.route("/scan", methods=["POST"])
 def scan():
-
     if "manual_user" not in session and "user" not in session:
-
         return redirect("/")
 
     target = request.form.get("target", "").strip()
-
     scan_type = request.form.get("scan_type", "quick")
     
-    # Enforce input sanitization rule immediately
     if not target or not is_valid_target(target):
         return render_template(
             "index.html", 
             error_msg="CRITICAL ERR: Input validation breach. Provide a cleanly formatted IPv4 Address or Domain name (Local host address parameters prohibited)."
         )
     
-    raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nmap(target, scan_type)
+    # Fully integrated conditional check for Nikto vs Nmap
+    if scan_type == "nikto":
+        raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nikto(target)
+    else:
+        raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nmap(target, scan_type)
+        
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     conn = sqlite3.connect(DB_FILE)
@@ -487,20 +493,17 @@ def scan():
 
 @app.route("/scan-config-run", methods=["POST"])
 def scan_config_run():
-
     target = request.form.get("target", "").strip()
     scan_type = request.form.get("scan_type", "quick")
 
     if not target or not is_valid_target(target):
-        return render_template(
-            "scanresult.html",
-            error_msg="Please enter a valid target."
-        )
+        return render_template("scanresult.html", error_msg="Please enter a valid target.")
 
-    raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nmap(
-        target,
-        scan_type
-    )
+    # Fully integrated conditional check for Nikto vs Nmap in config runs
+    if scan_type == "nikto":
+        raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nikto(target)
+    else:
+        raw_output, results, threat_score, threat_level, low, med, high, scan_meta = execute_real_nmap(target, scan_type)
 
     return render_template(
         "scanresult.html",
@@ -515,9 +518,6 @@ def scan_config_run():
         scan_meta=scan_meta
     )
 
-    
-
-
 @app.route('/api/history', methods=['GET'])
 def get_scan_history():
     conn = sqlite3.connect(DB_FILE)
@@ -531,8 +531,6 @@ def get_scan_history():
 # ==========================================
 # 3. LIVE CONTEXTUAL AI CHAT PORTAL
 # ==========================================
-from flask import jsonify, request
-
 @app.route('/api/chat', methods=['POST'])
 def chat_with_assistant():
     data = request.get_json()
@@ -541,7 +539,6 @@ def chat_with_assistant():
     if not user_message:
         return jsonify({'error': 'Message cannot be empty'}), 400
 
-    # Context-aware security assistant logic
     if "scan" in user_message or "results" in user_message:
         reply = "Based on your latest scan telemetry, target hosts are responsive, but ensure that all unnecessary administrative ports are closed and HSTS headers are enforced."
     elif "risk" in user_message or "vulnerabilit" in user_message:
@@ -554,6 +551,7 @@ def chat_with_assistant():
         reply = f"Quantum Shield Security AI processed your query: '{user_message}'. Maintain least-privilege access controls and monitor system logs for anomalous patterns."
 
     return jsonify({'reply': reply}), 200
+
 # ==========================================
 # AUTOMATED THREAT PDF REPORT COMPILER
 # ==========================================
@@ -612,6 +610,7 @@ def download_report():
     
     doc.build(elements)
     return send_file(pdf_filename, as_attachment=True)
+
 @app.route("/settings")
 def settings():
     return render_template("settings.html")
@@ -624,18 +623,18 @@ def reconnaissance():
 def scan_config():
     return render_template("scanconfig.html")
 
-
 @app.route("/vulnerability")
 def vulnerability():
     return render_template("vulnerability.html")
 
-
 @app.route("/monitoring")
 def monitoring():
     return render_template("monitoring.html")
+
 @app.route("/history")
 def history():
     return render_template("scanhistory.html")
+
 @app.route("/aiassistant")
 def aiassistant():
     return render_template("aiassistant.html")

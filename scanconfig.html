@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quantum Shield | Scan Configuration</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #050b14;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 50px auto;
+        }
+
+        .back {
+            color: #8b9bb0;
+            text-decoration: none;
+        }
+
+        h1 {
+            margin-top: 30px;
+        }
+
+        .description {
+            color: #8b9bb0;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #0b1422;
+            border: 1px solid #1d3148;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            background: #07101c;
+            color: white;
+            border: 1px solid #29415c;
+            border-radius: 6px;
+        }
+
+        .options {
+            margin-top: 25px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            font-weight: normal;
+        }
+
+        .option input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .scan-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .scan-button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/" class="back">
+        ← Back to Dashboard
+    </a>
+
+    <h1>Scan Configuration</h1>
+
+    <p class="description">
+        Configure your security scan before starting.
+    </p>
+
+    <div class="card">
+
+        <form action="/scan-config-run" method="POST">
+
+            <input type="hidden" name="from_config" value="yes">
+
+            <!-- TARGET -->
+            <div class="input-group">
+
+                <label>Target IP / Domain</label>
+
+                <input
+                    type="text"
+                    name="target"
+                    placeholder="Example: 192.168.1.10"
+                    required>
+
+            </div>
+
+
+            <!-- SCAN TYPE -->
+            <div class="input-group">
+
+                <label>Scan Type</label>
+
+                <select name="scan_type">
+
+                    <option value="quick">
+                        Quick Scan
+                    </option>
+
+                    <option value="version">
+                        Service Version Detection
+                    </option>
+
+                    <option value="os">
+                        Operating System Detection
+                    </option>
+
+                    <option value="vuln">
+                        Vulnerability Scan
+                    </option>
+
+                    <option value="nikto">
+                        Web Vulnerability Scan
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PORT RANGE -->
+            <div class="input-group">
+
+                <label>Port Range</label>
+
+                <input
+                    type="text"
+                    name="ports"
+                    value="1-1000"
+                    placeholder="Example: 1-1000">
+
+            </div>
+
+
+            <!-- OPTIONS -->
+            <div class="options">
+
+                <h3>Additional Scan Options</h3>
+
+                <label class="option">
+
+                    <input
+                        type="checkbox"
+                        name="service_detection"
+                        checked>
+
+                    Detect Services and Versions
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="checkbox"
+                        name="os_detection">
+
+                    Detect Operating System
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="checkbox"
+                        name="vulnerability_detection"
+                        checked>
+
+                    Detect Vulnerabilities
+
+                </label>
+
+            </div>
+
+
+            <!-- BUTTON -->
+            <button
+                type="submit"
+                class="scan-button">
+
+                🔍 Start Security Scan
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

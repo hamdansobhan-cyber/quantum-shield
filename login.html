@@ -1,465 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Shield | Login</title>
 
-<title>Quantum Shield</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron',sans-serif;
-}
-
-body{
-
-height:100vh;
-overflow:hidden;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-background:#020617;
-color:white;
-
-background-image:
-linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-
-background-size:40px 40px;
-
-position:relative;
-
-}
-
-body::before{
-
-content:"";
-position:absolute;
-width:650px;
-height:650px;
-background:#06b6d4;
-filter:blur(180px);
-opacity:.18;
-left:-200px;
-top:-150px;
-
-}
-
-body::after{
-
-content:"";
-position:absolute;
-width:650px;
-height:650px;
-background:#6366f1;
-filter:blur(180px);
-opacity:.18;
-right:-200px;
-bottom:-150px;
-
-}
-
-.container{
-
-width:1200px;
-height:700px;
-
-display:flex;
-
-border-radius:35px;
-
-overflow:hidden;
-
-background:rgba(255,255,255,.03);
-
-border:1px solid rgba(255,255,255,.08);
-
-backdrop-filter:blur(15px);
-
-box-shadow:
-0 0 40px rgba(0,0,0,.45);
-
-z-index:10;
-
-}
-
-.left{
-
-flex:1;
-
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-
-padding:60px;
-
-position:relative;
-
-}
-
-.left h1{
-
-font-size:55px;
-
-margin-top:20px;
-
-color:#38bdf8;
-
-}
-
-.left p{
-
-margin-top:20px;
-
-line-height:1.8;
-
-text-align:center;
-
-color:#94a3b8;
-
-font-size:15px;
-
-max-width:420px;
-
-}
-
-.logo{
-
-font-size:90px;
-
-animation:float 3s infinite ease-in-out;
-
-}
-
-@keyframes float{
-
-0%{transform:translateY(0);}
-50%{transform:translateY(-15px);}
-100%{transform:translateY(0);}
-
-}
-
-.features{
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:18px;
-
-margin-top:45px;
-
-width:100%;
-
-}
-
-.card{
-
-padding:18px;
-
-background:rgba(255,255,255,.03);
-
-border-radius:15px;
-
-border:1px solid rgba(255,255,255,.06);
-
-}
-
-.card h3{
-
-color:#38bdf8;
-
-margin-bottom:8px;
-
-font-size:15px;
-
-}
-
-.card p{
-
-font-size:12px;
-
-text-align:left;
-
-margin:0;
-
-}
-
-.right{
-
-width:430px;
-
-background:rgba(2,6,23,.75);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-padding:40px;
-
-}
-
-.login-box{
-
-width:100%;
-
-}
-
-.login-box h2{
-
-font-size:35px;
-
-color:#38bdf8;
-
-margin-bottom:12px;
-
-}
-
-.login-box p{
-
-color:#94a3b8;
-
-font-size:13px;
-
-margin-bottom:35px;
-
-line-height:1.7;
-
-}
-
-.btn{
-
-width:100%;
-
-padding:18px;
-
-border:none;
-
-border-radius:16px;
-
-font-size:15px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-margin-bottom:20px;
-
-transition:.3s;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-gap:12px;
-
-text-decoration:none;
-
-}
-
-.google{
-
-background:white;
-
-color:#111827;
-
-}
-
-.google:hover{
-
-transform:translateY(-3px);
-
-box-shadow:0 0 20px rgba(255,255,255,.25);
-
-}
-
-.guest{
-
-background:linear-gradient(90deg,#06b6d4,#6366f1);
-
-color:white;
-
-}
-
-.guest:hover{
-
-transform:translateY(-3px);
-
-box-shadow:0 0 20px rgba(56,189,248,.4);
-
-}
-
-.or{
-
-text-align:center;
-
-margin:20px 0;
-
-color:#64748b;
-
-font-size:13px;
-
-}
-
-.security{
-
-margin-top:35px;
-
-padding:20px;
-
-border-radius:15px;
-
-background:rgba(34,197,94,.08);
-
-border:1px solid rgba(34,197,94,.15);
-
-font-size:12px;
-
-line-height:1.8;
-
-color:#22c55e;
-
-}
-
-.footer{
-
-margin-top:35px;
-
-text-align:center;
-
-font-size:11px;
-
-color:#64748b;
-
-}
-
-</style>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
 
 <body>
 
-<div class="container">
+<div class="background-grid"></div>
 
-<div class="left">
+<div class="login-container">
 
-<div class="logo">🛡️</div>
+    <!-- LEFT PANEL -->
 
-<h1>Quantum Shield</h1>
+    <div class="left-panel">
 
-<p>
+        <div class="logo">
 
-Enterprise AI-powered Network Vulnerability Scanner
-designed to simplify cybersecurity assessments,
-identify threats, analyze vulnerabilities and generate
-professional security reports.
+            🛡
 
-</p>
+        </div>
 
-<div class="features">
+        <h1>
 
-<div class="card">
+            Quantum Shield
 
-<h3>🛰 Live Scanning</h3>
+        </h1>
 
-<p>Real-time vulnerability detection using Nmap and Nikto.</p>
+        <h2>
 
-</div>
+            Enterprise Vulnerability
+            Assessment Platform
 
-<div class="card">
+        </h2>
 
-<h3>🤖 AI Analysis</h3>
+        <p>
 
-<p>AI-generated recommendations and risk assessments.</p>
+            AI-powered cybersecurity platform designed to
+            perform network reconnaissance, vulnerability
+            assessment, threat intelligence, and security
+            analysis.
 
-</div>
+        </p>
 
-<div class="card">
+        <div class="features">
 
-<h3>🌎 Threat Intelligence</h3>
+            <div class="feature-card">
 
-<p>Global attack monitoring and visualization.</p>
+                <h3>⚡ Live Scanning</h3>
 
-</div>
+                <p>
+                    Real-time Nmap & Nikto integration
+                </p>
 
-<div class="card">
+            </div>
 
-<h3>📄 PDF Reports</h3>
+            <div class="feature-card">
 
-<p>Generate professional vulnerability reports instantly.</p>
+                <h3>🤖 AI Threat Intelligence</h3>
 
-</div>
+                <p>
+                    Gemini AI assisted analysis
+                </p>
 
-</div>
+            </div>
 
-</div>
+            <div class="feature-card">
 
-<div class="right">
+                <h3>📄 Professional Reports</h3>
 
-<div class="login-box">
+                <p>
+                    Export PDF vulnerability reports
+                </p>
 
-<h2>Welcome</h2>
+            </div>
 
-<p>
+            <div class="feature-card">
 
-Sign in with your Google account to save your scans and
-reports, or continue as a guest for a quick vulnerability scan.
+                <h3>🌍 Security Dashboard</h3>
 
-</p>
+                <p>
+                    Interactive analytics & monitoring
+                </p>
 
-<!-- GOOGLE LOGIN -->
-<a href="/login/google" class="btn google">
+            </div>
 
-<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+        </div>
 
-Continue with Google
+    </div>
 
-</a>
+    <!-- RIGHT PANEL -->
 
-<div class="or">
+    <div class="right-panel">
 
-──────── OR ────────
+        <div class="login-box">
 
-</div>
+            <h2>
 
-<!-- GUEST LOGIN -->
+                Welcome Back
 
-<a href="/dashboard" class="btn guest">
+            </h2>
 
-Continue as Guest
+            <p>
 
-</a>
+                Login to your Quantum Shield account
 
-<div class="security">
+            </p>
+            {% if error %}
 
-🔒 Secure OAuth Authentication<br>
-🛡 No passwords stored on our servers<br>
-✔ Enterprise-grade encrypted connection
+<div class="error-box">
 
-</div>
-
-<div class="footer">
-
-Quantum Shield Security Platform © 2026
-
-</div>
-
-</div>
+    {{ error }}
 
 </div>
 
+{% endif %}
+
+            <form action="/login" method="POST">
+
+                <div class="input-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>Password</label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword()">
+
+                            👁
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="options">
+
+                    <label>
+
+                        <input type="checkbox" name="remember">
+
+                        Remember Me
+
+                    </label>
+
+                    <a href="/forgot-password">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <div class="divider">
+
+                <span>OR</span>
+
+            </div>
+
+            <a
+                href="/login/google"
+                class="google-btn">
+
+                <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+
+                Continue with Google
+
+            </a>
+
+            <div class="signup-text">
+
+                Don't have an account?
+
+                <a href="/signup">
+
+                    Create Account
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+<script>
+
+function togglePassword(){
+
+    const input=document.getElementById("password");
+
+    if(input.type==="password"){
+
+        input.type="text";
+
+    }else{
+
+        input.type="password";
+
+    }
+
+}
+
+</script>
 
 </body>
 </html>

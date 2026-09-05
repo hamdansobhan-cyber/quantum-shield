@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quantum Shield | Scan History</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            font-family: 'Orbitron', sans-serif;
+
+            background: #020617;
+
+            color: #e2e8f0;
+
+            min-height: 100vh;
+
+            background-image:
+                linear-gradient(
+                    rgba(56,189,248,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(56,189,248,.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+        }
+
+
+        .container {
+
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding: 40px 30px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            margin-bottom: 30px;
+        }
+
+
+        .header h1 {
+
+            color: #38bdf8;
+
+            font-size: 28px;
+
+            margin-bottom: 10px;
+
+            text-shadow:
+                0 0 15px
+                rgba(56,189,248,.4);
+        }
+
+
+        .header p {
+
+            color: #64748b;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .summary-card {
+
+            background: #0f172a;
+
+            border: 1px solid
+                rgba(56,189,248,.1);
+
+            border-radius: 16px;
+
+            padding: 20px;
+
+            transition: .25s;
+        }
+
+
+        .summary-card:hover {
+
+            border-color:
+                rgba(56,189,248,.3);
+
+            transform: translateY(-3px);
+        }
+
+
+        .summary-label {
+
+            color: #64748b;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .summary-number {
+
+            color: #38bdf8;
+
+            font-size: 30px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           HISTORY CARD
+        ========================= */
+
+        .history-card {
+
+            background: #0f172a;
+
+            border: 1px solid
+                rgba(56,189,248,.1);
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,0,0,.25);
+        }
+
+
+        .history-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+
+        .history-header h2 {
+
+            font-size: 16px;
+
+            color: #e2e8f0;
+        }
+
+
+        .refresh {
+
+            padding: 9px 15px;
+
+            border-radius: 8px;
+
+            border: 1px solid #1e293b;
+
+            background: #020617;
+
+            color: #38bdf8;
+
+            font-family:
+                'Orbitron',
+                sans-serif;
+
+            font-size: 9px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .refresh:hover {
+
+            border-color: #38bdf8;
+
+            background: #111827;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        thead {
+
+            background: #020617;
+        }
+
+
+        th {
+
+            text-align: left;
+
+            padding: 14px;
+
+            color: #38bdf8;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+            white-space: nowrap;
+        }
+
+
+        td {
+
+            padding: 15px 14px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.05);
+
+            color: #cbd5e1;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 12px;
+        }
+
+
+        tbody tr {
+
+            transition: .2s;
+        }
+
+
+        tbody tr:hover {
+
+            background:
+                rgba(56,189,248,.04);
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            font-family:
+                'Orbitron',
+                sans-serif;
+
+            font-size: 8px;
+        }
+
+
+        .dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+        }
+
+
+        .success {
+
+            color: #4ade80;
+        }
+
+
+        .success .dot {
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 7px
+                #22c55e;
+        }
+
+
+        .warning {
+
+            color: #facc15;
+        }
+
+
+        .warning .dot {
+
+            background: #eab308;
+        }
+
+
+        .danger {
+
+            color: #f87171;
+        }
+
+
+        .danger .dot {
+
+            background: #ef4444;
+
+            box-shadow:
+                0 0 7px
+                #ef4444;
+        }
+
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
+
+        .view-btn {
+
+            padding: 7px 12px;
+
+            background:
+                rgba(56,189,248,.06);
+
+            color: #38bdf8;
+
+            border: 1px solid
+                rgba(56,189,248,.2);
+
+            border-radius: 7px;
+
+            font-family:
+                'Orbitron',
+                sans-serif;
+
+            font-size: 8px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .view-btn:hover {
+
+            background:
+                rgba(56,189,248,.15);
+
+            border-color: #38bdf8;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+            color: #64748b;
+        }
+
+
+        .empty-icon {
+
+            font-size: 38px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .empty h3 {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .empty p {
+
+            font-family: Arial, sans-serif;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+
+            text-align: center;
+
+            padding: 40px;
+
+            color: #38bdf8;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width: 750px) {
+
+            .container {
+
+                padding: 25px 15px;
+            }
+
+
+            .summary {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .header h1 {
+
+                font-size: 23px;
+            }
+
+
+            .history-header {
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+        }
+        /* =========================
+   SCAN DETAILS MODAL
+========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(2, 6, 23, 0.85);
+
+    backdrop-filter: blur(6px);
+
+    z-index: 9999;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #0f172a;
+
+    border: 1px solid rgba(56, 189, 248, 0.3);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(56, 189, 248, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 22px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.modal-header h2 {
+    color: #38bdf8;
+    font-size: 18px;
+    margin: 0;
+}
+
+.modal-header p {
+    margin-top: 6px;
+    color: #64748b;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+
+    background: #020617;
+    color: #94a3b8;
+
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #f87171;
+    border-color: #f87171;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+    padding: 22px;
+}
+
+.detail-item {
+    padding: 15px;
+
+    background: #020617;
+
+    border: 1px solid rgba(255,255,255,.05);
+
+    border-radius: 10px;
+}
+
+.detail-item span {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 7px;
+}
+
+.detail-item strong {
+    color: #cbd5e1;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    word-break: break-word;
+}
+
+.status-text {
+    color: #4ade80 !important;
+}
+
+.risk-text {
+    color: #facc15 !important;
+}
+
+.result-section {
+    padding: 0 22px 20px;
+}
+
+.result-section h3 {
+    margin-bottom: 10px;
+
+    color: #38bdf8;
+
+    font-size: 11px;
+}
+
+.result-section pre {
+    min-height: 55px;
+
+    max-height: 180px;
+
+    overflow: auto;
+
+    padding: 15px;
+
+    background: #020617;
+
+    border: 1px solid rgba(255,255,255,.05);
+
+    border-radius: 10px;
+
+    color: #94a3b8;
+
+    font-family: Consolas, monospace;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+.modal-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    padding: 0 22px 22px;
+}
+
+.close-main {
+    padding: 9px 18px;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 8px;
+
+    background: #020617;
+
+    color: #38bdf8;
+
+    font-family: 'Orbitron', sans-serif;
+
+    font-size: 9px;
+
+    cursor: pointer;
+}
+
+.close-main:hover {
+    border-color: #38bdf8;
+
+    background: #111827;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🕘 Scan History
+        </h1>
+
+        <p>
+            View and review previous network security
+            scans performed using Quantum Shield.
+        </p>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                TOTAL SCANS
+            </div>
+
+            <div
+                class="summary-number"
+                id="totalScans"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                SUCCESSFUL SCANS
+            </div>
+
+            <div
+                class="summary-number"
+                id="successfulScans"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                HIGH RISK
+            </div>
+
+            <div
+                class="summary-number"
+                id="highRiskScans"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="history-card">
+
+
+        <div class="history-header">
+
+            <h2>
+                Previous Scans
+            </h2>
+
+
+            <button
+                class="refresh"
+                onclick="loadHistory()"
+            >
+
+                ↻ Refresh
+
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            TARGET
+                        </th>
+
+                        <th>
+                            SCAN TYPE
+                        </th>
+
+                        <th>
+                            DATE
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                        <th>
+                            RISK
+                        </th>
+
+                        <th>
+                            ACTION
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="historyTable">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="loading"
+                        >
+
+                            Loading scan history...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+</div>
+
+
+<!-- SCAN DETAILS POPUP -->
+
+<div
+    class="modal"
+    id="detailsModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>Scan Details</h2>
+
+                <p>
+                    Security assessment information
+                </p>
+
+            </div>
+
+            <button
+                class="close-btn"
+                onclick="closeDetails()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <span>TARGET</span>
+                <strong id="detailTarget">—</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>SCAN TYPE</span>
+                <strong id="detailType">—</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>DATE</span>
+                <strong id="detailDate">—</strong>
+            </div>
+
+            <div class="detail-item">
+                <span>STATUS</span>
+
+                <strong
+                    id="detailStatus"
+                    class="status-text"
+                >
+                    —
+                </strong>
+
+            </div>
+
+            <div class="detail-item">
+                <span>RISK LEVEL</span>
+
+                <strong
+                    id="detailRisk"
+                    class="risk-text"
+                >
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="result-section">
+
+            <h3>Open Ports</h3>
+
+            <pre id="detailPorts">—</pre>
+
+        </div>
+
+
+        <div class="result-section">
+
+            <h3>Vulnerabilities</h3>
+
+            <pre id="detailVulnerabilities">—</pre>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="close-main"
+                onclick="closeDetails()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+
+
+    /* =========================
+       HISTORY DATA
+    ========================= */
+
+    let scanHistory = [];
+
+
+    /* =========================
+       LOAD HISTORY
+    ========================= */
+
+    async function loadHistory() {
+
+
+        const table =
+            document.getElementById(
+                "historyTable"
+            );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="loading"
+                >
+
+                    Loading scan history...
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/api/history"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load history"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            /*
+             * Supports either:
+             *
+             * [...]
+             *
+             * or:
+             *
+             * {history: [...]}
+             */
+
+            scanHistory =
+                Array.isArray(data)
+                    ? data
+                    : (
+                        data.history || []
+                    );
+
+
+            updateSummary();
+
+
+            if (
+                scanHistory.length === 0
+            ) {
+
+                showEmpty();
+
+                return;
+
+            }
+
+
+            table.innerHTML =
+                scanHistory
+                    .map(
+                        (scan, index) =>
+                            createRow(
+                                scan,
+                                index
+                            )
+                    )
+                    .join("");
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                error
+            );
+
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                    >
+
+                        <div class="empty">
+
+                            <div class="empty-icon">
+                                ⚠️
+                            </div>
+
+                            <h3>
+                                Unable to Load History
+                            </h3>
+
+                            <p>
+                                Please make sure
+                                the Flask server
+                                is running.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    }
+
+
+    /* =========================
+       CREATE ROW
+    ========================= */
+
+    function createRow(
+        scan,
+        index
+    ) {
+
+
+        const target =
+            scan.target ||
+            scan.ip ||
+            scan.hostname ||
+            "Unknown";
+
+
+        const type =
+            scan.scan_type ||
+            scan.type ||
+            "Network Scan";
+
+
+        const date =
+            scan.timestamp ||
+            scan.date ||
+            scan.created_at ||
+            "Unknown";
+
+
+       const risk =
+    String(
+        scan.risk ||
+        scan.risk_level ||
+        scan.threat_level ||
+        "Low"
+    );
+
+        const status =
+            scan.status ||
+            "Completed";
+
+
+        const riskStyle =
+            getRiskStyle(
+                risk
+            );
+
+
+        const statusStyle =
+            getStatusStyle(
+                status
+            );
+
+
+        return `
+
+            <tr>
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        target
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        type
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        formatDate(date)
+                    )}
+                </td>
+
+                <td>
+
+                    <span
+                        class="status ${statusStyle}"
+                    >
+
+                        <span class="dot"></span>
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span
+                        class="status ${riskStyle}"
+                    >
+
+                        <span class="dot"></span>
+
+                        ${escapeHTML(
+                            risk
+                        )}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="view-btn"
+                        onclick="viewScan(${index})"
+                    >
+
+                        View
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    function updateSummary() {
+
+
+        document.getElementById(
+            "totalScans"
+        ).textContent =
+            scanHistory.length;
+
+
+        const successful =
+            scanHistory.filter(
+                scan => {
+
+                    const status =
+                        String(
+                            scan.status ||
+                            "Completed"
+                        ).toLowerCase();
+
+
+                    return (
+                        status ===
+                        "completed"
+                        ||
+                        status ===
+                        "success"
+                        ||
+                        status ===
+                        "successful"
+                    );
+
+                }
+            );
+
+
+        document.getElementById(
+            "successfulScans"
+        ).textContent =
+            successful.length;
+
+
+        const highRisk =
+            scanHistory.filter(
+                scan => {
+
+                   const risk =
+                 String(
+                scan.risk ||
+                scan.risk_level ||
+                scan.threat_level ||
+                 ""
+                ).toLowerCase();
+
+
+                    return (
+                        risk.includes(
+                            "high"
+                        )
+                        ||
+                        risk.includes(
+                            "critical"
+                        )
+                    );
+
+                }
+            );
+
+
+        document.getElementById(
+            "highRiskScans"
+        ).textContent =
+            highRisk.length;
+
+    }
+
+
+    /* =========================
+       RISK STYLE
+    ========================= */
+
+    function getRiskStyle(
+        risk
+    ) {
+
+
+        const value =
+            risk.toLowerCase();
+
+
+        if (
+            value.includes(
+                "critical"
+            )
+        ) {
+
+            return "danger";
+
+        }
+
+
+        if (
+            value.includes(
+                "high"
+            )
+        ) {
+
+            return "danger";
+
+        }
+
+
+        if (
+            value.includes(
+                "medium"
+            )
+        ) {
+
+            return "warning";
+
+        }
+
+
+        return "success";
+
+    }
+
+
+    /* =========================
+       STATUS STYLE
+    ========================= */
+
+    function getStatusStyle(
+        status
+    ) {
+
+
+        const value =
+            status.toLowerCase();
+
+
+        if (
+            value.includes(
+                "fail"
+            )
+            ||
+            value.includes(
+                "error"
+            )
+        ) {
+
+            return "danger";
+
+        }
+
+
+        if (
+            value.includes(
+                "running"
+            )
+        ) {
+
+            return "warning";
+
+        }
+
+
+        return "success";
+
+    }
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    function showEmpty() {
+
+
+        document.getElementById(
+            "historyTable"
+        ).innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                >
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            🕘
+                        </div>
+
+                        <h3>
+                            No Scan History
+                        </h3>
+
+                        <p>
+                            Your completed scans
+                            will appear here.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    /* =========================
+       VIEW SCAN
+    ========================= */
+
+   function viewScan(index) {
+
+    const scan = scanHistory[index];
+
+    if (!scan) {
+        return;
+    }
+
+    const target =
+        scan.target ||
+        scan.ip ||
+        scan.hostname ||
+        "Unknown";
+
+    const scanType =
+        scan.scan_type ||
+        scan.type ||
+        "Network Scan";
+
+    const date =
+        scan.timestamp ||
+        scan.date ||
+        scan.created_at ||
+        "Unknown";
+
+    const status =
+        scan.status ||
+        "Completed";
+
+    const risk =
+    scan.risk ||
+    scan.risk_level ||
+    scan.threat_level ||
+    "Low";
+
+    const ports =
+        scan.open_ports ||
+        scan.ports ||
+        "No port information available";
+
+    const vulnerabilities =
+        scan.vulnerabilities ||
+        "No vulnerability information available";
+
+
+    document.getElementById("detailTarget").textContent = target;
+
+    document.getElementById("detailType").textContent = scanType;
+
+    document.getElementById("detailDate").textContent =
+        formatDate(date);
+
+    document.getElementById("detailStatus").textContent = status;
+
+    document.getElementById("detailRisk").textContent = risk;
+
+    document.getElementById("detailPorts").textContent =
+        typeof ports === "object"
+            ? JSON.stringify(ports, null, 2)
+            : ports;
+
+    document.getElementById("detailVulnerabilities").textContent =
+        typeof vulnerabilities === "object"
+            ? JSON.stringify(vulnerabilities, null, 2)
+            : vulnerabilities;
+
+
+    document.getElementById("detailsModal").classList.add("show");
+}
+
+function closeDetails() {
+
+    document
+        .getElementById("detailsModal")
+        .classList.remove("show");
+
+}
+
+
+    /* =========================
+       DATE
+    ========================= */
+
+    function formatDate(
+        value
+    ) {
+
+
+        if (!value) {
+
+            return "Unknown";
+
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return String(
+                value
+            );
+
+        }
+
+
+        return date.toLocaleString();
+
+    }
+
+
+    /* =========================
+       HTML SAFETY
+    ========================= */
+
+    function escapeHTML(
+        value
+    ) {
+
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =========================
+       START
+    ========================= */
+    loadHistory();
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quantum Shield | Settings</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #020617;
+            color: #e2e8f0;
+            min-height: 100vh;
+
+            background-image:
+                linear-gradient(rgba(56,189,248,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56,189,248,.025) 1px, transparent 1px);
+
+            background-size: 40px 40px;
+
+            transition: .3s;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 45px 30px;
+        }
+
+        /* HEADER */
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header h1 {
+            color: #38bdf8;
+            font-size: 32px;
+            letter-spacing: 1px;
+
+            text-shadow:
+                0 0 18px rgba(56,189,248,.45);
+        }
+
+        .header p {
+            margin-top: 10px;
+            color: #64748b;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 10px 15px;
+
+            background: rgba(34,197,94,.08);
+            border: 1px solid rgba(34,197,94,.2);
+
+            border-radius: 30px;
+
+            color: #4ade80;
+            font-size: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 10px #22c55e;
+        }
+
+        /* GRID */
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        /* CARD */
+
+        .card {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(15,23,42,.96),
+                    rgba(15,23,42,.78)
+                );
+
+            border: 1px solid rgba(56,189,248,.10);
+            border-radius: 20px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,.28);
+
+            transition: .3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(56,189,248,.28);
+
+            box-shadow:
+                0 0 30px rgba(56,189,248,.08);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: #38bdf8;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            margin-bottom: 22px;
+        }
+
+        .card-title .icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(56,189,248,.08);
+
+            border: 1px solid rgba(56,189,248,.12);
+
+            border-radius: 10px;
+
+            font-size: 18px;
+        }
+
+        /* SETTING ROW */
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            min-height: 65px;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.05);
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            padding-right: 20px;
+        }
+
+        .setting-name {
+            color: #e2e8f0;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .setting-description {
+            color: #64748b;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* SELECT */
+
+        select {
+            min-width: 165px;
+
+            padding: 10px 12px;
+
+            background: #020617;
+            color: #e2e8f0;
+
+            border: 1px solid #1e293b;
+            border-radius: 9px;
+
+            outline: none;
+
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        select:hover,
+        select:focus {
+            border-color: #38bdf8;
+
+            box-shadow:
+                0 0 12px rgba(56,189,248,.12);
+        }
+
+        /* TOGGLE */
+
+        .switch {
+            position: relative;
+
+            width: 48px;
+            height: 25px;
+
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+
+            background: #1e293b;
+
+            border-radius: 30px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .slider:before {
+            content: "";
+
+            position: absolute;
+
+            width: 19px;
+            height: 19px;
+
+            left: 3px;
+            top: 3px;
+
+            background: #64748b;
+
+            border-radius: 50%;
+
+            transition: .25s;
+        }
+
+        .switch input:checked + .slider {
+            background: #0891b2;
+
+            box-shadow:
+                0 0 14px rgba(8,145,178,.45);
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(23px);
+            background: white;
+        }
+
+        /* LOCKED SECURITY */
+
+        .locked {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #22c55e;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .locked-icon {
+            font-size: 14px;
+        }
+
+        /* PREVIEW */
+
+        .preview-box {
+            margin-top: 18px;
+
+            padding: 16px;
+
+            background: #020617;
+
+            border: 1px solid #1e293b;
+
+            border-radius: 12px;
+        }
+
+        .preview-title {
+            color: #64748b;
+            font-size: 9px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .preview-line {
+            display: flex;
+            justify-content: space-between;
+
+            padding: 6px 0;
+
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+        }
+
+        .preview-line span:first-child {
+            color: #64748b;
+        }
+
+        .preview-line span:last-child {
+            color: #38bdf8;
+        }
+
+        /* SYSTEM STATUS */
+
+        .component {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 14px 0;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.05);
+        }
+
+        .component:last-child {
+            border-bottom: none;
+        }
+
+        .component-name {
+            font-size: 11px;
+            color: #e2e8f0;
+        }
+
+        .component-type {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #64748b;
+
+            margin-top: 4px;
+        }
+
+        .available {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #4ade80;
+
+            font-size: 9px;
+        }
+
+        /* FULL WIDTH */
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        /* ABOUT */
+
+        .about-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+        .about-item {
+            padding: 16px;
+
+            background: #020617;
+
+            border: 1px solid #1e293b;
+
+            border-radius: 11px;
+        }
+
+        .about-label {
+            color: #475569;
+            font-size: 8px;
+
+            margin-bottom: 8px;
+
+            letter-spacing: 1px;
+        }
+
+        .about-value {
+            color: #38bdf8;
+            font-size: 11px;
+        }
+
+        /* ACTIONS */
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+
+            padding: 13px 24px;
+
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+        .reset-btn {
+            background: #0f172a;
+
+            color: #94a3b8;
+
+            border: 1px solid #1e293b;
+        }
+
+        .reset-btn:hover {
+            color: white;
+            border-color: #38bdf8;
+        }
+
+        .save-btn {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #06b6d4,
+                    #6366f1
+                );
+
+            box-shadow:
+                0 0 18px rgba(56,189,248,.18);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 0 28px rgba(56,189,248,.4);
+        }
+
+        /* NOTIFICATION */
+
+        .notification {
+            position: fixed;
+
+            right: 25px;
+            bottom: 25px;
+
+            min-width: 280px;
+
+            padding: 15px 18px;
+
+            background: #0f172a;
+
+            border: 1px solid rgba(34,197,94,.35);
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,.4);
+
+            transform:
+                translateY(120px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition: .35s;
+
+            z-index: 999;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification-title {
+            color: #4ade80;
+
+            font-size: 11px;
+
+            margin-bottom: 5px;
+        }
+
+        .notification-text {
+            color: #94a3b8;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 11px;
+        }
+
+        /* DISABLED */
+
+        .disabled {
+            opacity: .55;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 850px) {
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .about-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .header-top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+        @media(max-width: 550px) {
+
+            .container {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .setting {
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            select {
+                min-width: 125px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+        }
+
+        /* REDUCED ANIMATION */
+
+        body.no-animation *,
+        body.no-animation *::before,
+        body.no-animation *::after {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        /* NO GLOW */
+
+        body.no-glow .card,
+        body.no-glow .system-status,
+        body.no-glow .status-dot,
+        body.no-glow .save-btn {
+            box-shadow: none !important;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-top">
+
+            <div>
+
+                <h1>⚙ System Settings</h1>
+
+                <p>
+                    Configure Quantum Shield scanning and interface preferences.
+                </p>
+
+            </div>
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                SYSTEM ONLINE
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-grid">
+
+
+        <!-- SCANNER SETTINGS -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <span class="icon">🌐</span>
+
+                Scanner Settings
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Default Scan Type
+                    </div>
+
+                    <div class="setting-description">
+                        Select the scan used when starting a new assessment.
+                    </div>
+
+                </div>
+
+
+                <select id="scanType">
+
+                    <option value="quick">
+                        Quick Scan
+                    </option>
+
+                    <option value="version">
+                        Version Detection
+                    </option>
+
+                    <option value="os">
+                        OS Detection
+                    </option>
+
+                    <option value="vuln">
+                        Vulnerability Scan
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Scan Timeout
+                    </div>
+
+                    <div class="setting-description">
+                        Maximum time allowed for a scan operation.
+                    </div>
+
+                </div>
+
+
+                <select id="timeout">
+
+                    <option value="30">
+                        30 seconds
+                    </option>
+
+                    <option value="60" selected>
+                        60 seconds
+                    </option>
+
+                    <option value="120">
+                        120 seconds
+                    </option>
+
+                    <option value="300">
+                        5 minutes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="preview-box">
+
+                <div class="preview-title">
+                    CURRENT CONFIGURATION
+                </div>
+
+                <div class="preview-line">
+
+                    <span>Scan Method</span>
+
+                    <span id="previewScan">
+                        Quick Scan
+                    </span>
+
+                </div>
+
+                <div class="preview-line">
+
+                    <span>Timeout</span>
+
+                    <span id="previewTimeout">
+                        60 seconds
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INTERFACE -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <span class="icon">🎨</span>
+
+                Interface
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Animations
+                    </div>
+
+                    <div class="setting-description">
+                        Enable dashboard transition effects.
+                    </div>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="animations"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Glow Effects
+                    </div>
+
+                    <div class="setting-description">
+                        Enable cyber-style interface glow effects.
+                    </div>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="glow"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Compact Interface
+                    </div>
+
+                    <div class="setting-description">
+                        Reduce spacing between dashboard components.
+                    </div>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="compact"
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- REPORT SETTINGS -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <span class="icon">📄</span>
+
+                Report Settings
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Include AI Analysis
+                    </div>
+
+                    <div class="setting-description">
+                        Include AI-generated security recommendations.
+                    </div>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="aiReport"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Include Scan Results
+                    </div>
+
+                    <div class="setting-description">
+                        Include detected ports and services.
+                    </div>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="scanReport"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Report Format
+                    </div>
+
+                    <div class="setting-description">
+                        Format generated by Quantum Shield.
+                    </div>
+
+                </div>
+
+
+                <select disabled>
+
+                    <option>
+                        PDF
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- SECURITY -->
+
+        <div class="card">
+
+            <div class="card-title">
+
+                <span class="icon">🛡️</span>
+
+                Security
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Input Validation
+                    </div>
+
+                    <div class="setting-description">
+                        Validate scan targets before execution.
+                    </div>
+
+                </div>
+
+
+                <div class="locked">
+
+                    <span class="locked-icon">
+                        ✓
+                    </span>
+
+                    ENABLED
+
+                </div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Command Protection
+                    </div>
+
+                    <div class="setting-description">
+                        Protect scanner commands from unsafe input.
+                    </div>
+
+                </div>
+
+
+                <div class="locked">
+
+                    <span class="locked-icon">
+                        ✓
+                    </span>
+
+                    ENABLED
+
+                </div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div class="setting-info">
+
+                    <div class="setting-name">
+                        Security Controls
+                    </div>
+
+                    <div class="setting-description">
+                        These protections cannot be disabled.
+                    </div>
+
+                </div>
+
+
+                <div class="locked">
+                    🔒 PROTECTED
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="card full">
+
+            <div class="card-title">
+
+                <span class="icon">💻</span>
+
+                System Components
+
+            </div>
+
+
+            <div class="component">
+
+                <div>
+
+                    <div class="component-name">
+                        Flask Application
+                    </div>
+
+                    <div class="component-type">
+                        Web Application Backend
+                    </div>
+
+                </div>
+
+                <div class="available">
+
+                    <span class="status-dot"></span>
+
+                    RUNNING
+
+                </div>
+
+            </div>
+
+
+            <div class="component">
+
+                <div>
+
+                    <div class="component-name">
+                        SQLite Database
+                    </div>
+
+                    <div class="component-type">
+                        Scan History Storage
+                    </div>
+
+                </div>
+
+                <div class="available">
+
+                    <span class="status-dot"></span>
+
+                    CONNECTED
+
+                </div>
+
+            </div>
+
+
+            <div class="component">
+
+                <div>
+
+                    <div class="component-name">
+                        Nmap
+                    </div>
+
+                    <div class="component-type">
+                        Network Reconnaissance Engine
+                    </div>
+
+                </div>
+
+                <div class="available">
+
+                    <span class="status-dot"></span>
+
+                    AVAILABLE
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ABOUT -->
+
+        <div class="card full">
+
+            <div class="card-title">
+
+                <span class="icon">ℹ️</span>
+
+                About Quantum Shield
+
+            </div>
+
+
+            <div class="about-grid">
+
+                <div class="about-item">
+
+                    <div class="about-label">
+                        PROJECT
+                    </div>
+
+                    <div class="about-value">
+                        Quantum Shield
+                    </div>
+
+                </div>
+
+
+                <div class="about-item">
+
+                    <div class="about-label">
+                        PLATFORM
+                    </div>
+
+                    <div class="about-value">
+                        Flask / Python
+                    </div>
+
+                </div>
+
+
+                <div class="about-item">
+
+                    <div class="about-label">
+                        DATABASE
+                    </div>
+
+                    <div class="about-value">
+                        SQLite
+                    </div>
+
+                </div>
+
+
+                <div class="about-item">
+
+                    <div class="about-label">
+                        NETWORK SCANNER
+                    </div>
+
+                    <div class="about-value">
+                        Nmap
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="actions">
+
+        <button
+            class="reset-btn"
+            onclick="resetSettings()"
+        >
+            ↺ Reset
+        </button>
+
+
+        <button
+            class="save-btn"
+            onclick="saveSettings()"
+        >
+            ✓ Save Settings
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATION -->
+
+<div
+    class="notification"
+    id="notification"
+>
+
+    <div class="notification-title">
+        ✓ SETTINGS SAVED
+    </div>
+
+    <div
+        class="notification-text"
+        id="notificationText"
+    >
+        Your preferences have been saved.
+    </div>
+
+</div>
+
+
+<script>
+
+    const scanType =
+        document.getElementById("scanType");
+
+    const timeout =
+        document.getElementById("timeout");
+
+    const animations =
+        document.getElementById("animations");
+
+    const glow =
+        document.getElementById("glow");
+
+    const compact =
+        document.getElementById("compact");
+
+    const aiReport =
+        document.getElementById("aiReport");
+
+    const scanReport =
+        document.getElementById("scanReport");
+
+
+    /*
+    ========================================
+    UPDATE PREVIEW
+    ========================================
+    */
+
+    function updatePreview() {
+
+        const scanText =
+            scanType.options[
+                scanType.selectedIndex
+            ].text;
+
+        document.getElementById(
+            "previewScan"
+        ).textContent = scanText;
+
+
+        document.getElementById(
+            "previewTimeout"
+        ).textContent =
+            timeout.value + " seconds";
+
+    }
+
+
+    scanType.addEventListener(
+        "change",
+        updatePreview
+    );
+
+    timeout.addEventListener(
+        "change",
+        updatePreview
+    );
+
+
+    /*
+    ========================================
+    APPLY INTERFACE SETTINGS
+    ========================================
+    */
+
+    function applyInterfaceSettings() {
+
+        if (animations.checked) {
+
+            document.body.classList.remove(
+                "no-animation"
+            );
+
+        } else {
+
+            document.body.classList.add(
+                "no-animation"
+            );
+
+        }
+
+
+        if (glow.checked) {
+
+            document.body.classList.remove(
+                "no-glow"
+            );
+
+        } else {
+
+            document.body.classList.add(
+                "no-glow"
+            );
+
+        }
+
+
+        if (compact.checked) {
+
+            document.body.style.setProperty(
+                "--compact-mode",
+                "1"
+            );
+
+            document.querySelectorAll(
+                ".card"
+            ).forEach(card => {
+
+                card.style.padding = "20px";
+
+            });
+
+        } else {
+
+            document.querySelectorAll(
+                ".card"
+            ).forEach(card => {
+
+                card.style.padding = "28px";
+
+            });
+
+        }
+
+    }
+
+
+    animations.addEventListener(
+        "change",
+        applyInterfaceSettings
+    );
+
+    glow.addEventListener(
+        "change",
+        applyInterfaceSettings
+    );
+
+    compact.addEventListener(
+        "change",
+        applyInterfaceSettings
+    );
+
+
+    /*
+    ========================================
+    SAVE SETTINGS
+    ========================================
+    */
+
+    function saveSettings() {
+
+        const settings = {
+
+            scanType:
+                scanType.value,
+
+            timeout:
+                timeout.value,
+
+            animations:
+                animations.checked,
+
+            glow:
+                glow.checked,
+
+            compact:
+                compact.checked,
+
+            aiReport:
+                aiReport.checked,
+
+            scanReport:
+                scanReport.checked
+
+        };
+
+
+        localStorage.setItem(
+            "quantumShieldSettings",
+            JSON.stringify(settings)
+        );
+
+
+        applyInterfaceSettings();
+
+        showNotification(
+            "Your Quantum Shield preferences have been saved."
+        );
+
+    }
+
+
+    /*
+    ========================================
+    LOAD SETTINGS
+    ========================================
+    */
+
+    function loadSettings() {
+
+        const saved =
+            localStorage.getItem(
+                "quantumShieldSettings"
+            );
+
+
+        if (!saved) {
+
+            updatePreview();
+            applyInterfaceSettings();
+
+            return;
+
+        }
+
+
+        try {
+
+            const settings =
+                JSON.parse(saved);
+
+
+            if (settings.scanType) {
+
+                scanType.value =
+                    settings.scanType;
+
+            }
+
+
+            if (settings.timeout) {
+
+                timeout.value =
+                    settings.timeout;
+
+            }
+
+
+            if (
+                typeof settings.animations
+                === "boolean"
+            ) {
+
+                animations.checked =
+                    settings.animations;
+
+            }
+
+
+            if (
+                typeof settings.glow
+                === "boolean"
+            ) {
+
+                glow.checked =
+                    settings.glow;
+
+            }
+
+
+            if (
+                typeof settings.compact
+                === "boolean"
+            ) {
+
+                compact.checked =
+                    settings.compact;
+
+            }
+
+
+            if (
+                typeof settings.aiReport
+                === "boolean"
+            ) {
+
+                aiReport.checked =
+                    settings.aiReport;
+
+            }
+
+
+            if (
+                typeof settings.scanReport
+                === "boolean"
+            ) {
+
+                scanReport.checked =
+                    settings.scanReport;
+
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Settings could not be loaded."
+            );
+
+        }
+
+
+        updatePreview();
+        applyInterfaceSettings();
+
+    }
+
+
+    /*
+    ========================================
+    RESET
+    ========================================
+    */
+
+    function resetSettings() {
+
+        localStorage.removeItem(
+            "quantumShieldSettings"
+        );
+
+
+        scanType.value =
+            "quick";
+
+        timeout.value =
+            "60";
+
+        animations.checked =
+            true;
+
+        glow.checked =
+            true;
+
+        compact.checked =
+            false;
+
+        aiReport.checked =
+            true;
+
+        scanReport.checked =
+            true;
+
+
+        updatePreview();
+        applyInterfaceSettings();
+
+
+        showNotification(
+            "Settings restored to default values."
+        );
+
+    }
+
+
+    /*
+    ========================================
+    NOTIFICATION
+    ========================================
+    */
+
+    function showNotification(message) {
+
+        const notification =
+            document.getElementById(
+                "notification"
+            );
+
+        const text =
+            document.getElementById(
+                "notificationText"
+            );
+
+
+        text.textContent =
+            message;
+
+
+        notification.classList.add(
+            "show"
+        );
+
+
+        setTimeout(() => {
+
+            notification.classList.remove(
+                "show"
+            );
+
+        }, 3000);
+
+    }
+
+
+    /*
+    ========================================
+    START
+    ========================================
+    */
+
+    loadSettings();
+
+</script>
+
+</body>
+
+</html>
