@@ -18,25 +18,13 @@
 
 </head>
 
-
 <body>
 
 <div class="background-grid"></div>
 
-
 <div class="signup-page">
-
-
-    <!-- ==================================================
-         LEFT SIDE
-         ================================================== -->
-
-    <section class="signup-left">
-
-
-        <!-- Shield -->
-
-        <div class="shield-logo">
+<section class="signup-left">
+<div class="shield-logo">
 
             <svg viewBox="0 0 64 64"
                  xmlns="http://www.w3.org/2000/svg">
@@ -57,39 +45,23 @@
             </svg>
 
         </div>
-
-
-        <!-- Brand -->
-
-        <h1 class="quantum-title">
+<h1 class="quantum-title">
             Quantum Shield
         </h1>
-
 
         <h2 class="platform-title">
             Enterprise Vulnerability Assessment Platform
         </h2>
 
-
         <p class="platform-description">
 
-            AI-powered cybersecurity platform designed to perform
+            cybersecurity platform designed to perform
             network reconnaissance, vulnerability assessment,
             threat intelligence, and security analysis.
 
         </p>
-
-
-        <!-- ==================================================
-             FEATURE CARDS
-             ================================================== -->
-
-        <div class="signup-features">
-
-
-            <!-- Live Scanning -->
-
-            <div class="signup-feature">
+<div class="signup-features">
+<div class="signup-feature">
 
                 <div class="feature-icon">
 
@@ -107,7 +79,6 @@
 
                 </div>
 
-
                 <div>
 
                     <h3>
@@ -121,11 +92,7 @@
                 </div>
 
             </div>
-
-
-            <!-- AI Threat Intelligence -->
-
-            <div class="signup-feature">
+<div class="signup-feature">
 
                 <div class="feature-icon">
 
@@ -156,7 +123,6 @@
 
                 </div>
 
-
                 <div>
 
                     <h3>
@@ -170,11 +136,7 @@
                 </div>
 
             </div>
-
-
-            <!-- Professional Reports -->
-
-            <div class="signup-feature">
+<div class="signup-feature">
 
                 <div class="feature-icon">
 
@@ -204,7 +166,6 @@
 
                 </div>
 
-
                 <div>
 
                     <h3>
@@ -218,11 +179,7 @@
                 </div>
 
             </div>
-
-
-            <!-- Security Dashboard -->
-
-            <div class="signup-feature">
+<div class="signup-feature">
 
                 <div class="feature-icon">
 
@@ -250,7 +207,6 @@
 
                 </div>
 
-
                 <div>
 
                     <h3>
@@ -265,51 +221,28 @@
 
             </div>
 
-
         </div>
 
     </section>
-
-
-
-    <!-- ==================================================
-         RIGHT SIDE
-         ================================================== -->
-
-    <section class="signup-right">
-
+<section class="signup-right">
 
         <div class="signup-card">
-
 
             <h2>
                 Create Account
             </h2>
 
-
             <p class="signup-subtitle">
                 Join your Quantum Shield security workspace
             </p>
-
-
-            <!-- ERROR MESSAGE -->
-
-            <div id="signup-message"
+<div id="signup-message"
                  class="signup-message">
 
             </div>
-
-
-            <!-- FORM -->
-
-            <form action="/register"
+<form action="/register"
                   method="POST"
                   onsubmit="return validateSignup()">
-
-
-                <!-- USERNAME -->
-
-                <div class="signup-input">
+<div class="signup-input">
 
                     <label>
                         Username
@@ -341,7 +274,6 @@
 
                         </svg>
 
-
                         <input
                             id="username"
                             type="text"
@@ -355,11 +287,7 @@
                     </div>
 
                 </div>
-
-
-                <!-- EMAIL -->
-
-                <div class="signup-input">
+<div class="signup-input">
 
                     <label>
                         Email
@@ -387,7 +315,6 @@
 
                         </svg>
 
-
                         <input
                             id="email"
                             type="email"
@@ -399,11 +326,7 @@
                     </div>
 
                 </div>
-
-
-                <!-- PASSWORD -->
-
-                <div class="signup-input">
+<div class="signup-input">
 
                     <label>
                         Password
@@ -432,7 +355,6 @@
 
                         </svg>
 
-
                         <input
                             id="password"
                             type="password"
@@ -440,7 +362,6 @@
                             autocomplete="new-password"
                             placeholder="Create password"
                             required>
-
 
                         <button
                             type="button"
@@ -481,11 +402,7 @@
                     </div>
 
                 </div>
-
-
-                <!-- CONFIRM PASSWORD -->
-
-                <div class="signup-input">
+<div class="signup-input">
 
                     <label>
                         Confirm Password
@@ -514,7 +431,6 @@
 
                         </svg>
 
-
                         <input
                             id="confirm_password"
                             type="password"
@@ -526,11 +442,7 @@
                     </div>
 
                 </div>
-
-
-                <!-- CREATE -->
-
-                <button
+<button
                     type="submit"
                     class="create-account-btn">
 
@@ -544,13 +456,8 @@
 
                 </button>
 
-
             </form>
-
-
-            <!-- DIVIDER -->
-
-            <div class="signup-divider">
+<div class="signup-divider">
 
                 <span></span>
 
@@ -561,11 +468,7 @@
                 <span></span>
 
             </div>
-
-
-            <!-- GOOGLE -->
-
-            <a
+<a
                 href="/login/google?prompt=select_account"
                 class="google-signup">
 
@@ -592,11 +495,7 @@
                 Continue with Google
 
             </a>
-
-
-            <!-- LOGIN -->
-
-            <div class="login-link">
+<div class="login-link">
 
                 Already have an account?
 
@@ -606,137 +505,61 @@
 
             </div>
 
-
         </div>
 
     </section>
 
 </div>
 
-
-
 <script>
-
-function togglePassword(){
-
-    const password =
-        document.getElementById("password");
-
-    const confirmPassword =
-        document.getElementById("confirm_password");
-
-
-    if(password.type === "password"){
-
-        password.type = "text";
-
-        confirmPassword.type = "text";
-
-    }else{
-
-        password.type = "password";
-
-        confirmPassword.type = "password";
-
-    }
-
+function togglePassword() {
+    const p = document.getElementById("password");
+    const c = document.getElementById("confirm_password");
+    const type = p.type === "password" ? "text" : "password";
+    p.type = type;
+    c.type = type;
 }
 
+function validateSignup() {
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm_password");
+    const message = document.getElementById("signup-message");
 
+    message.className = "signup-message";
 
-function validateSignup(){
-
-    const username =
-        document.getElementById("username");
-
-    const password =
-        document.getElementById("password");
-
-    const confirmPassword =
-        document.getElementById("confirm_password");
-
-    const message =
-        document.getElementById("signup-message");
-
-
-    message.className =
-        "signup-message";
-
-
-    if(username.value.trim().length < 3){
-
+    if (username.value.trim().length < 3) {
         message.classList.add("error");
-
-        message.textContent =
-            "Username must contain at least 3 characters.";
-
+        message.textContent = "Username must contain at least 3 characters.";
         username.focus();
-
         return false;
-
     }
 
-
-    if(password.value !== confirmPassword.value){
-
+    if (password.value !== confirm.value) {
         message.classList.add("error");
-
-        message.textContent =
-            "Passwords do not match.";
-
-        confirmPassword.focus();
-
+        message.textContent = "Passwords do not match.";
+        confirm.focus();
         return false;
-
     }
-
 
     return true;
-
 }
-
-
-
-const params =
-    new URLSearchParams(window.location.search);
-
-
-const message =
-    document.getElementById("signup-message");
-
 
 const errors = {
-
-    email_exists:
-        "This email is already registered. Please log in instead.",
-
-    username_exists:
-        "This username is already taken. Please choose another.",
-
-    account_exists:
-        "An account with this email already exists. Please log in.",
-
-    google_exists:
-        "This Google account is already registered. Please log in with Google."
-
+    email_exists: "This email is already registered. Please log in instead.",
+    username_exists: "This username is already taken. Please choose another.",
+    account_exists: "An account with this email already exists. Please log in.",
+    google_exists: "This Google account is already registered. Please log in with Google."
 };
 
+const error = new URLSearchParams(location.search).get("error");
+const message = document.getElementById("signup-message");
 
-const error =
-    params.get("error");
-
-
-if(error && errors[error]){
-
+if (error && errors[error]) {
     message.classList.add("error");
-
-    message.textContent =
-        errors[error];
-
+    message.textContent = errors[error];
 }
-
 </script>
-
 
 </body>
 

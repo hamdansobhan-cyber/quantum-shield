@@ -144,7 +144,25 @@
             color: white;
         }
 
+        .scan-description {
+            flex-basis: 100%;
+            width: 100%;
+            margin-top: -8px;
+            padding: 12px 16px;
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 3px solid #38bdf8;
+            border-radius: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .scan-description strong {
+            color: #38bdf8;
+        }
+
         .btn-scan {
+            margin-left: auto;
             padding: 16px 35px;
             background: linear-gradient(90deg, #06b6d4, #6366f1);
             color: white;
@@ -262,13 +280,49 @@
             <form class="scan-form" action="/scan" method="POST">
                 <div class="input-group">
                     <input type="text" name="target" placeholder="Enter IP Address or Domain" required>
-                    <select name="scan_type">
-                        <option value="quick">Quick Scan</option>
-                        <option value="version">Service Detection</option>
-                        <option value="os">OS Detection</option>
-                        <option value="vuln">Vulnerability Scan</option>
-                        <option value="nikto">Nikto Scan</option>
-                    </select>
+                    <select name="scan_type" id="scanTypeInput" onchange="updateScanDescription()">
+<option value="quick">Quick Scan</option>
+<option value="stealth">TCP SYN / Stealth Scan</option>
+<option value="tcp_connect">TCP Connect Scan</option>
+<option value="tcp_ack">TCP ACK Scan</option>
+<option value="tcp_window">TCP Window Scan</option>
+<option value="tcp_maimon">TCP Maimon Scan</option>
+<option value="tcp_fin">TCP FIN Scan</option>
+<option value="tcp_null">TCP NULL Scan</option>
+<option value="tcp_xmas">TCP Xmas Scan</option>
+<option value="udp">UDP Scan</option>
+<option value="ip_protocol">IP Protocol Scan</option>
+<option value="custom_flags">Custom TCP Flag Scan</option>
+<option value="idle">Idle Scan</option>
+<option value="ftp_bounce">FTP Bounce Scan</option>
+<option value="sctp_init">SCTP INIT Scan</option>
+<option value="sctp_cookie">SCTP COOKIE-ECHO Scan</option>
+<option value="version">Service Version Detection</option>
+<option value="os">OS Detection</option>
+<option value="intense">Intense Scan</option>
+<option value="all_ports">All TCP Ports Scan</option>
+<option value="ping">Ping / Host Discovery</option>
+<option value="vuln">Vulnerability Scan</option>
+<option value="nikto">Nikto Scan</option>
+<option value="sqlmap">SQLMap SQL Injection Scan</option>
+</select>
+<div id="advancedScanOptions" class="scan-description" style="display:none; margin-top:12px;">
+    <div id="customFlagsField" style="display:none;">
+        <label>Custom TCP Flags</label>
+        <input type="text" name="scanflags" placeholder="Example: SYN,ACK">
+    </div>
+    <div id="zombieField" style="display:none;">
+        <label>Zombie Host</label>
+        <input type="text" name="zombie" placeholder="Example: 192.168.1.20">
+    </div>
+    <div id="bounceField" style="display:none;">
+        <label>FTP Bounce Relay</label>
+        <input type="text" name="ftp_bounce" placeholder="Example: 192.168.1.30">
+    </div>
+</div>
+                </div>
+                <div class="scan-description" id="scanDescription">
+                    <strong>Quick Scan:</strong> Quickly checks the target for open ports and exposed network services.
                 </div>
                 <button type="submit" class="btn-scan">Start Scan</button>
             </form>
@@ -321,5 +375,61 @@
         </div>
     </div>
 
+
+<script>
+function updateScanDescription() {
+    var type = document.getElementById("scanTypeInput").value;
+    var description = document.getElementById("scanDescription");
+
+    var descriptions = {
+        quick: "Quickly checks common ports.",
+        stealth: "Uses SYN packets to check TCP ports.",
+        tcp_connect: "Uses a normal TCP connection.",
+        tcp_ack: "Helps identify firewall filtering.",
+        tcp_window: "Uses TCP window behaviour.",
+        tcp_maimon: "Uses FIN/ACK packets.",
+        tcp_fin: "Uses FIN packets.",
+        tcp_null: "Uses TCP packets with no flags.",
+        tcp_xmas: "Uses FIN, PSH and URG flags.",
+        udp: "Checks UDP ports and services.",
+        ip_protocol: "Checks supported IP protocols.",
+        custom_flags: "Uses selected TCP flags.",
+        idle: "Uses a zombie host for the scan.",
+        ftp_bounce: "Uses an FTP relay host.",
+        sctp_init: "Checks SCTP services using INIT.",
+        sctp_cookie: "Checks SCTP services using COOKIE-ECHO.",
+        version: "Finds services and their versions.",
+        os: "Attempts to identify the operating system.",
+        intense: "Performs a detailed Nmap scan.",
+        all_ports: "Checks all TCP ports.",
+        ping: "Checks whether the host is reachable.",
+        vuln: "Checks services for known vulnerabilities.",
+        nikto: "Checks a web server for common problems.",
+        sqlmap: "Tests web parameters for SQL injection."
+    };
+
+    description.innerHTML = "<strong>Scan:</strong> " + (descriptions[type] || descriptions.quick);
+    showAdvancedOptions();
+}
+
+function showAdvancedOptions() {
+    var type = document.getElementById("scanTypeInput").value;
+    var box = document.getElementById("advancedScanOptions");
+    var flags = document.getElementById("customFlagsField");
+    var zombie = document.getElementById("zombieField");
+    var bounce = document.getElementById("bounceField");
+
+    flags.style.display = "none";
+    zombie.style.display = "none";
+    bounce.style.display = "none";
+    box.style.display = "none";
+
+    if (type == "custom_flags") { flags.style.display = "block"; box.style.display = "block"; }
+    if (type == "idle") { zombie.style.display = "block"; box.style.display = "block"; }
+    if (type == "ftp_bounce") { bounce.style.display = "block"; box.style.display = "block"; }
+}
+
+document.addEventListener("DOMContentLoaded", updateScanDescription);
+</script>
 </body>
 </html>

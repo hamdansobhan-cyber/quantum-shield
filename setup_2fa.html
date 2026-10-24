@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Shield | Set Up Google Authenticator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; padding: 24px; background: #020617; color: #f8fafc; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; }
+    .box { width: 100%; max-width: 460px; padding: 32px; background: #0f172a; border: 1px solid rgba(56,189,248,.3); border-radius: 20px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    h1 { font-family: Orbitron, sans-serif; font-size: 23px; margin: 0 0 12px; }
+    p { color: #cbd5e1; line-height: 1.5; }
+    .qr-wrap { display: inline-flex; justify-content: center; align-items: center; min-width: 250px; min-height: 250px; margin: 12px auto; padding: 12px; border-radius: 12px; background: #fff; }
+    .qr-wrap img { display: block; width: 250px; height: 250px; object-fit: contain; image-rendering: pixelated; }
+    .manual { margin: 14px 0 22px; padding: 12px; border-radius: 8px; background: #020617; border: 1px solid #334155; overflow-wrap: anywhere; }
+    .manual strong { display: block; color: #94a3b8; font-size: 12px; margin-bottom: 8px; }
+    .manual code { color: #67e8f9; font-size: 14px; }
+    input { width: 100%; padding: 14px; margin: 8px 0 14px; background: #020617; border: 1px solid #334155; color: white; border-radius: 9px; text-align: center; font-size: 20px; letter-spacing: 5px; }
+    button { width: 100%; padding: 14px; background: linear-gradient(90deg,#06b6d4,#6366f1); border: 0; border-radius: 9px; color: white; font-weight: bold; cursor: pointer; }
+    .error { padding: 10px; color: #fecaca; background: #7f1d1d55; border-radius: 8px; margin-bottom: 14px; }
+    .hint { font-size: 13px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <h1>Set Up Google Authenticator</h1>
+    <p>Open Google Authenticator, tap <strong>+</strong>, choose <strong>Scan a QR code</strong>, and scan the code below.</p>
+
+    {% if qr_code %}
+      <div class="qr-wrap">
+        <img src="data:image/png;base64,{{ qr_code }}" alt="Google Authenticator setup QR code">
+      </div>
+    {% else %}
+      <div class="error">The QR code was not generated. Refresh this page or restart the app and try again.</div>
+    {% endif %}
+
+    <div class="manual"><strong>Can't scan? Enter this setup key manually:</strong><code>{{ secret }}</code></div>
+
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('setup_2fa') }}">
+      <label for="otp">Enter the 6-digit code shown in the app</label>
+      <input id="otp" type="text" name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="000000" required>
+      <button type="submit">Verify and Enable 2FA</button>
+    </form>
+    <p class="hint">The code changes every 30 seconds. No push notification is used.</p>
+  </main>
+</body>
+</html>

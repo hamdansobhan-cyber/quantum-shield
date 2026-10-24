@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Quantum Shield</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+
     <style>
-        * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -16,440 +19,734 @@
 
         body {
             background: #020617;
-            overflow: hidden;
             color: white;
-            background-image:
+            overflow: hidden;
+background-image:
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+
             background-size: 40px 40px;
         }
-
-        /* ======================================
-        LOADING SCREEN
-        ====================================== */
-        #loading-screen {
+#loading-screen {
             position: fixed;
             top: 0;
             left: 0;
+
             width: 100%;
             height: 100vh;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 70%);
+
+            background: radial-gradient(
+                circle at center,
+                #0f172a 0%,
+                #020617 70%
+            );
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             z-index: 999999;
-            overflow: hidden;
+
             transition: opacity 1s ease, visibility 1s ease;
         }
-
-        #loading-screen::before {
+#loading-screen::before {
             content: "";
+
             position: absolute;
+            top: 0;
+            left: 0;
+
             width: 100%;
             height: 100%;
+
             background-image:
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+
             background-size: 40px 40px;
+
             animation: gridMove 8s linear infinite;
         }
 
         @keyframes gridMove {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(40px); }
-        }
+            from {
+                transform: translateY(0);
+            }
 
-        .loader-container {
+            to {
+                transform: translateY(40px);
+            }
+        }
+.loader-container {
             position: relative;
+
             display: flex;
             flex-direction: column;
+
             align-items: center;
             justify-content: center;
+
             z-index: 10;
         }
-
-        .scanner-ring {
+.scanner-ring {
             position: absolute;
+
             width: 280px;
             height: 280px;
+
             border: 2px solid rgba(56, 189, 248, 0.25);
             border-radius: 50%;
+
             animation: scannerPulse 3s infinite;
         }
 
-        .delay1 { animation-delay: 1s; }
-        .delay2 { animation-delay: 2s; }
-
-        @keyframes scannerPulse {
-            0% { transform: scale(0.7); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+        .delay1 {
+            animation-delay: 1s;
         }
 
-        .core-logo {
+        .delay2 {
+            animation-delay: 2s;
+        }
+
+        @keyframes scannerPulse {
+            0% {
+                transform: scale(0.7);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+.core-logo {
             width: 180px;
             height: 180px;
+
             border-radius: 50%;
+
             display: flex;
             justify-content: center;
             align-items: center;
+
             font-size: 62px;
             font-weight: 900;
+
             color: #38bdf8;
+
             background: rgba(15, 23, 42, 0.9);
+
             border: 2px solid rgba(56, 189, 248, 0.35);
-            box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), inset 0 0 25px rgba(121, 207, 244, 0.2);
-            text-shadow: 0 0 20px #38bdf8, 0 0 40px #38bdf8;
+
+            box-shadow:
+                0 0 40px rgba(56, 189, 248, 0.4),
+                inset 0 0 25px rgba(121, 207, 244, 0.2);
+
+            text-shadow:
+                0 0 20px #38bdf8,
+                0 0 40px #38bdf8;
+
             animation: logoFloat 4s ease-in-out infinite;
         }
 
         @keyframes logoFloat {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
         }
 
         .loading-text {
             margin-top: 60px;
+
             font-size: 32px;
             font-weight: 700;
+
             letter-spacing: 4px;
+
             color: #38bdf8;
+
             text-shadow: 0 0 15px #38bdf8;
         }
 
         .loading-subtext {
             margin-top: 15px;
+
             font-size: 15px;
             color: #94a3b8;
+
             letter-spacing: 2px;
         }
-
-        .progress-container {
+.progress-container {
             margin-top: 40px;
+
             width: 420px;
             height: 12px;
+
             background: rgba(255, 255, 255, 0.05);
+
             border-radius: 999px;
+
             overflow: hidden;
+
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
+
+            background: linear-gradient(
+                90deg,
+                #06b6d4,
+                #6366f1
+            );
+
             border-radius: 999px;
+
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+
             animation: progressLoad 5s linear forwards;
         }
 
         @keyframes progressLoad {
-            0% { width: 0%; }
-            100% { width: 100%; }
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
         }
 
         .loading-status {
             margin-top: 25px;
+
             font-size: 14px;
+
             color: #cbd5e1;
+
             letter-spacing: 1px;
+
             animation: flicker 1.5s infinite;
         }
 
         @keyframes flicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+            0% {
+                opacity: 1;
+            }
 
-        /* ======================================
-        BACKGROUND GLOW
-        ====================================== */
-        .bg-glow {
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+.bg-glow {
             position: absolute;
+
             width: 700px;
             height: 700px;
-            background: radial-gradient(circle, #0ea5e955 0%, transparent 70%);
+
             top: -200px;
             right: -100px;
+
+            background: radial-gradient(
+                circle,
+                #0ea5e955 0%,
+                transparent 70%
+            );
+
             filter: blur(60px);
+
             z-index: 0;
         }
-
-        /* ======================================
-        LAYOUT MAPS
-        ====================================== */
-        .container {
+.container {
             display: flex;
+
             height: 100vh;
+
             position: relative;
+
             z-index: 1;
         }
-
-        /* ======================================
-        SIDEBAR
-        ====================================== */
-        .sidebar {
+.sidebar {
             width: 240px;
+
             background: rgba(2, 6, 23, 0.95);
+
             backdrop-filter: blur(20px);
+
             border-right: 1px solid rgba(255, 255, 255, 0.05);
+
             padding: 40px 25px;
+
             display: flex;
             flex-direction: column;
         }
 
         .logo {
             font-size: 56px;
+
             font-weight: 900;
+
             color: #38bdf8;
+
             margin-bottom: 70px;
-            text-shadow: 0 0 15px #38bdf8, 0 0 40px #38bdf8;
+
+            text-shadow:
+                0 0 15px #38bdf8,
+                0 0 40px #38bdf8;
         }
 
         .menu {
             display: flex;
+
             flex-direction: column;
+
             gap: 18px;
         }
 
         .menu a {
             text-decoration: none;
+
             color: #94a3b8;
+
             padding: 18px;
+
             border-radius: 18px;
+
             transition: 0.3s;
+
             font-size: 14px;
         }
 
-        .menu a:hover, .menu a.active {
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
+        .menu a:hover,
+        .menu a.active {
+            background: linear-gradient(
+                90deg,
+                #06b6d4,
+                #6366f1
+            );
+
             transform: translateX(8px);
+
             color: white;
+
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
         }
-
-        /* ======================================
-        MAIN COMPONENT
-        ====================================== */
-        .main {
+.main {
             flex: 1;
+
             display: flex;
+
             justify-content: center;
             align-items: center;
+
             padding: 60px;
+
             overflow-y: auto;
         }
 
-        /* ======================================
-        HERO COMPONENT GRID
-        ====================================== */
         .hero {
             width: 100%;
+
             max-width: 1500px;
+
             background: rgba(15, 23, 42, 0.75);
+
             backdrop-filter: blur(30px);
+
             border: 1px solid rgba(255, 255, 255, 0.06);
+
             border-radius: 40px;
+
             padding: 70px;
+
             position: relative;
+
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.4), 0 0 80px rgba(56, 189, 248, 0.05);
+
+            box-shadow:
+                0 0 50px rgba(0, 0, 0, 0.4),
+                0 0 80px rgba(56, 189, 248, 0.05);
         }
 
         .hero h1 {
             font-size: 92px;
+
             font-weight: 900;
+
             color: #38bdf8;
+
             line-height: 1;
+
             margin-bottom: 20px;
-            text-shadow: 0 0 20px #38bdf8, 0 0 60px #38bdf8;
+
+            text-shadow:
+                0 0 20px #38bdf8,
+                0 0 60px #38bdf8;
         }
 
         .subtitle {
             font-size: 22px;
+
             color: #94a3b8;
+
             margin-bottom: 55px;
+
             max-width: 850px;
+
             line-height: 1.7;
         }
-
-        /* ======================================
-        FORM ACTIONS
-        ====================================== */
-        .scan-form {
+.scan-form {
             display: flex;
+
             gap: 20px;
+
             margin-bottom: 60px;
+
             flex-wrap: wrap;
         }
 
         .scan-form input {
             flex: 1;
+
             min-width: 350px;
+
             padding: 24px;
+
             border: none;
+
             outline: none;
+
             border-radius: 22px;
+
             background: #0f172a;
+
             border: 1px solid rgba(255, 255, 255, 0.05);
+
             color: white;
+
             font-size: 16px;
+
             transition: 0.3s;
         }
 
         .scan-form input:focus {
             border-color: #38bdf8;
+
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
         }
 
         .scan-form select {
             padding: 24px;
+
             border: none;
+
             outline: none;
+
             border-radius: 22px;
+
             background: #0f172a;
+
             color: white;
+
             font-size: 15px;
+
             border: 1px solid rgba(255, 255, 255, 0.05);
+
             min-width: 320px;
         }
 
-        .scan-form button {
-            padding: 24px 40px;
-            border: none;
-            border-radius: 22px;
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
-            color: white;
+        /* Enhanced Guidance Box for Pros, Cons, and Situations */
+        .scan-description {
+            flex-basis: 100%;
+            width: 100%;
+            margin-top: 12px;
+            padding: 20px;
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid #38bdf8;
+            border-radius: 12px;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .scan-description h4 {
+            color: #38bdf8;
+            margin-bottom: 8px;
             font-size: 16px;
-            font-weight: 700;
+        }
+
+        .scan-validation-error {
+            display: none;
+            flex-basis: 100%;
+            width: 100%;
+            padding: 14px 16px;
+            margin-top: 10px;
+            border: 1px solid rgba(248, 113, 113, 0.75);
+            border-left: 4px solid #f87171;
+            border-radius: 10px;
+            background: rgba(127, 29, 29, 0.25);
+            color: #fecaca;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .scan-validation-error strong { color: #fca5a5; }
+
+        /* Layout for the description heading and its mode-switch button. */
+        .scan-description-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .scan-description-header h4 {
+            margin-bottom: 0;
+        }
+
+        .description-mode-button {
+            padding: 8px 12px;
+            border: 1px solid #38bdf8;
+            border-radius: 8px;
+            background: rgba(56, 189, 248, 0.10);
+            color: #38bdf8;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .description-mode-button:hover {
+            background: rgba(56, 189, 248, 0.22);
+        }
+
+        .description-mode-button:focus-visible {
+            outline: 2px solid #38bdf8;
+            outline-offset: 3px;
+        }
+
+        .scan-description ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .scan-description li {
+            margin-bottom: 6px;
+        }
+
+        .scan-form button {
+            margin-left: auto;
+            width: 320px;
+            min-width: 320px;
+            box-sizing: border-box;
+            padding: 24px 40px;
+
+            border: none;
+
+            border-radius: 22px;
+
+            background: linear-gradient(
+                90deg,
+                #06b6d4,
+                #6366f1
+            );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
             transition: 0.3s;
+
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
         }
 
         .scan-form button:hover {
             transform: translateY(-5px);
+
             box-shadow: 0 0 30px rgba(56, 189, 248, 0.45);
         }
-
-        /* ======================================
-        CARDS SYSTEM
-        ====================================== */
-        .features {
+.features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(320px, 1fr));
+
             gap: 28px;
         }
 
         .card {
             background: rgba(15, 23, 42, 0.8);
+
             padding: 35px;
+
             border-radius: 30px;
+
             border: 1px solid rgba(255, 255, 255, 0.05);
+
             transition: 0.3s;
+
             position: relative;
+
             overflow: hidden;
         }
 
         .card:hover {
             transform: translateY(-10px);
+
             box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
         }
 
         .card h2 {
             font-size: 34px;
+
             color: #38bdf8;
+
             margin-bottom: 20px;
         }
 
         .card p {
             color: #94a3b8;
+
             line-height: 1.8;
+
             font-size: 15px;
         }
-
-        /* ======================================
-        BOTTOM BAR DATA
-        ====================================== */
-        .status-bar {
+.status-bar {
             margin-top: 45px;
+
             display: flex;
+
             gap: 25px;
+
             flex-wrap: wrap;
         }
 
         .status {
             background: rgba(255, 255, 255, 0.04);
+
             padding: 18px 25px;
+
             border-radius: 18px;
+
             border: 1px solid rgba(255, 255, 255, 0.04);
+
             display: flex;
+
             align-items: center;
+
             gap: 12px;
+
             font-size: 14px;
+
             color: #cbd5e1;
         }
 
         .dot {
             width: 12px;
             height: 12px;
+
             border-radius: 50%;
+
             background: #22c55e;
+
             box-shadow: 0 0 12px #22c55e;
+
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
 
-        /* ===================================================
-        DASHBOARD ALIGNED AI SLIDING CHAT DRAWER CLASSES
-        =================================================== */
-        .ai-chat-drawer {
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+.ai-chat-drawer {
             position: fixed;
+
             top: 0;
             right: -450px;
+
             width: 450px;
             height: 100vh;
+
             background: rgba(15, 23, 42, 0.95);
+
             backdrop-filter: blur(20px);
+
             border-left: 2px solid #06b6d4;
+
             box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+
             z-index: 9999999;
-            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+            transition: right 0.4s;
+
             display: flex;
+
             flex-direction: column;
         }
-
-        .ai-chat-drawer.drawer-open {
+.ai-chat-drawer.drawer-open {
             right: 0;
         }
 
         .ai-chat-header {
             padding: 25px;
+
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             background: #0b1329;
         }
 
         .ai-chat-header h3 {
             color: #38bdf8;
+
             font-size: 14px;
+
             letter-spacing: 1px;
+
             text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
         .ai-close-btn {
             background: transparent;
+
             border: none;
+
             color: #64748b;
+
             font-size: 20px;
+
             cursor: pointer;
+
             transition: color 0.2s;
         }
 
@@ -459,329 +756,1364 @@
 
         .ai-chat-messages {
             flex: 1;
+
             padding: 25px;
+
             overflow-y: auto;
+
             display: flex;
+
             flex-direction: column;
+
             gap: 15px;
         }
 
         .ai-msg {
             padding: 14px 18px;
+
             border-radius: 18px;
+
             font-size: 13px;
+
             line-height: 1.6;
+
             max-width: 85%;
+
             word-wrap: break-word;
+
             font-family: monospace;
         }
 
         .ai-msg.user {
-            background: linear-gradient(135deg, #06b6d4, #4338ca);
+            background: linear-gradient(
+                135deg,
+                #06b6d4,
+                #4338ca
+            );
+
             color: white;
+
             align-self: flex-end;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+
             border-bottom-right-radius: 4px;
         }
 
         .ai-msg.bot {
             background: #0f172a;
-            color: #e2e8f0;
-            align-self: flex-start;
-            border: 1px solid rgba(56, 189, 248, 0.15);
-            border-bottom-left-radius: 4px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
 
-        .ai-chat-input-area {
+            color: #e2e8f0;
+
+            align-self: flex-start;
+
+            border: 1px solid rgba(56, 189, 248, 0.15);
+
+            border-bottom-left-radius: 4px;
+
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+.ai-chat-input-area {
             padding: 20px;
+
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+
             background: #0b1329;
+
             display: flex;
+
             gap: 12px;
         }
 
         .ai-chat-input-area input {
             flex: 1;
+
             padding: 16px;
+
             background: #020617;
+
             border: 1px solid rgba(255, 255, 255, 0.1);
+
             border-radius: 12px;
+
             color: white;
+
             font-size: 13px;
+
             outline: none;
+
             font-family: monospace;
         }
 
         .ai-chat-input-area input:focus {
             border-color: #38bdf8;
+
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
         }
 
         .ai-chat-input-area button {
             padding: 16px 24px;
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
+
+            background: linear-gradient(
+                90deg,
+                #06b6d4,
+                #6366f1
+            );
+
             border: none;
+
             border-radius: 12px;
+
             color: white;
+
             font-weight: bold;
+
             cursor: pointer;
+
             font-size: 12px;
+
             letter-spacing: 1px;
+
             transition: transform 0.2s;
         }
 
         .ai-chat-input-area button:hover {
             transform: scale(1.02);
         }
-
-        /* Floating Trigger Actuator FAB Box */
-        .ai-fab-trigger {
+.ai-fab-trigger {
             position: fixed;
+
             bottom: 30px;
             right: 30px;
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
+
+            background: linear-gradient(
+                90deg,
+                #06b6d4,
+                #6366f1
+            );
+
             border: none;
+
             padding: 18px 28px;
+
             border-radius: 50px;
+
             color: white;
+
             font-weight: 700;
+
             font-size: 13px;
+
             letter-spacing: 1px;
+
             cursor: pointer;
+
             box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+
             z-index: 999999;
-            transition: transform 0.2s, box-shadow 0.2s;
+
+            transition: transform 0.2s;
         }
 
         .ai-fab-trigger:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 35px rgba(6, 182, 212, 0.8);
         }
-
-        /* Elastic Typing Indicator */
-        .typing-indicator {
+.typing-indicator {
             display: flex;
+
             gap: 5px;
+
             padding: 15px 20px !important;
         }
+
         .typing-dot {
             width: 7px;
             height: 7px;
+
             background: #38bdf8;
+
             border-radius: 50%;
-            animation: dotElastic 1.4s infinite ease-in-out;
-        }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes dotElastic {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1.2); opacity: 1; }
+
+            animation: dotAnimation 1.4s infinite ease-in-out;
         }
 
-        @media(max-width: 1200px){
-            .hero h1 { font-size: 68px; }
-            .container { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; }
-            .main { padding: 25px; }
-            .hero { padding: 45px; }
-        }
-    </style>
-</head>
-
-<body>
-
-    <div id="loading-screen">
-        <div class="loader-container">
-            <div class="scanner-ring"></div>
-            <div class="scanner-ring delay1"></div>
-            <div class="scanner-ring delay2"></div>
-            <div class="core-logo">VAP</div>
-            <div class="loading-text">INITIALIZING THREAT ENGINE</div>
-            <div class="loading-subtext">Quantum Shield AI Security Operations Center</div>
-            <div class="progress-container">
-                <div class="progress-bar"></div>
-            </div>
-            <div class="loading-status" id="loading-status">Establishing secure infrastructure...</div>
-        </div>
-    </div>
-
-    <div class="bg-glow"></div>
-
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">VAP</div>
-            <div class="menu">
-                <a href="/home" class="active">🏠 Dashboard Home</a>
-                <a href="#" onclick="toggleAiDrawer(); return false;">🤖 Threat Intelligence (AI)</a>
-                    <a href="/reconnaissance">
-                       🌐 Network Reconnaissance
-                    </a>
-
-                   <a href="/vulnerability">
-                    🛡 Vulnerability Analysis
-                   </a>
-
-                   <a href="/monitoring">
-                   📊 Infrastructure Monitoring
-                   </a>
-                   <a href="/settings">
-                     ⚙️ Settings
-                    </a>
-                    <a href="/history">
-                    🕘 Scan History
-                   </a>
-                     <a href="/aiassistant">
-                     🤖 AI Security Assistant
-                    </a>
-               <a href="/scan-config">
-               🔎 Scan Configuration
-             </a>
-                <a href="/logout">🚪 Logout</a>
-            </div>
-        </div>
-
-        <div class="main">
-            <div class="hero">
-                <h1>Quantum Shield</h1>
-                <div class="subtitle">
-                    AI-Powered Enterprise Vulnerability Intelligence Platform for advanced infrastructure reconnaissance, threat analysis, and cybersecurity operations.
-                </div>
-
-                <form class="scan-form" action="/scan" method="POST" onsubmit="showLoading()">
-                    <input type="text" name="target" placeholder="Enter Domain or IP Address" required>
-                    <select name="scan_type">
-                        <option value="quick">Quick Scan (~5-15 sec)</option>
-                        <option value="version">Service Version Detection</option>
-                        <option value="os">OS Detection</option>
-                        <option value="vuln">Vulnerability Scan</option>
-                        <option value="nikto">Nikto Web Scan</option>
-                    </select>
-                    <button type="submit">Launch Scan</button>
-                </form>
-
-                <div class="features">
-                    <div class="card">
-                        <h2>Network Recon</h2>
-                        <p>Performs infrastructure scanning and port discovery using optimized Nmap reconnaissance intelligence.</p>
-                    </div>
-                    <div class="card">
-                        <h2>Threat Analysis</h2>
-                        <p>Detects exposed services, vulnerabilities, attack surfaces, and infrastructure weaknesses.</p>
-                    </div>
-                    <div class="card">
-                        <h2>Infrastructure Monitoring</h2>
-                        <p>Enterprise-grade monitoring and reconnaissance visualization for live target systems.</p>
-                    </div>
-                </div>
-
-                <div class="status-bar">
-                    <div class="status"><div class="dot"></div> Threat Engine Online</div>
-                    <div class="status"><div class="dot"></div> AI Monitoring Active</div>
-                    <div class="status"><div class="dot"></div> SOC Infrastructure Stable</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="ai-chat-drawer" id="aiChatDrawer">
-        <div class="ai-chat-header">
-            <h3>QUANTUM SOC INTELLIGENCE CORE</h3>
-            <button class="ai-close-btn" onclick="toggleAiDrawer()">✕</button>
-        </div>
-        <div class="ai-chat-messages" id="aiChatMessages">
-            <div class="ai-msg bot">
-                System online. I am optimized for digital forensics metrics, architecture design documentation validation, and live network scan analysis. Ask me anything.
-            </div>
-        </div>
-        <div class="ai-chat-input-area">
-            <input type="text" id="aiUserQuery" placeholder="Submit dynamic threat query..." onkeydown="if(event.key === 'Enter') dispatchAiQuery()">
-            <button onclick="dispatchAiQuery()">EXECUTE</button>
-        </div>
-    </div>
-
-    <button class="ai-fab-trigger" onclick="toggleAiDrawer()">AI CHAT</button>
-
-    <script>
-        window.onload = function () {
-            setTimeout(() => {
-                document.getElementById("loading-screen").style.opacity = "0";
-                document.getElementById("loading-screen").style.visibility = "hidden";
-            }, 3500);
-        };
-
-        function showLoading() {
-            document.getElementById("loading-screen").style.opacity = "1";
-            document.getElementById("loading-screen").style.visibility = "visible";
-
-            const messages = [
-                "Establishing secure infrastructure...",
-                "Launching reconnaissance engine...",
-                "Analyzing target exposure...",
-                "Running AI threat assessment...",
-                "Generating intelligence reports...",
-                "Finalizing scan results..."
-            ];
-            let i = 0;
-            const statusText = document.getElementById("loading-status");
-            setInterval(() => {
-                statusText.innerText = messages[i];
-                i = (i + 1) % messages.length;
-            }, 1200);
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
         }
 
-        function toggleAiDrawer() {
-            const drawer = document.getElementById('aiChatDrawer');
-            drawer.classList.toggle('drawer-open');
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
         }
 
-        async function dispatchAiQuery() {
-            const inputField = document.getElementById('aiUserQuery');
-            const msgText = inputField.value.trim();
-            if (!msgText) return;
+        @keyframes dotAnimation {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
 
-            appendMessage(msgText, 'user');
-            inputField.value = '';
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+@media (max-width: 1200px) {
 
-            const msgBox = document.getElementById('aiChatMessages');
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'ai-msg bot typing-indicator';
-            typingIndicator.id = 'aiTyping';
-            typingIndicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-            msgBox.appendChild(typingIndicator);
-            msgBox.scrollTop = msgBox.scrollHeight;
+            .hero h1 {
+                font-size: 68px;
+            }
 
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: msgText })
-                });
-                
-                const data = await response.json();
-                
-                const currentIndicator = document.getElementById('aiTyping');
-                if (currentIndicator) { currentIndicator.remove(); }
-                
-                appendMessage(data.response, 'bot');
-                
-            } catch (error) {
-                const currentIndicator = document.getElementById('aiTyping');
-                if (currentIndicator) { currentIndicator.remove(); }
-                appendMessage("Central core communication drop. Confirm your API Key configuration inside app.py.", 'bot');
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                padding: 25px;
+            }
+
+            .hero {
+                padding: 45px;
             }
         }
 
-        function appendMessage(text, sender) {
-            const msgBox = document.getElementById('aiChatMessages');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `ai-msg ${sender}`;
-            msgDiv.innerText = text;
-            msgBox.appendChild(msgDiv);
-            msgBox.scrollTop = msgBox.scrollHeight;
-        }
-    </script>
     
-</body>
+        /* Give scan guidance enough room to read without an inner scrollbar. */
+        @media (min-width: 901px) {
+            .scan-description {
+                min-height: 440px;
+                max-height: none;
+                overflow-y: visible;
+            }
+        }
 
+        /* Compact layout: keep the scan guidance readable without taking over the page. */
+        .main {
+            align-items: flex-start;
+            padding: 24px;
+        }
+
+        .hero {
+            max-width: 1200px;
+            padding: 36px;
+            border-radius: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 5vw, 64px);
+            line-height: 1.08;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            line-height: 1.55;
+            margin-bottom: 26px;
+            max-width: 760px;
+        }
+
+        .scan-form {
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .scan-form input,
+        .scan-form select {
+            min-width: 220px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .scan-form button {
+            width: auto;
+            min-width: 200px;
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .scan-description {
+            margin-top: 4px;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            min-height: 420px;
+            max-height: none;
+            overflow-y: visible;
+            overflow-wrap: anywhere;
+        }
+
+        .scan-description h4 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .scan-description-header {
+            margin-bottom: 8px;
+        }
+
+        .scan-description ul {
+            margin-top: 6px;
+            padding-left: 18px;
+        }
+
+        .scan-description li {
+            margin-bottom: 4px;
+        }
+
+        .description-mode-button {
+            font-size: 11px;
+            padding: 8px 10px;
+        }
+
+        .features {
+            gap: 16px;
+        }
+
+        .card {
+            padding: 24px;
+            border-radius: 22px;
+        }
+
+        @media (max-width: 900px) {
+            .main { padding: 16px; }
+            .hero { padding: 24px; }
+            .scan-form input,
+            .scan-form select { min-width: 100%; width: 100%; }
+            .scan-form button { width: 100%; min-width: 100%; }
+            .scan-description { min-height: 360px; max-height: none; overflow-y: visible; }
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 18px; border-radius: 18px; }
+            .hero h1 { font-size: 34px; }
+            .subtitle { font-size: 14px; margin-bottom: 20px; }
+            .scan-description { padding: 12px; font-size: 12px; }
+            .scan-description-header { align-items: flex-start; }
+        }
+
+        /* Compact layout: keep the scan guidance readable without taking over the page. */
+        .main {
+            align-items: flex-start;
+            padding: 24px;
+        }
+
+        .hero {
+            max-width: 1200px;
+            padding: 36px;
+            border-radius: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 5vw, 64px);
+            line-height: 1.08;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            line-height: 1.55;
+            margin-bottom: 26px;
+            max-width: 760px;
+        }
+
+        .scan-form {
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .scan-form input,
+        .scan-form select {
+            min-width: 220px;
+            padding: 16px 18px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .scan-form button {
+            width: auto;
+            min-width: 200px;
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 13px;
+        }
+
+        .scan-description {
+            margin-top: 4px;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            min-height: 420px;
+            max-height: none;
+            overflow-y: visible;
+            overflow-wrap: anywhere;
+        }
+
+        .scan-description h4 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .scan-description-header {
+            margin-bottom: 8px;
+        }
+
+        .scan-description ul {
+            margin-top: 6px;
+            padding-left: 18px;
+        }
+
+        .scan-description li {
+            margin-bottom: 4px;
+        }
+
+        .description-mode-button {
+            font-size: 11px;
+            padding: 8px 10px;
+        }
+
+        .features {
+            gap: 16px;
+        }
+
+        .card {
+            padding: 24px;
+            border-radius: 22px;
+        }
+
+        @media (max-width: 900px) {
+            .main { padding: 16px; }
+            .hero { padding: 24px; }
+            .scan-form input,
+            .scan-form select { min-width: 100%; width: 100%; }
+            .scan-form button { width: 100%; min-width: 100%; }
+            .scan-description { min-height: 360px; max-height: none; overflow-y: visible; }
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 18px; border-radius: 18px; }
+            .hero h1 { font-size: 34px; }
+            .subtitle { font-size: 14px; margin-bottom: 20px; }
+            .scan-description { padding: 12px; font-size: 12px; }
+            .scan-description-header { align-items: flex-start; }
+        }
+</style>
+</head>
+
+<body>
+<div id="loading-screen">
+
+        <div class="loader-container">
+
+            <div class="scanner-ring"></div>
+            <div class="scanner-ring delay1"></div>
+            <div class="scanner-ring delay2"></div>
+
+            <div class="core-logo">
+                VAP
+            </div>
+
+            <div class="loading-text">
+                INITIALIZING THREAT ENGINE
+            </div>
+
+            <div class="loading-subtext">
+                Quantum Shield AI Security Operations Center
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+
+            <div class="loading-status" id="loading-status">
+                Establishing secure infrastructure...
+            </div>
+
+        </div>
+
+    </div>
+<div class="bg-glow"></div>
+<div class="container">
+<div class="sidebar">
+
+            <div class="logo">
+                VAP
+            </div>
+
+            <div class="menu">
+
+                <a href="/home" class="active">
+                    🏠 Dashboard Home
+                </a>
+
+                <a href="#" onclick="toggleAiDrawer(); return false;">
+                    🤖 Threat Intelligence (AI)
+                </a>
+
+                <a href="/reconnaissance">
+                    🌐 Network Reconnaissance
+                </a>
+
+                <a href="/vulnerability">
+                    🛡 Vulnerability Analysis
+                </a>
+
+                <a href="/monitoring">
+                    📊 Infrastructure Monitoring
+                </a>
+
+                <a href="/settings">
+                    ⚙️ Settings
+                </a>
+
+                <a href="/history">
+                    🕘 Scan History
+                </a>
+
+                <a href="/aiassistant">
+                    🤖 AI Security Assistant
+                </a>
+
+                <a href="/scan-config">
+                    🔎 Scan Configuration
+                </a>
+
+                <a href="/security-center">
+                    🛡️ Security Center
+                </a>
+
+                <a href="/logout">
+                    🚪 Logout
+                </a>
+
+            </div>
+
+        </div>
+<div class="main">
+
+            <div class="hero">
+
+                <h1>
+                    Quantum Shield
+                </h1>
+
+                <div class="subtitle">
+                    AI-Powered Enterprise Vulnerability Intelligence Platform
+                    for advanced infrastructure reconnaissance, threat analysis,
+                    and cybersecurity operations.
+                </div>
+{% if error_msg %}
+                <div role="alert" aria-live="assertive" style="margin: 16px 0; padding: 14px 16px; border: 1px solid #dc6262; border-radius: 10px; background: rgba(220, 70, 70, 0.12); color: inherit;">
+                    <strong>Scan not completed</strong>
+                    <div style="margin-top: 6px;">{{ error_msg }}</div>
+                </div>
+                {% endif %}
+                <form
+                    class="scan-form"
+                    action="/scan"
+                    method="POST"
+                    onsubmit="return validateScanInput()"
+                >
+<input
+                        id="targetInput"
+                        type="text"
+                        name="target"
+                        placeholder="Enter Domain or IP Address"
+                        required
+                    >
+                    <div id="scanValidationError" class="scan-validation-error" role="alert" aria-live="assertive"></div>
+<select id="scanTypeInput" name="scan_type" onchange="updateScanPage()">
+<optgroup label="Core Nmap Scans">
+    <option value="quick">Quick Scan</option>
+    <option value="stealth">TCP SYN / Stealth Scan</option>
+    <option value="tcp_connect">TCP Connect Scan</option>
+    <option value="tcp_ack">TCP ACK Scan</option>
+    <option value="tcp_window">TCP Window Scan</option>
+    <option value="tcp_maimon">TCP Maimon Scan</option>
+    <option value="tcp_fin">TCP FIN Scan</option>
+    <option value="tcp_null">TCP NULL Scan</option>
+    <option value="tcp_xmas">TCP Xmas Scan</option>
+    <option value="udp">UDP Scan</option>
+    <option value="ip_protocol">IP Protocol Scan</option>
+    <option value="custom_flags">Custom TCP Flag Scan</option>
+    <option value="idle">Idle Scan</option>
+    <option value="ftp_bounce">FTP Bounce Scan</option>
+    <option value="sctp_init">SCTP INIT Scan</option>
+    <option value="sctp_cookie">SCTP COOKIE-ECHO Scan</option>
+    <option value="os">OS Detection</option>
+    <option value="intense">Intense Scan</option>
+    <option value="all_ports">All TCP Ports Scan</option>
+    <option value="ping">Ping / Host Discovery</option>
+    <option value="vuln">Vulnerability Scan</option>
+</optgroup>
+<optgroup label="Advanced Web Service & Application Scanning">
+    <option value="version">Service Version Detection (-sV --version-intensity 5)</option>
+    <option value="default_web_script">Default Web Script Scan (-sV -sC)</option>
+    <option value="vuln_detection">Vulnerability Detection Script (--script vuln)</option>
+    <option value="web_enum">Web Directory Brute-Forcing (--script http-enum)</option>
+    <option value="ssl_audit">SSL/TLS Security Auditing (--script ssl-enum-ciphers)</option>
+    <option value="comprehensive_web">Comprehensive Web Auditing (--script "http-*")</option>
+    <option value="nikto">Nikto Web Scan</option>
+    <option value="sqlmap">SQLMap Detection Scan</option>
+</optgroup>
+</select>
+<div id="advancedScanOptions" class="scan-description" style="display:none; margin-top:12px;">
+    <div id="customFlagsField" style="display:none;">
+        <label>Custom TCP Flags</label>
+        <input type="text" name="scanflags" placeholder="Example: SYN,ACK">
+    </div>
+    <div id="zombieField" style="display:none;">
+        <label>Zombie Host</label>
+        <input type="text" name="zombie" placeholder="Example: 192.168.1.20">
+    </div>
+    <div id="bounceField" style="display:none;">
+        <label>FTP Bounce Relay</label>
+        <input type="text" name="ftp_bounce" placeholder="Example: 192.168.1.30">
+    </div>
+</div>
+                    <div class="scan-description" id="scanDescription">
+                        <div class="scan-description-header">
+                            <h4 id="scanDescriptionTitle">Quick Scan</h4>
+                            <button
+                                type="button"
+                                id="descriptionModeButton"
+                                class="description-mode-button"
+                                onclick="toggleDescriptionMode()"
+                                aria-pressed="false">
+                                Show Simplified Description
+                            </button>
+                        </div>
+                        <div id="scanDescriptionContent" aria-live="polite">
+                            <p><strong>When to Use:</strong> Quickly checks the most common ports to give a fast overview of the target.</p>
+                            <ul>
+                                <li><strong>Pros:</strong> Very fast and efficient.</li>
+                                <li><strong>Cons:</strong> Can miss ports outside the top common list.</li>
+                            </ul>
+                        </div>
+                    </div>
+<button type="submit">
+                        Launch Scan
+                    </button>
+
+                </form>
+<div class="features">
+
+                    <div class="card">
+
+                        <h2>
+                            Network Recon
+                        </h2>
+
+                        <p>
+                            Performs infrastructure scanning and port discovery
+                            using optimized Nmap reconnaissance intelligence.
+                        </p>
+
+                    </div>
+
+                    <div class="card">
+
+                        <h2>
+                            Threat Analysis
+                        </h2>
+
+                        <p>
+                            Detects exposed services, vulnerabilities, attack
+                            surfaces, and infrastructure weaknesses.
+                        </p>
+
+                    </div>
+<div class="card">
+
+                        <h2>
+                            Infrastructure Monitoring
+                        </h2>
+
+                        <p>
+                            Enterprise-grade monitoring and reconnaissance
+                            visualization for live target systems.
+                        </p>
+
+                    </div>
+
+                </div>
+<div class="status-bar">
+
+                    <div class="status">
+                        <div class="dot"></div>
+                        Threat Engine Online
+                    </div>
+
+                    <div class="status">
+                        <div class="dot"></div>
+                        AI Monitoring Active
+                    </div>
+
+                    <div class="status">
+                        <div class="dot"></div>
+                        SOC Infrastructure Stable
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+<div class="ai-chat-drawer" id="aiChatDrawer">
+<div class="ai-chat-header">
+
+            <h3>
+                QUANTUM SOC INTELLIGENCE CORE
+            </h3>
+
+            <button
+                class="ai-close-btn"
+                onclick="toggleAiDrawer()"
+            >
+                ✕
+            </button>
+
+        </div>
+<div
+            class="ai-chat-messages"
+            id="aiChatMessages"
+        >
+
+            <div class="ai-msg bot">
+
+                System online. I am optimized for digital forensics metrics,
+                architecture design documentation validation, and live network
+                scan analysis. Ask me anything.
+
+            </div>
+
+        </div>
+<div class="ai-chat-input-area">
+
+            <input
+                type="text"
+                id="aiUserQuery"
+                placeholder="Submit dynamic threat query..."
+                onkeydown="if(event.key === 'Enter') dispatchAiQuery()"
+            >
+
+            <button onclick="dispatchAiQuery()">
+                EXECUTE
+            </button>
+
+        </div>
+
+    </div>
+<button
+        class="ai-fab-trigger"
+        onclick="toggleAiDrawer()"
+    >
+        AI CHAT
+    </button>
+<script>
+const loadingScreen =
+            document.getElementById("loading-screen");
+const loadingStatus =
+            document.getElementById("loading-status");
+window.onload = function () {
+
+            setTimeout(function () {
+
+                loadingScreen.style.opacity = "0";
+
+                loadingScreen.style.visibility = "hidden";
+
+            }, 3500);
+
+        };
+function showLoading() {
+
+            loadingScreen.style.opacity = "1";
+
+            loadingScreen.style.visibility = "visible";
+const messages = [
+
+                "Establishing secure infrastructure...",
+
+                "Launching reconnaissance engine...",
+
+                "Analyzing target exposure...",
+
+                "Running AI threat assessment...",
+
+                "Generating intelligence reports...",
+
+                "Finalizing scan results..."
+
+            ];
+let messageNumber = 0;
+setInterval(function () {
+
+                loadingStatus.innerText =
+                    messages[messageNumber];
+messageNumber++;
+if (messageNumber === messages.length) {
+
+                    messageNumber = 0;
+
+                }
+
+            }, 1200);
+
+        }
+function toggleAiDrawer() {
+
+            const drawer =
+                document.getElementById("aiChatDrawer");
+drawer.classList.toggle("drawer-open");
+
+        }
+async function dispatchAiQuery() {
+const inputBox =
+                document.getElementById("aiUserQuery");
+const userMessage =
+                inputBox.value.trim();
+if (userMessage === "") {
+
+                return;
+
+            }
+appendMessage(userMessage, "user");
+inputBox.value = "";
+const messageBox =
+                document.getElementById("aiChatMessages");
+const typingMessage =
+                document.createElement("div");
+
+            typingMessage.className =
+                "ai-msg bot typing-indicator";
+
+            typingMessage.id =
+                "aiTyping";
+
+            typingMessage.innerHTML =
+                '<div class="typing-dot"></div>' +
+                '<div class="typing-dot"></div>' +
+                '<div class="typing-dot"></div>';
+messageBox.appendChild(typingMessage);
+messageBox.scrollTop =
+                messageBox.scrollHeight;
+try {
+const response = await fetch("/api/chat", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        query: userMessage
+                    })
+
+                });
+const data =
+                    await response.json();
+const typing =
+                    document.getElementById("aiTyping");
+
+                if (typing) {
+
+                    typing.remove();
+
+                }
+appendMessage(
+                    data.reply,
+                    "bot"
+                );
+
+            } catch (error) {
+const typing =
+                    document.getElementById("aiTyping");
+
+                if (typing) {
+
+                    typing.remove();
+
+                }
+appendMessage(
+                    "Central core communication drop. Confirm your API Key configuration inside app.py.",
+                    "bot"
+                );
+
+            }
+
+        }
+function appendMessage(text, sender) {
+const messageBox =
+                document.getElementById("aiChatMessages");
+const message =
+                document.createElement("div");
+message.className =
+                "ai-msg " + sender;
+message.innerText = text;
+messageBox.appendChild(message);
+messageBox.scrollTop =
+                messageBox.scrollHeight;
+
+        }
+
+    </script>
+
+
+<script>
+// "detailed" shows the original technical description.
+// "simple" shows a beginner-friendly explanation with easier pros and cons.
+var descriptionMode = "detailed";
+
+// Beginner-friendly text for each scan type. Scan commands are not changed.
+var simpleScanInfo = {
+    quick: { description: "Checks a selected list of commonly used TCP ports to see which network services may be reachable. It is a good first check when you do not yet know much about a target.", pros: "Fast, easy to understand, and useful for an initial overview.", cons: "May miss services listening on less common ports; an open port does not automatically mean a security weakness." },
+    stealth: { description: "Uses TCP SYN packets to estimate port states without normally completing the full TCP connection. It is often called a half-open scan.", pros: "Usually creates less full-connection activity than a TCP connect scan and gives useful port-state information.", cons: "Still detectable; generally requires elevated privileges and can be affected by firewalls." },
+    tcp_connect: { description: "Attempts a normal TCP connection to each selected port. A successful connection usually means the port is open and accepting connections.", pros: "Straightforward and works without raw-packet privileges on many systems.", cons: "Completed connection attempts are more likely to appear in logs; it does not determine whether a service is vulnerable." },
+    tcp_ack: { description: "Sends TCP packets with the ACK flag to help assess how network filters or firewalls handle traffic.", pros: "Useful for investigating firewall filtering behaviour.", cons: "Does not directly identify open ports; results need to be interpreted with other scan types." },
+    tcp_window: { description: "Examines TCP window values in replies as a specialized way to infer port states on some systems.", pros: "Can provide extra clues in compatible network environments.", cons: "Often unreliable on modern operating systems and network equipment." },
+    tcp_maimon: { description: "Sends a specialized TCP probe using FIN and ACK flags, then studies the target's response.", pros: "Can offer additional research or troubleshooting clues on some systems.", cons: "Often has limited value on modern systems and can produce ambiguous results." },
+    tcp_fin: { description: "Sends TCP packets with the FIN flag instead of starting a normal connection and interprets the replies.", pros: "Can help compare how a target or firewall handles unusual TCP traffic.", cons: "Results vary by operating system; silence does not always reveal whether a port is closed or filtered." },
+    tcp_null: { description: "Sends TCP packets with no control flags set and observes the responses to infer port states.", pros: "Can provide clues about filtering and TCP behaviour on compatible systems.", cons: "Many systems do not respond in the expected way, so results may be inconclusive." },
+    tcp_xmas: { description: "Sends TCP packets with FIN, PSH and URG flags set together and checks how the target responds.", pros: "Useful for specialized checks of TCP and firewall behaviour.", cons: "Can be detected and logged; results vary by operating system and are not a reliable general-purpose scan." },
+    udp: { description: "Checks UDP ports, which are used by services such as DNS and SNMP. UDP is different from TCP and needs its own scan.", pros: "Finds UDP services that a TCP-only scan would miss.", cons: "Can take longer because UDP services often do not reply to probes." },
+    ip_protocol: { description: "Checks which IP protocol types appear to be supported by a host, rather than checking individual TCP or UDP ports.", pros: "Provides useful information for specialized network inventory and troubleshooting.", cons: "Does not list application services or replace TCP/UDP port scanning." },
+    custom_flags: { description: "Lets you choose TCP flags for a specialized probe. TCP flags are control indicators, such as SYN, ACK and FIN, used in network communication.", pros: "Flexible for controlled testing of specific network or firewall behaviour.", cons: "Requires understanding of TCP flags; unusual combinations can give results that are difficult to interpret." },
+    idle: { description: "Attempts to infer the target's port states by observing changes in a separate, suitable intermediary host called a zombie host.", pros: "Can provide indirect scan results in a narrow set of network conditions.", cons: "Requires a suitable host and careful setup; it does not guarantee anonymity and must only be used with authorization." },
+    ftp_bounce: { description: "Tests whether an FTP server allows its file-transfer feature to relay probes to another system. This is a legacy technique.", pros: "Can help assess whether an FTP server has an unsafe relay configuration.", cons: "Most modern FTP servers block it; do not use another person's server as a relay without explicit permission." },
+    sctp_init: { description: "Checks for SCTP services by sending SCTP INIT messages, the opening message in an SCTP association.", pros: "Useful for networks that use SCTP, including some telecom environments.", cons: "Not useful for most ordinary websites if they do not use SCTP." },
+    sctp_cookie: { description: "Sends SCTP COOKIE-ECHO messages to study the response of services using the SCTP transport protocol.", pros: "Provides specialized SCTP port-state information.", cons: "SCTP is uncommon in many IT environments, and results may be inconclusive." },
+    version: { description: "Tries to identify the service software and version behind discovered open ports, such as a web server or database service.", pros: "Helps administrators check whether software may need updates or security review.", cons: "Version identification can be inaccurate or hidden; identifying a version does not prove a vulnerability." },
+    default_web_script: { description: "Combines service/version detection with Nmap's default scripts to collect additional information from discovered services.", pros: "Provides a useful amount of context in one scan.", cons: "Sends more probes than a basic scan, may create logs, and individual results need review." },
+    vuln_detection: { description: "Runs Nmap vulnerability-related scripts against supported services to look for indicators of known weaknesses.", pros: "Can highlight possible issues for follow-up investigation and patch checks.", cons: "May produce false positives or miss issues; a script result alone does not prove exploitability." },
+    web_enum: { description: "Requests common website paths and files to see whether directories, login pages or administrative endpoints may be exposed.", pros: "Can reveal overlooked paths that should be reviewed or access-controlled.", cons: "Generates multiple web requests, may be logged, and a discovered path is not automatically a vulnerability." },
+    ssl_audit: { description: "Checks the SSL/TLS cipher suites a secure service supports, helping identify potentially outdated or weak encryption options.", pros: "Useful for reviewing transport-encryption configuration.", cons: "The cipher scan alone does not fully check certificates, application security or every TLS setting." },
+    comprehensive_web: { description: "Runs a broad group of Nmap HTTP scripts against detected web services to gather server and website information.", pros: "Can uncover a wide range of configuration and information-disclosure clues.", cons: "May generate substantial traffic and lengthy output; the exact checks depend on the scripts available and services found." },
+    os: { description: "Estimates the target's operating system by comparing its network responses with known TCP/IP fingerprints.", pros: "Adds useful asset-inventory context and can guide later checks.", cons: "May be inaccurate or unavailable when responses are blocked or insufficient." },
+    intense: { description: "Uses a broader Nmap preset to combine several discovery and identification checks for a more detailed initial picture of the target.", pros: "Usually reveals more about ports and services than a quick scan.", cons: "Takes longer and creates more network activity; the exact checks depend on the configured command." },
+    all_ports: { description: "Checks the full TCP port range, from 1 through 65535, rather than only the most common ports.", pros: "Can discover services using unusual or non-standard TCP ports.", cons: "Can take considerably longer; it does not automatically scan all UDP ports and cannot guarantee discovery in every network condition." },
+    ping: { description: "Sends host-discovery probes to see whether the target appears reachable from the scanner's network location.", pros: "Quick first step for basic connectivity and availability checks.", cons: "Firewalls may block probes even when a host is online; it does not discover services or vulnerabilities." },
+    vuln: { description: "Uses Nmap vulnerability-related scripts to look for possible known weaknesses in services that can be reached and checked.", pros: "Helps prioritize services for patch review and manual validation.", cons: "Coverage is limited to supported checks; results may be false positives and do not prove that exploitation is possible." },
+    nikto: { description: "Sends HTTP requests to check a web server for common risky files, outdated components, unsafe settings and known issues.", pros: "Useful for finding common web-server configuration problems and exposed files.", cons: "Can produce many findings and visible log entries; it is not a complete web-application penetration test." },
+    sqlmap: { description: "Tests a supplied web URL and its parameters for signs of SQL injection, where user input may affect a database query unsafely.", pros: "Can help confirm a specific input-handling weakness and guide developers toward safer parameterized queries.", cons: "Testing can affect performance or data, especially with aggressive options. Use only with explicit permission, preferably in a test environment." }
+};
+
+// Extra beginner-friendly technical context shown in Detailed Description mode.
+var detailedScanInfo = {
+ quick: {what:"A port scan sends network probes to a target and observes its replies. This preset checks a smaller set of commonly used TCP ports rather than every possible port.",how:"Nmap tests selected ports and labels their observed state, such as open, closed, or filtered. Results are a snapshot of what the scanner can see from its network location.",finds:"Potentially reachable services on common ports, which can help decide whether a more focused scan is needed.",limits:"A port marked open does not automatically mean it is vulnerable, and services on uncommon ports may be missed."},
+ stealth: {what:"A TCP SYN scan starts the first part of a TCP connection but normally does not complete the full handshake. It is commonly called a half-open scan.",how:"Nmap sends SYN packets and interprets responses such as SYN/ACK or RST to infer port state. Some operating systems and firewalls may respond differently.",finds:"Likely open, closed, or filtered TCP ports, often with less connection logging than a full TCP connect scan, although monitoring tools can still detect it.",limits:"Usually needs elevated privileges to send raw packets. It is not invisible, and network devices may alter or block responses."},
+ tcp_connect: {what:"A TCP connect scan uses the operating system's normal networking function to attempt a complete TCP connection to each selected port.",how:"If the connection succeeds, the port is reported as open; a refusal generally indicates closed, while no response may indicate filtering.",finds:"Accessible TCP ports and a straightforward baseline when raw-packet scanning privileges are unavailable.",limits:"Completed connection attempts are more likely to appear in application and system logs. It identifies port state, not whether the service is secure."},
+ tcp_ack: {what:"An ACK scan is mainly used to study firewall filtering behaviour, not to find open ports directly.",how:"Nmap sends TCP packets with the ACK flag and examines whether replies suggest the probe passed through a filter or was blocked.",finds:"A rough indication of ports that are filtered versus unfiltered, useful when reviewing firewall rules.",limits:"It cannot reliably tell whether a port is open or closed. Results depend on firewall and network behaviour."},
+ tcp_window: {what:"A TCP Window scan is a specialized technique that examines the TCP window field in responses to infer port state on some systems.",how:"It compares response details from the target. The behaviour needed for this technique is implementation-specific.",finds:"Occasionally, additional clues about port states or filtering on compatible systems.",limits:"Often unreliable on modern systems and network equipment; use a standard scan to confirm findings."},
+ tcp_maimon: {what:"A Maimon scan is a specialized TCP probe using FIN and ACK flags. It is mainly of historical or research interest.",how:"Nmap observes how the target responds to this unusual packet combination to infer port state.",finds:"Potentially useful port-state clues on systems with the relevant TCP behaviour.",limits:"Modern systems may not show the expected behaviour, so results can be incomplete or misleading."},
+ tcp_fin: {what:"A FIN scan sends TCP packets with the FIN flag set rather than opening a normal connection.",how:"Nmap interprets responses according to TCP behaviour; some systems send no reply for closed or filtered ports, which makes interpretation platform-dependent.",finds:"Port-state clues and possible differences in how filters handle unusual TCP probes.",limits:"Windows systems commonly return results that make this technique ineffective for distinguishing states. It is not a reliable replacement for a SYN or connect scan."},
+ tcp_null: {what:"A NULL scan sends TCP packets with no control flags set. It is a specialized probe rather than a normal connection attempt.",how:"Nmap interprets replies or the absence of replies based on TCP conventions and the target operating system's implementation.",finds:"Possible port-state clues on compatible Unix-like systems and information about filtering behaviour.",limits:"Microsoft Windows and other systems may not follow the expected response pattern. Silence can mean more than one thing."},
+ tcp_xmas: {what:"An Xmas scan sets several TCP flags—FIN, PSH and URG—on the same probe, giving the technique its name.",how:"Nmap observes how the target responds to the unusual flag combination to infer port state.",finds:"Potential clues about port states and firewall handling of unusual TCP traffic.",limits:"Can be logged or detected, and results vary by operating system. It does not make a scan undetectable."},
+ udp: {what:"UDP is a connectionless protocol used by services such as DNS, SNMP and some DHCP or streaming-related services. UDP scans test these ports separately from TCP.",how:"Nmap may receive a UDP response, an ICMP port-unreachable message, or no response. No response often leaves a port marked open|filtered and can require retries.",finds:"UDP services that a TCP-only scan would not reveal.",limits:"Can be slow because many UDP services do not respond to empty probes and networks may rate-limit ICMP messages."},
+ ip_protocol: {what:"An IP protocol scan checks which IP protocol numbers a host appears to support; it is different from scanning TCP or UDP port numbers.",how:"Nmap sends IP packets using different protocol numbers and interprets responses to identify supported or filtered protocols.",finds:"Protocol-level information that can be useful when assessing unusual network configurations.",limits:"It does not list TCP/UDP application ports, and firewalls may prevent accurate conclusions."},
+ custom_flags: {what:"Custom TCP flags lets an operator choose a specific combination of TCP flags for a probe, for specialized troubleshooting or authorized testing.",how:"The selected flags are sent in TCP packets and the returned responses are interpreted to study target or firewall behaviour.",finds:"How a particular network path or system reacts to a chosen packet pattern.",limits:"Requires TCP knowledge and careful interpretation. It may produce ambiguous results and is not a general-purpose first scan."},
+ idle: {what:"An Idle scan is an advanced Nmap technique that attempts to infer target port states by observing changes in the IP ID values of a separate, suitable host (often called a zombie).",how:"Nmap sends carefully chosen probes involving the idle host and target, then compares responses from the idle host to infer information indirectly.",finds:"In specific network conditions, inferred target port states while the target may see the idle host as the apparent probe source.",limits:"Requires a suitable idle host with predictable IP ID behaviour and can be unreliable. It does not guarantee anonymity and should only be used with explicit authorization."},
+ ftp_bounce: {what:"An FTP bounce scan is a legacy technique that attempts to use an FTP server's file-transfer feature as a relay for probes to another host.",how:"It relies on an FTP server permitting a data connection to a third-party destination, a behaviour modern servers generally restrict.",finds:"Historically, it could reveal reachability through a permissive FTP server.",limits:"Usually blocked or unsupported on modern servers and should not be expected to work. Do not use third-party systems as relays without permission."},
+ sctp_init: {what:"SCTP is a transport protocol used in some telecom and specialized networking environments. An SCTP INIT scan checks for SCTP services using the initial handshake message.",how:"Nmap sends SCTP INIT probes and interprets responses such as INIT-ACK or ABORT to infer port state.",finds:"SCTP services that ordinary TCP and UDP scans would not identify.",limits:"Only useful where SCTP is deployed, and filtering or network support may affect results."},
+ sctp_cookie: {what:"An SCTP COOKIE-ECHO scan uses a later SCTP association message and is intended for specialized SCTP port-state testing.",how:"Nmap sends COOKIE-ECHO packets and interprets SCTP responses to estimate whether the port is open or closed.",finds:"Additional SCTP-specific state information in environments that use the protocol.",limits:"SCTP is uncommon on ordinary websites, and the scan may be inconclusive or irrelevant when no SCTP service is expected."},
+ version: {what:"Service/version detection tries to identify the software behind open ports, rather than only reporting that a port responds.",how:"Nmap sends service-specific probes and compares the replies with its probe database to estimate the service name, product and version.",finds:"Possible service names and version details that help administrators check vendor advisories and patch status.",limits:"Banners can be hidden, customized or misleading. Version detection is an estimate and does not itself prove a vulnerability."},
+ default_web_script: {what:"This option combines service/version detection with Nmap's default script set, which performs common discovery and information-gathering checks.",how:"Nmap runs selected NSE scripts against discovered services. The exact scripts and results depend on what ports and services are found.",finds:"Extra details about supported services and common configurations, beyond a basic port list.",limits:"More probes create more traffic and logs. Review individual script output and confirm important findings manually."},
+ vuln_detection: {what:"Nmap's vulnerability scripts check for indicators associated with known security weaknesses in supported services. The scripts vary in how they test for each issue.",how:"NSE scripts send targeted probes and compare the responses with conditions associated with a known issue. Not every script performs a complete exploit attempt.",finds:"Potentially vulnerable services or configurations that warrant investigation and patch verification.",limits:"Results can be false positives or false negatives, and scripts do not prove that an attacker can exploit a system. Run only against systems you are authorized to assess."},
+ web_enum: {what:"HTTP enumeration checks for common web paths, files and application endpoints that may not be linked from the visible website.",how:"Nmap's HTTP enumeration script requests a set of known paths and looks at server responses to identify possible matches.",finds:"Exposed directories, login pages, development files or administrative endpoints that may need access controls.",limits:"A found path is not automatically a vulnerability; responses may be generic or false matches. Requests can be logged by the server."},
+ ssl_audit: {what:"An SSL/TLS cipher audit examines which cryptographic protocol versions and cipher suites a secure service supports.",how:"The scan negotiates or tests supported TLS options and reports the cipher suites that the server appears to accept.",finds:"Outdated protocols or weak cipher options that may need configuration changes, depending on the service and policy.",limits:"It is not a complete certificate or application security audit. Certificate validity and modern TLS configuration should be checked with suitable additional tools."},
+ comprehensive_web: {what:"This option runs a broad group of Nmap HTTP scripts against detected web services to collect many kinds of web-server information.",how:"The scripts make different HTTP requests and inspect responses, headers, cookies and other exposed details, depending on the scripts available.",finds:"A wide set of configuration and information-disclosure clues that can guide a more focused review.",limits:"May generate substantial traffic and large output. Individual scripts differ in scope, so inspect what actually ran and validate findings."},
+ os: {what:"Operating-system detection estimates the target's operating system from network-stack characteristics; it does not install software or log in to the machine.",how:"Nmap compares TCP/IP response characteristics with known fingerprints. It works best when it can observe suitable open and closed ports.",finds:"An estimated OS family and sometimes a version range, useful for asset inventory and choosing follow-up checks.",limits:"Firewalls, virtual machines, custom stacks and limited responses can make the estimate inaccurate or unavailable."},
+ intense: {what:"An intense scan is a broader Nmap preset that combines several discovery and service-identification techniques for a fuller initial profile.",how:"Depending on the project's command configuration, it may perform port discovery, service/version detection, scripts and OS detection.",finds:"A more complete picture of reachable ports and services than a minimal scan.",limits:"Takes longer and creates more network activity. The exact checks depend on the command used; inspect the scan configuration."},
+ all_ports: {what:"This scan checks the full TCP port range (1–65535), rather than only a smaller list of common ports.",how:"Nmap sends probes to each TCP port in the configured range and classifies the responses it receives.",finds:"Services listening on uncommon or non-standard TCP ports.",limits:"Can take considerably longer, especially with packet loss or filtering. It does not automatically scan all UDP ports."},
+ ping: {what:"Host discovery checks whether a target appears reachable on the network before spending time on a full port scan.",how:"Depending on privileges and configuration, Nmap may use ICMP, TCP, or other discovery probes and observe the replies.",finds:"Whether a host appears online from the scanner's network position.",limits:"A host may be online but block discovery probes, so no reply does not always mean the system is offline. It does not enumerate services."},
+ vuln: {what:"A vulnerability scan uses Nmap's vulnerability-related scripts against detected services to look for indicators of known weaknesses.",how:"Scripts perform issue-specific checks and report their evidence or status. Coverage depends on the scripts available and the services discovered.",finds:"Potential vulnerabilities to prioritize for patching and further validation.",limits:"It is not a guarantee that all vulnerabilities will be found, and a script result may need manual verification. Use only with authorization."},
+ nikto: {what:"Nikto is a web-server assessment tool that checks for common dangerous files, outdated server components, unsafe settings and other known issues.",how:"It sends HTTP requests from a collection of checks and compares server responses with patterns associated with potential problems.",finds:"Possible exposed files, risky headers or configurations, and known web-server issues worth reviewing.",limits:"Can produce many findings and false positives, and its requests are often visible in logs. It is not a full application penetration test."},
+ sqlmap: {what:"SQLMap is a specialized tool for testing whether application inputs may allow SQL injection, a weakness where input is handled unsafely in database queries.",how:"It sends crafted test inputs to a supplied URL or parameter and analyzes responses for signs that input changes database-query behaviour.",finds:"Potential SQL injection in specific parameters and evidence that may help developers fix unsafe query construction, for example by using parameterized queries.",limits:"Testing can alter data, affect performance or trigger application errors. Use only on systems you own or have explicit permission to test, preferably in a test environment."}
+};
+
+// Extra practical guidance for beginners: what the output may look like and what to check first.
+var scanLearningInfo = {
+ quick:{expected:"Usually a list of ports marked open, closed, or filtered, sometimes with a service name. ‘Open’ means a service appears to accept connections; it does not mean that the service is unsafe. A result may be empty if the target blocks probes or the chosen ports are not reachable.",before:"Confirm the IP address or hostname, start with a system you own or are allowed to test, and remember that this scan checks only the configured common TCP ports. If you find an unexpected open port, identify its service before deciding what to do."},
+ stealth:{expected:"Nmap commonly reports each tested TCP port as open, closed, or filtered. Because this scan usually does not complete a full TCP handshake, the output can differ from a connect scan when a firewall or network device treats probes differently.",before:"Use an authorized target and ensure the scanner has the permissions needed for raw-packet scanning. ‘Stealth’ describes the connection method, not invisibility: security tools and network logs may still detect the probes."},
+ tcp_connect:{expected:"Ports may be listed as open, closed, or filtered. An open result indicates that a TCP connection could be established from your scanner. It does not tell you whether authentication is strong, the software is patched, or the service is safe to expose.",before:"This is a useful choice when SYN scanning privileges are unavailable. Check that you have selected the right host and port range, and expect completed connection attempts to appear in monitoring or application logs."},
+ tcp_ack:{expected:"The main result is often whether ports are ‘unfiltered’ or ‘filtered’, rather than a clear open/closed decision. The output is a clue about how packets pass through a firewall, not a direct list of running services.",before:"Use this alongside a normal port scan and compare the results. Do not interpret ‘unfiltered’ as ‘open’; it only means the probe was not clearly blocked by the network path."},
+ tcp_window:{expected:"Some systems may produce port-state clues based on TCP window values in replies. Many modern systems return responses that make this method inconclusive, so you may see results that do not match a standard scan.",before:"Treat this as a specialized experiment, not a first scan. Record the target and network conditions, and verify any surprising result with a standard SYN or TCP connect scan."},
+ tcp_maimon:{expected:"The output may classify ports based on replies to FIN/ACK probes, but behaviour differs between operating systems and network devices. Some ports may remain ambiguous because no response can have several explanations.",before:"Use only when studying TCP response behaviour in an authorized environment. If the output is unclear, compare it with a standard scan rather than assuming silence means the port is closed."},
+ tcp_fin:{expected:"You may see open, closed, or filtered classifications inferred from replies to FIN packets. The meaning of silence depends on the target operating system and firewall, so the scan may not provide a definitive answer.",before:"This is a specialized scan and should not replace a standard port scan. Use a controlled target and verify important findings using another method."},
+ tcp_null:{expected:"Nmap interprets responses to TCP packets with no flags set. Depending on the target, ports may be classified as closed or filtered, while a lack of response may leave the result uncertain.",before:"Understand that network standards and operating-system behaviour affect this scan. Do not use the absence of a reply as proof that a port is open, closed, or protected."},
+ tcp_xmas:{expected:"The scan observes how the target responds to a TCP packet with FIN, PSH and URG flags. Results may include inferred port states, but modern systems and firewalls can make the outcome ambiguous.",before:"Use for learning or authorized firewall/TCP-stack testing. It can generate alerts, and the unusual packet pattern does not make the scan undetectable."},
+ udp:{expected:"UDP results may include open, closed, open|filtered, or filtered. ‘Open|filtered’ often means Nmap could not tell whether a UDP service is listening because no response arrived. Some services reply only to correctly formed application requests.",before:"UDP scanning can take longer than TCP scanning. If a port matters, verify it with a service-specific check and confirm that the service is expected to be reachable. A UDP result is separate from the result for the same port over TCP."},
+ ip_protocol:{expected:"The output identifies IP protocol numbers that appear supported or reachable, rather than listing TCP/UDP service ports. The result can help network inventory but usually will not tell you which application is running.",before:"Use when you have a specific protocol-level inventory question. For normal website or server checks, a TCP/UDP port scan is usually more directly useful."},
+ custom_flags:{expected:"The result depends on the flags selected and how the target responds. Output may be difficult to interpret because the same response can have different meanings for different flag combinations and network devices.",before:"Know what each selected TCP flag means and define the question you are trying to answer before running it. If you are learning, use a lab host and compare against a standard scan."},
+ idle:{expected:"If the required conditions are met, the scan may infer target port states using changes observed on a separate intermediary host. It can fail if that host is unsuitable, active, filtered, or behaves differently than expected.",before:"Use only with explicit authorization for both the target and any intermediary host. The technique has strict technical requirements and does not guarantee anonymity or prevent attribution."},
+ ftp_bounce:{expected:"The output may indicate whether an FTP server permits a third-party transfer/relay behaviour that could be abused to direct traffic. Many servers reject this behaviour, so the check may fail or be unsupported.",before:"Only test an FTP server you are authorized to assess, and never use another organization’s server as a relay without written permission. Treat this as a legacy configuration check."},
+ sctp_init:{expected:"Results may show SCTP ports as open, closed, or filtered, depending on replies to SCTP INIT probes. If the environment does not use SCTP or blocks it, the scan may return little useful information.",before:"Confirm that SCTP is relevant to the environment before running the scan. It is more useful in specialized infrastructure than for a typical HTTP-only website."},
+ sctp_cookie:{expected:"The scan reports how a service responds to SCTP COOKIE-ECHO probes. A lack of response or an unusual response may be inconclusive and should not be treated as proof that a service is secure or vulnerable.",before:"Use only when an SCTP service is expected and you understand the testing purpose. Correlate results with an SCTP INIT scan or service-owner information."},
+ version:{expected:"For open ports, Nmap may report a guessed service name, product, version, and sometimes additional details. Services can hide or customize version banners, so the detected version may be missing or inaccurate.",before:"Run after discovering ports, and verify important version information against the service itself or trusted asset records. A version number alone does not prove a known CVE applies; configuration, backports and vendor patches matter."},
+ default_web_script:{expected:"Output can include service/version details and findings from Nmap’s default scripts, such as selected service information or configuration clues. Which scripts run depends on the detected services and the installed Nmap script set.",before:"Review the actual script names and results rather than assuming every possible check ran. The extra probes can be logged; use an authorized host and validate noteworthy findings."},
+ vuln_detection:{expected:"Results may name a script, the service checked, and evidence suggesting a known weakness. Some scripts return informational or inconclusive messages. Read the evidence and script output; a CVE name by itself does not prove the target is vulnerable.",before:"Use against authorized systems and make sure the relevant services are reachable. Confirm the software version, vendor advisories and configuration before classifying a finding as a real vulnerability."},
+ web_enum:{expected:"The output may list paths such as directories, login pages, test files, or administrative routes that responded in a way the script recognizes. Some results may be generic responses or false matches, and a reachable path is not automatically a security flaw.",before:"Use the correct website host and port, and make sure you are allowed to send repeated requests. Review each path manually, check whether it should be public, and avoid assuming that a login page alone is a vulnerability."},
+ ssl_audit:{expected:"The output lists TLS protocol and cipher-suite options the service appears to accept, sometimes grouped by strength or protocol version. The security meaning depends on the complete configuration and the organization’s requirements.",before:"Use the correct TLS-enabled host and port, commonly HTTPS on 443. Also check certificate validity, hostname matching and other TLS settings separately; this scan focuses on cipher support and is not a full TLS audit."},
+ comprehensive_web:{expected:"The output may contain many separate HTTP-script results, such as server details, headers, supported methods, or other configuration clues. Some scripts may not run or may return no result if the service is not recognized or blocks probes.",before:"Allow more time and expect more web requests and output than a narrow check. Review which scripts ran, avoid treating informational details as vulnerabilities, and validate each concern before reporting it."},
+ os:{expected:"Nmap may suggest an operating-system family or version range, sometimes with a confidence level. It may instead report that it could not identify the OS, especially when too few useful responses are available.",before:"OS detection is more reliable when Nmap can observe suitable open and closed ports. Use the estimate as an inventory clue, not definitive proof, and confirm it with authorized system inventory where possible."},
+ intense:{expected:"Depending on the configured command, the report may combine host discovery, port states, service/version information, scripts and OS guesses. It can provide a broad initial profile but does not mean every security weakness was checked.",before:"Use when you have permission and can tolerate longer scans and more traffic. Review the command and output to understand which checks actually ran; follow up with narrower scans based on the findings."},
+ all_ports:{expected:"The scan may list services on any TCP port from 1 to 65535, including unusual ports missed by a common-port scan. Filtered ports and network delays can make completion slower, and a service may still be missed if probes are blocked.",before:"Plan for a longer scan, particularly across a remote or filtered network. This option covers the full TCP range, not automatically every UDP port. Identify unexpected services and ask whether they need to be exposed."},
+ ping:{expected:"The result indicates whether the host appears reachable from the scanner’s location. It may show the host as down when a firewall blocks discovery probes, even if the system is operating normally.",before:"Use as a connectivity check before deeper scanning. If there is no response, verify the address, routing and firewall policy rather than immediately concluding that the host is offline."},
+ vuln:{expected:"The report may show possible weaknesses detected by supported scripts on discovered services. Coverage depends on the service, script set and network visibility, so an empty report does not mean the system has no vulnerabilities.",before:"Run only with authorization, then prioritize findings by evidence, exposure and business impact. Confirm each result with version/configuration checks and a suitable validation process before taking remediation action."},
+ nikto:{expected:"Nikto can return a long list of observations, including potentially risky files, server headers, outdated components or configuration concerns. Some are informational or false positives; review the message and response details for each item.",before:"Use only against a web server you are allowed to test. It sends many requests and may trigger monitoring or rate limits. Confirm findings manually and remember that Nikto does not test every business-logic or authenticated application flaw."},
+ sqlmap:{expected:"SQLMap may report that injection was not detected, that a parameter appears injectable, or that testing was inconclusive. A negative result only applies to the URL, parameters, request context and tests performed; it does not certify the whole application as safe.",before:"Use only on your own application or with explicit written permission, ideally in a staging environment with backups and test data. Enter the exact URL and parameter to assess. Avoid aggressive options on production because testing may alter data, create load or trigger application controls."}
+};
+
+// Beginner step-by-step instructions for each scan. These explain the existing form; they do not change scan commands.
+var scanSteps = {
+ quick: ["Only scan a computer or network you own or have permission to test.", "Enter the target's IP address or domain name in the target box.", "Choose Quick Scan from the scan list.", "Click Launch Scan and wait for the scan to finish.", "Review the port list. Start with any port marked open and note its service name; open does not automatically mean vulnerable."],
+ stealth: ["Confirm that you are allowed to test the target and that your environment permits this scan.", "Enter the target IP address or domain name.", "Choose TCP SYN / Stealth Scan.", "Click Launch Scan. If the tool reports a permissions error, ask the system administrator rather than trying to bypass restrictions.", "Read the open, closed, or filtered states. This scan is not invisible and can still be logged."],
+ tcp_connect: ["Choose a target you are authorized to scan.", "Enter its IP address or domain name.", "Choose TCP Connect Scan.", "Click Launch Scan and wait for the results.", "Check which ports accepted a connection. This tells you about reachability, not whether the service is safe."],
+ tcp_ack: ["Use this only for an authorized firewall or network troubleshooting check.", "Enter the target IP address or domain name.", "Choose TCP ACK Scan.", "Click Launch Scan.", "Look for filtered or unfiltered results. Do not read unfiltered as open; this scan mainly gives clues about filtering."],
+ tcp_window: ["Use a test system you are allowed to examine; this is a specialized scan.", "Enter the target IP address or domain name.", "Choose TCP Window Scan.", "Click Launch Scan.", "Treat the output as a clue only. If the result matters, compare it with Quick Scan or TCP Connect Scan."],
+ tcp_maimon: ["Confirm permission to test the target.", "Enter its IP address or domain name.", "Choose TCP Maimon Scan.", "Click Launch Scan and wait for the output.", "Because this method may be unreliable on modern systems, verify important results with a standard TCP scan."],
+ tcp_fin: ["Use only on a target you are permitted to test.", "Enter the target IP address or domain name.", "Choose TCP FIN Scan.", "Click Launch Scan.", "Read the port states carefully. A missing response can be ambiguous, so confirm with a standard scan."],
+ tcp_null: ["Use an authorized test target.", "Enter its IP address or domain name.", "Choose TCP NULL Scan.", "Click Launch Scan and wait for the report.", "Remember that no reply does not prove a port is closed or secure. Confirm important findings using another scan."],
+ tcp_xmas: ["Make sure you have permission; unusual TCP probes may trigger security alerts.", "Enter the target IP address or domain name.", "Choose TCP Xmas Scan.", "Click Launch Scan.", "Review the results as specialized clues only and verify them with a standard scan."],
+ udp: ["Choose a target you own or have explicit permission to test.", "Enter its IP address or domain name.", "Choose UDP Scan.", "Click Launch Scan and allow extra time; UDP scans can be slow.", "Review states such as open or open|filtered. The latter means the scan could not tell whether a service is listening."],
+ ip_protocol: ["Use this when you have a specific reason to check IP protocols; it is not a normal website port scan.", "Enter the authorized target IP address or domain name.", "Choose IP Protocol Scan.", "Click Launch Scan.", "Review protocol-level results. For normal application services, use a TCP or UDP scan as well."],
+ custom_flags: ["Use only in an authorized lab or network test, and choose flags only if you understand what they mean.", "Enter the target IP address or domain name.", "Choose Custom TCP Flag Scan; the extra Custom TCP Flags box will appear.", "Enter the TCP flag combination required by your test, for example SYN,ACK, then click Launch Scan.", "Review the output cautiously because unusual flag combinations can be hard to interpret. Compare with a standard scan."],
+ idle: ["Use only with explicit permission for both the target and the intermediary host.", "Enter the target IP address or domain name in the main target box.", "Choose Idle Scan; the Zombie Host box will appear.", "Enter the IP address of a suitable intermediary host you are authorized to use, then click Launch Scan.", "If the scan fails, the intermediary may not meet the technical requirements. This technique does not guarantee anonymity."],
+ ftp_bounce: ["Use only with permission to test the target and the FTP relay server.", "Enter the target system in the main target box.", "Choose FTP Bounce Scan; the FTP Bounce Relay box will appear.", "Enter the authorized FTP relay address and click Launch Scan.", "Many FTP servers block this old technique. Never use another person's server as a relay without explicit written permission."],
+ sctp_init: ["First confirm that the target environment uses or may use SCTP; it is uncommon on ordinary websites.", "Enter the authorized target IP address or domain name.", "Choose SCTP INIT Scan.", "Click Launch Scan.", "Review SCTP port states. No results may simply mean SCTP is not used or traffic is filtered."],
+ sctp_cookie: ["Use this scan only if SCTP is relevant and you have permission.", "Enter the target IP address or domain name.", "Choose SCTP COOKIE-ECHO Scan.", "Click Launch Scan.", "Read the SCTP response as specialized evidence, and compare it with service-owner information or an SCTP INIT scan."],
+ os: ["Choose a target you are authorized to examine.", "Enter its IP address or domain name.", "Choose OS Detection.", "Click Launch Scan and wait for Nmap to compare network responses.", "Treat the operating-system name as an estimate, not proof. If it cannot identify the OS, there may not be enough visible responses."],
+ intense: ["Make sure the target is in scope and that a longer, noisier scan is acceptable.", "Enter the target IP address or domain name.", "Choose Intense Scan.", "Click Launch Scan and allow it more time than a quick scan.", "Review the ports, service details, and other checks that actually appear. Intense does not mean every vulnerability was tested."],
+ all_ports: ["Use only on an authorized target and allow enough time for a full TCP port check.", "Enter the target IP address or domain name.", "Choose All TCP Ports Scan.", "Click Launch Scan and wait; checking all 65,535 TCP ports can take longer.", "Look for services on unusual port numbers. This option does not automatically check every UDP port."],
+ ping: ["Enter the IP address or domain name of a system you are allowed to check.", "Choose Ping / Host Discovery.", "Click Launch Scan.", "Check whether the target is reported as reachable or appears down.", "If it appears down, verify the address and firewall rules. Some firewalls block discovery probes even when the computer is online."],
+ vuln: ["Only run vulnerability checks on systems you own or have explicit permission to assess.", "Enter the authorized target IP address or domain name.", "Choose Vulnerability Scan.", "Click Launch Scan and wait for the supported checks to complete.", "Read each finding and its evidence. Confirm software versions and configuration before calling something a real vulnerability."],
+ version: ["A port scan is useful first so you know which ports are open.", "Enter the target IP address or domain name.", "Choose Service Version Detection.", "Click Launch Scan.", "Read the service name and any version shown. Verify important versions with trusted system records; a version alone does not prove a vulnerability."],
+ default_web_script: ["Use an authorized target; this scan sends more probes than a basic port scan.", "Enter the target IP address or domain name.", "Choose Default Web Script Scan.", "Click Launch Scan and wait for service detection and default scripts.", "Review the name and message for each script result. Some messages are informational, not security problems."],
+ vuln_detection: ["Confirm written permission and the scope of the systems you may test.", "Enter the authorized target IP address or domain name.", "Choose Vulnerability Detection Script.", "Click Launch Scan.", "Review script names and supporting evidence. A CVE name or script message alone does not prove the system is vulnerable."],
+ web_enum: ["Use only on a website you own or are allowed to test; the scan makes repeated web requests.", "Enter the website host or IP address in the target box, including the correct port if needed.", "Choose Web Directory Brute-Forcing / Web Path Enumeration.", "Click Launch Scan and wait for the path checks.", "Review each discovered path and ask whether it should be publicly accessible. A found path is not automatically a vulnerability."],
+ ssl_audit: ["Choose a website or service that supports HTTPS/TLS and that you are allowed to test.", "Enter the correct host and, if needed, the TLS service port (HTTPS commonly uses 443).", "Choose SSL/TLS Security Auditing.", "Click Launch Scan.", "Review supported TLS versions and cipher suites. Check certificate expiry and hostname separately because this scan is not a complete TLS audit."],
+ comprehensive_web: ["Use only with permission; this scan may send many HTTP requests and produce a long report.", "Enter the authorized website host or IP address and the correct service port if needed.", "Choose Comprehensive Web Auditing.", "Click Launch Scan and allow extra time for the web scripts.", "Read each script result individually. Separate simple information from genuine security concerns and verify findings before reporting them."],
+ nikto: ["Use only against a web server you own or have explicit permission to test.", "Enter the website address or server host in the target box, using the format your dashboard expects.", "Choose Nikto Web Scan.", "Click Launch Scan and wait; Nikto can send many requests.", "Review each finding. Some are warnings or informational details, so verify whether the file, setting, or component is actually risky."],
+ sqlmap: ["Use only on your own test application or with explicit written permission. A staging site with test data is safest.", "Enter the exact web URL you are allowed to test, including the parameter you want checked, for example a test product URL with ?id=1.", "Choose SQLMap Detection Scan. Avoid testing live systems with important data.", "Click Launch Scan and wait for the configured test to finish. Do not add aggressive options unless your test plan specifically allows them.", "Read whether injection was detected, not detected, or inconclusive. A negative result covers only the tested URL and parameter, not the entire website."]
+};
+
+// Small helpers keep the description code easy to read and avoid repetition.
+function addDescriptionParagraph(container, label, text) {
+    var paragraph = document.createElement("p");
+    var heading = document.createElement("strong");
+    heading.textContent = label;
+    paragraph.appendChild(heading);
+    paragraph.appendChild(document.createTextNode(" " + text));
+    container.appendChild(paragraph);
+}
+
+function addDescriptionList(container, items) {
+    var list = document.createElement("ul");
+
+    items.forEach(function (item) {
+        var row = document.createElement("li");
+        var heading = document.createElement("strong");
+        heading.textContent = item[0];
+        row.appendChild(heading);
+        row.appendChild(document.createTextNode(item[1]));
+        list.appendChild(row);
+    });
+
+    container.appendChild(list);
+}
+
+function addDescriptionSteps(container, steps) {
+    var heading = document.createElement("p");
+    var strong = document.createElement("strong");
+    strong.textContent = "How to run this scan, step by step:";
+    heading.appendChild(strong);
+    container.appendChild(heading);
+
+    var list = document.createElement("ol");
+    steps.forEach(function (step) {
+        var item = document.createElement("li");
+        item.textContent = step;
+        list.appendChild(item);
+    });
+    container.appendChild(list);
+}
+
+// Show either the short explanation or the full technical explanation.
+function renderScanDescription(type, info) {
+    var simple = descriptionMode === "simple";
+    var title = document.getElementById("scanDescriptionTitle");
+    var content = document.getElementById("scanDescriptionContent");
+    var button = document.getElementById("descriptionModeButton");
+    var learning = scanLearningInfo[type] || scanLearningInfo.quick;
+
+    title.textContent = info.title;
+    button.textContent = simple
+        ? "Show Detailed Description"
+        : "Show Simplified Description";
+    button.setAttribute("aria-pressed", String(simple));
+    content.replaceChildren();
+
+    if (simple && simpleScanInfo[type]) {
+        var shortInfo = simpleScanInfo[type];
+        addDescriptionParagraph(content, "What it does:", shortInfo.description);
+        addDescriptionParagraph(content, "What the results may show:", learning.expected);
+        addDescriptionParagraph(content, "Before you run it:", learning.before);
+        addDescriptionSteps(content, scanSteps[type] || scanSteps.quick);
+        addDescriptionList(content, [
+            ["Pros: ", shortInfo.pros],
+            ["Cons: ", shortInfo.cons]
+        ]);
+        return;
+    }
+
+    var detail = detailedScanInfo[type] || detailedScanInfo.quick;
+    addDescriptionParagraph(content, "Overview:", detail.what);
+    addDescriptionParagraph(content, "How it works:", detail.how);
+    addDescriptionParagraph(content, "What you may learn:", detail.finds);
+    addDescriptionParagraph(content, "When to use it:", info.situation);
+    addDescriptionParagraph(content, "What the results may show:", learning.expected);
+    addDescriptionParagraph(content, "Before you run it:", learning.before);
+    addDescriptionSteps(content, scanSteps[type] || scanSteps.quick);
+    addDescriptionList(content, [
+        ["Pros: ", info.pros],
+        ["Cons and limitations: ", info.cons],
+        ["Important note: ", detail.limits]
+    ]);
+}
+
+// Switch between detailed and simplified descriptions when the button is clicked.
+function toggleDescriptionMode() {
+    descriptionMode = descriptionMode === "detailed" ? "simple" : "detailed";
+    updateScanPage();
+}
+
+function updateScanPage() {
+    var type = document.getElementById("scanTypeInput").value;
+    var target = document.getElementById("targetInput");
+    var box = document.getElementById("scanDescription");
+
+    var scanInfo = {
+        quick: { title: "Quick Scan", situation: "Use first when you want a fast baseline of common TCP ports before choosing a deeper scan.", pros: "Fast and easy to interpret.", cons: "Does not check every port or determine whether discovered services are secure." },
+        stealth: { title: "TCP SYN / Stealth Scan (-sS)", situation: "Use to check TCP port states with SYN probes that normally stop before completing a full TCP handshake.", pros: "Often less full-connection activity than a connect scan.", cons: "Still detectable and usually requires elevated privileges." },
+        tcp_connect: { title: "TCP Connect Scan (-sT)", situation: "Use when raw-packet privileges are unavailable or you want to test whether normal TCP connections can be established.", pros: "Straightforward and broadly compatible.", cons: "Completed connections may be logged; it only reports reachability, not service security." },
+        tcp_ack: { title: "TCP ACK Scan (-sA)", situation: "Use when investigating whether firewall rules appear to filter TCP probes.", pros: "Useful for studying filtering behaviour.", cons: "Cannot reliably distinguish open ports from closed ports." },
+        tcp_window: { title: "TCP Window Scan (-sW)", situation: "Use for specialized troubleshooting when you need to examine TCP window behaviour on a compatible system.", pros: "May provide extra clues on some systems.", cons: "Unreliable on many modern systems; confirm with a standard scan." },
+        tcp_maimon: { title: "TCP Maimon Scan (-sM)", situation: "Use for specialized or educational testing of how a system responds to FIN/ACK probes.", pros: "Can reveal unusual TCP response behaviour on some targets.", cons: "Limited practical value on many modern systems." },
+        tcp_fin: { title: "TCP FIN Scan (-sF)", situation: "Use for specialized testing of how targets and filters respond to FIN packets.", pros: "Offers a different view of TCP filtering behaviour.", cons: "Operating-system differences make results ambiguous; it is not a universal substitute for a SYN scan." },
+        tcp_null: { title: "TCP NULL Scan (-sN)", situation: "Use for specialized testing of responses to TCP packets with no flags set.", pros: "Can provide clues about packet filtering on compatible systems.", cons: "Results are platform-dependent and silence is ambiguous." },
+        tcp_xmas: { title: "TCP Xmas Scan (-sX)", situation: "Use for specialized testing of how a system handles packets with FIN, PSH and URG flags set.", pros: "Can help compare firewall and TCP-stack behaviour.", cons: "May be detected and results vary by operating system." },
+        udp: { title: "UDP Scan (-sU)", situation: "Use when you need to discover UDP services in addition to TCP services, for example DNS or SNMP.", pros: "Covers a different transport protocol from TCP.", cons: "Often slower because UDP services may not respond to probes." },
+        ip_protocol: { title: "IP Protocol Scan (-sO)", situation: "Use for network inventory or troubleshooting when you need to know which IP protocol types a host supports.", pros: "Provides protocol-level information beyond port numbers.", cons: "Does not identify application services or replace TCP/UDP port scans." },
+        custom_flags: { title: "Custom TCP Flags", situation: "Use only when you have a specific testing question about a combination of TCP control flags.", pros: "Flexible for targeted troubleshooting and learning.", cons: "Requires knowledge of TCP flags and can be difficult to interpret." },
+        idle: { title: "Idle / Zombie Scan (-sI)", situation: "Use only in authorized, specialized testing when a suitable idle intermediary host is available.", pros: "Can infer port states indirectly under specific conditions.", cons: "Requires a suitable host, can fail, and does not guarantee anonymity." },
+        ftp_bounce: { title: "FTP Bounce Scan (-b)", situation: "Use in an authorized assessment to check whether an FTP server permits unsafe third-party relay behaviour.", pros: "Can identify a legacy FTP relay misconfiguration.", cons: "Usually blocked by modern servers and must not be used to relay through systems without permission." },
+        sctp_init: { title: "SCTP INIT Scan", situation: "Use in environments that rely on SCTP, such as some telecom or specialized network systems.", pros: "Finds SCTP services that TCP scans will not cover.", cons: "Usually irrelevant if the target does not use SCTP." },
+        sctp_cookie: { title: "SCTP COOKIE-ECHO Scan", situation: "Use for specialized SCTP testing when an SCTP service is expected.", pros: "Provides additional SCTP-specific response information.", cons: "Has limited relevance to ordinary web infrastructure and may be inconclusive." },
+        version: { title: "Service Version Detection (-sV --version-intensity 5)", situation: "Use after finding open ports when you need to identify the service software and possible version for patch review.", pros: "Helps prioritize outdated or unsupported components.", cons: "Version results can be incomplete or inaccurate and do not prove a vulnerability." },
+        default_web_script: { title: "Default Script Scan (-sV -sC)", situation: "Use for a broader first assessment when service identification and Nmap's default scripts may provide useful context.", pros: "Combines several useful information-gathering checks.", cons: "Creates more traffic than a basic scan; inspect individual script results." },
+        vuln_detection: { title: "Nmap Vulnerability Detection (--script vuln)", situation: "Use on authorized targets to look for indicators of known weaknesses in services supported by Nmap's vulnerability scripts.", pros: "Can highlight issues that need patch checks or manual validation.", cons: "May produce false positives or miss issues; a result does not automatically prove exploitability." },
+        web_enum: { title: "Web Path Enumeration (--script http-enum)", situation: "Use when checking a website for common paths, folders or endpoints that may be unintentionally exposed.", pros: "Can uncover overlooked administrative or development paths.", cons: "Generates requests and logs; a path being found does not itself mean it is vulnerable." },
+        ssl_audit: { title: "SSL/TLS Cipher Audit (--script ssl-enum-ciphers)", situation: "Use to review which TLS versions and cipher suites a secure service supports.", pros: "Helps identify potentially weak or outdated encryption options.", cons: "Does not by itself validate certificate expiry or provide a complete TLS/application audit." },
+        comprehensive_web: { title: "Comprehensive Web Audit (--script http-*)", situation: "Use when you have permission for a broad collection of HTTP-script checks and can review a larger result set.", pros: "May collect varied web-server configuration and information-disclosure clues.", cons: "Can generate substantial traffic and output; exact coverage depends on the scripts and detected services." },
+        os: { title: "OS Detection", situation: "Use for asset inventory or to help plan follow-up checks when you need an estimate of the target's operating system.", pros: "Adds useful system context without logging into the host.", cons: "The estimate may be wrong or unavailable if responses are blocked or insufficient." },
+        intense: { title: "Intense Scan", situation: "Use when a more detailed initial profile is needed and extra scan time and network traffic are acceptable.", pros: "Collects more information than a minimal port scan.", cons: "Takes longer and is more likely to be noticed; exact coverage depends on the configured command." },
+        all_ports: { title: "All TCP Ports Scan", situation: "Use when you suspect a service may be listening on an uncommon TCP port.", pros: "Checks TCP ports 1–65535 instead of only a common-port list.", cons: "Can take much longer and does not automatically cover UDP ports." },
+        ping: { title: "Ping / Host Discovery", situation: "Use as a quick first step to check whether the target appears reachable from your current network location.", pros: "Fast and useful for basic connectivity troubleshooting.", cons: "A firewall may block discovery probes even when the host is online; no service details are provided." },
+        vuln: { title: "Vulnerability Scan", situation: "Use on authorized targets to look for potential known weaknesses in discovered services.", pros: "Helps create a shortlist for patching and further verification.", cons: "Not a complete vulnerability assessment; findings need validation." },
+        nikto: { title: "Nikto Web Scan", situation: "Use for an authorized web-server review focused on common risky files, settings and known server issues.", pros: "Useful for quickly identifying common web-server weaknesses.", cons: "Can create many requests and findings; it is not a full application penetration test." },
+        sqlmap: { title: "SQLMap SQL Injection Test", situation: "Use only with explicit permission to test a specific web URL or parameter for SQL injection, preferably in a test environment.", pros: "Can provide evidence of unsafe database input handling to help developers fix it.", cons: "Some tests can affect application performance or data; use conservative settings and never test systems without authorization." }
+    };
+
+    var info = scanInfo[type] || scanInfo.quick;
+    renderScanDescription(type, info);
+
+    if (type.indexOf("sqlmap") === 0 || type.indexOf("nikto") === 0 || type.includes("web") || type.includes("ssl") || type.includes("vuln")) {
+        target.type = "text";
+        target.placeholder = "Example: http://127.0.0.1:5001/product?id=1";
+    } else {
+        target.type = "text";
+        target.placeholder = "Enter Domain or IP Address";
+    }
+
+    showAdvancedOptions();
+}
+
+function showAdvancedOptions() {
+    var type = document.getElementById("scanTypeInput").value;
+    var box = document.getElementById("advancedScanOptions");
+    var flags = document.getElementById("customFlagsField");
+    var zombie = document.getElementById("zombieField");
+    var bounce = document.getElementById("bounceField");
+
+    flags.style.display = "none";
+    zombie.style.display = "none";
+    bounce.style.display = "none";
+    box.style.display = "none";
+
+    if (type == "custom_flags") {
+        flags.style.display = "block";
+        box.style.display = "block";
+    }
+    if (type == "idle") {
+        zombie.style.display = "block";
+        box.style.display = "block";
+    }
+    if (type == "ftp_bounce") {
+        bounce.style.display = "block";
+        box.style.display = "block";
+    }
+}
+
+
+// Validate the target and scan-specific fields before submitting the form.
+function validateScanInput() {
+    var form = document.querySelector(".scan-form");
+    var type = document.getElementById("scanTypeInput").value;
+    var targetInput = document.getElementById("targetInput");
+    var target = targetInput.value.trim();
+    var errorBox = document.getElementById("scanValidationError");
+    var error = "";
+
+    function isValidIPv4(value) {
+        var parts = value.split(".");
+        return parts.length === 4 && parts.every(function (part) {
+            return /^\d{1,3}$/.test(part) && Number(part) >= 0 &&
+                Number(part) <= 255 && String(Number(part)) === part;
+        });
+    }
+    function isValidIPv6(value) {
+        return value.indexOf(":") !== -1 &&
+            /^[0-9a-fA-F:]+$/.test(value) &&
+            (value.match(/:/g) || []).length >= 2;
+    }
+    function isValidHostname(value) {
+        if (!value || value.length > 253 || value.indexOf(" ") !== -1) return false;
+        var host = value.replace(/\.$/, "");
+        if (host.toLowerCase() === "localhost") return true;
+        if (isValidIPv4(host) || isValidIPv6(host)) return true;
+        var labels = host.split(".");
+        if (labels.length < 2) return false;
+        return labels.every(function (label) {
+            return label.length >= 1 && label.length <= 63 &&
+                /^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/.test(label);
+        });
+    }
+    function isValidWebTarget(value) {
+        var candidate = /^https?:\/\//i.test(value) ? value : "http://" + value;
+        try {
+            var url = new URL(candidate);
+            return (url.protocol === "http:" || url.protocol === "https:") &&
+                isValidHostname(url.hostname) && !url.username && !url.password;
+        } catch (e) { return false; }
+    }
+
+    var webTargetTypes = [
+        "nikto", "web_enum", "ssl_audit", "comprehensive_web",
+        "default_web_script", "sqlmap"
+    ];
+
+    if (!target) {
+        error = "Target is required. Enter the domain, IP address, or URL you want to scan.";
+    } else if (type === "sqlmap") {
+        if (!/^https?:\/\//i.test(target)) {
+            error = "SQLMap requires a full URL starting with http:// or https://. Include the page and parameter when applicable. Example: http://127.0.0.1:5001/product?id=1";
+        } else if (!isValidWebTarget(target)) {
+            error = "The URL is invalid. Check the protocol, hostname/IP address, and URL format. Use http:// or https://.";
+        }
+    } else if (webTargetTypes.indexOf(type) !== -1) {
+        if (!isValidWebTarget(target)) {
+            error = "This web scan needs a valid website URL, domain, or IP address. Example: https://example.com or http://192.168.1.10. Check for spelling mistakes or spaces.";
+        }
+    } else if (/^https?:\/\//i.test(target) || /[\/?#]/.test(target)) {
+        error = "This network scan expects a domain or IP address only, not a full URL or page path. Example: example.com or 192.168.1.10.";
+    } else if (!isValidHostname(target.replace(/^\[|\]$/g, ""))) {
+        error = "The target does not look like a valid domain name or IP address. Check the spelling, remove spaces, and try again. Examples: example.com or 192.168.1.10.";
+    }
+
+    if (!error && type === "custom_flags") {
+        var flagsInput = form.querySelector('input[name="scanflags"]');
+        var flags = flagsInput ? flagsInput.value.trim().toUpperCase() : "";
+        var allowedFlags = ["SYN", "ACK", "FIN", "RST", "PSH", "URG", "ECE", "CWR"];
+        var enteredFlags = flags.split(/[\s,]+/).filter(Boolean);
+        if (!flags) {
+            error = "Custom TCP Flags is required. Enter one or more flags, such as SYN,ACK.";
+        } else if (enteredFlags.some(function (flag) { return allowedFlags.indexOf(flag) === -1; })) {
+            error = "One or more TCP flags are invalid. Use only SYN, ACK, FIN, RST, PSH, URG, ECE, or CWR, separated by commas. Example: SYN,ACK.";
+        } else if (new Set(enteredFlags).size !== enteredFlags.length) {
+            error = "The TCP flags contain duplicates. Remove repeated flags and try again.";
+        }
+    }
+
+    if (!error && type === "idle") {
+        var zombieInput = form.querySelector('input[name="zombie"]');
+        var zombie = zombieInput ? zombieInput.value.trim() : "";
+        if (!zombie) {
+            error = "Zombie Host is required for an Idle Scan. Enter the IP address of a suitable idle host.";
+        } else if (!isValidIPv4(zombie) && !isValidIPv6(zombie)) {
+            error = "Zombie Host must be a valid IP address, not a domain or URL. Example: 192.168.1.20.";
+        } else if (zombie === target) {
+            error = "The Zombie Host and scan target are the same. Enter a different suitable host.";
+        }
+    }
+
+    if (!error && type === "ftp_bounce") {
+        var bounceInput = form.querySelector('input[name="ftp_bounce"]');
+        var bounce = bounceInput ? bounceInput.value.trim() : "";
+        if (!bounce) {
+            error = "FTP Bounce Relay is required. Enter the hostname or IP address of an FTP relay you are authorized to use.";
+        } else if (!isValidHostname(bounce)) {
+            error = "FTP Bounce Relay must be a valid hostname or IP address only. Do not include a URL, path, spaces, or port number.";
+        }
+    }
+
+    if (error) {
+        errorBox.textContent = "";
+        var strong = document.createElement("strong");
+        strong.textContent = "Input Error: ";
+        errorBox.appendChild(strong);
+        errorBox.appendChild(document.createTextNode(error));
+        errorBox.style.display = "block";
+        alert("Input Error\n\n" + error);
+
+        if (type === "custom_flags" && error.indexOf("Custom TCP Flags") !== -1) {
+            form.querySelector('input[name="scanflags"]').focus();
+        } else if (type === "idle" && error.indexOf("Zombie Host") !== -1) {
+            form.querySelector('input[name="zombie"]').focus();
+        } else if (type === "ftp_bounce" && error.indexOf("FTP Bounce Relay") !== -1) {
+            form.querySelector('input[name="ftp_bounce"]').focus();
+        } else {
+            targetInput.focus();
+        }
+        errorBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        return false;
+    }
+
+    errorBox.style.display = "none";
+    errorBox.textContent = "";
+    showLoading();
+    return true;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var errorBox = document.getElementById("scanValidationError");
+    ["targetInput", "scanTypeInput"].forEach(function (id) {
+        var field = document.getElementById(id);
+        if (field) field.addEventListener(id === "scanTypeInput" ? "change" : "input", function () {
+            errorBox.style.display = "none";
+            errorBox.textContent = "";
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", updateScanPage);
+</script>
+    <script src="{{ url_for('static', filename='language.js') }}"></script>
+</body>
 </html>

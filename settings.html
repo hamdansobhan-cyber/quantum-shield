@@ -1,243 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Quantum Shield | Settings</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-
+        /* --- 1. BASIC STYLING --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
-            background: #020617;
+            background-color: #020617;
             color: #e2e8f0;
-            min-height: 100vh;
-
-            background-image:
-                linear-gradient(rgba(56,189,248,.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(56,189,248,.025) 1px, transparent 1px);
-
-            background-size: 40px 40px;
-
-            transition: .3s;
-        }
-
-        .container {
-            max-width: 1150px;
-            margin: auto;
-            padding: 45px 30px;
-        }
-
-        /* HEADER */
-
-        .header {
-            margin-bottom: 35px;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header h1 {
-            color: #38bdf8;
-            font-size: 32px;
-            letter-spacing: 1px;
-
-            text-shadow:
-                0 0 18px rgba(56,189,248,.45);
-        }
-
-        .header p {
-            margin-top: 10px;
-            color: #64748b;
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-
-            padding: 10px 15px;
-
-            background: rgba(34,197,94,.08);
-            border: 1px solid rgba(34,197,94,.2);
-
-            border-radius: 30px;
-
-            color: #4ade80;
-            font-size: 10px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-
-            box-shadow:
-                0 0 10px #22c55e;
-        }
-
-        /* GRID */
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 22px;
-        }
-
-        /* CARD */
-
-        .card {
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(15,23,42,.96),
-                    rgba(15,23,42,.78)
-                );
-
-            border: 1px solid rgba(56,189,248,.10);
-            border-radius: 20px;
-
-            padding: 28px;
-
-            box-shadow:
-                0 10px 30px rgba(0,0,0,.28);
-
-            transition: .3s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-
-            border-color:
-                rgba(56,189,248,.28);
-
-            box-shadow:
-                0 0 30px rgba(56,189,248,.08);
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            color: #38bdf8;
-
-            font-size: 15px;
-            font-weight: 700;
-
-            margin-bottom: 22px;
-        }
-
-        .card-title .icon {
-            width: 38px;
-            height: 38px;
-
+            padding: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-
-            background: rgba(56,189,248,.08);
-
-            border: 1px solid rgba(56,189,248,.12);
-
-            border-radius: 10px;
-
-            font-size: 18px;
+            min-height: 100vh;
         }
 
-        /* SETTING ROW */
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
 
-        .setting {
+        h1 {
+            color: #38bdf8;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* --- 2. CARDS & ROWS --- */
+        .card {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #38bdf8;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-
-            min-height: 65px;
-
-            border-bottom:
-                1px solid rgba(255,255,255,.05);
+            padding: 12px 0;
+            border-bottom: 1px solid #1e293b;
         }
 
-        .setting:last-child {
+        .setting-row:last-child {
             border-bottom: none;
         }
 
-        .setting-info {
-            padding-right: 20px;
+        .setting-label {
+            font-size: 13px;
+            color: #cbd5e1;
         }
 
-        .setting-name {
-            color: #e2e8f0;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .setting-description {
+        .setting-desc {
+            font-size: 10px;
             color: #64748b;
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            line-height: 1.4;
+            margin-top: 3px;
         }
 
-        /* SELECT */
-
-        select {
-            min-width: 165px;
-
-            padding: 10px 12px;
-
-            background: #020617;
-            color: #e2e8f0;
-
-            border: 1px solid #1e293b;
-            border-radius: 9px;
-
+        /* --- 3. INPUTS & SELECTS --- */
+        select, input[type="text"] {
+            padding: 8px 12px;
+            background: #0f172a;
+            color: white;
+            border: 1px solid #334155;
+            border-radius: 8px;
             outline: none;
-
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-
             cursor: pointer;
-
-            transition: .2s;
+            font-size: 12px;
+            min-width: 180px;
         }
 
-        select:hover,
-        select:focus {
+        select:focus, input:focus {
             border-color: #38bdf8;
-
-            box-shadow:
-                0 0 12px rgba(56,189,248,.12);
         }
 
-        /* TOGGLE */
-
+        /* --- 4. TOGGLE SWITCH --- */
         .switch {
             position: relative;
-
-            width: 48px;
-            height: 25px;
-
-            flex-shrink: 0;
+            width: 40px;
+            height: 20px;
+            display: inline-block;
         }
 
         .switch input {
@@ -248,1450 +122,312 @@
 
         .slider {
             position: absolute;
-            inset: 0;
-
-            background: #1e293b;
-
-            border-radius: 30px;
-
             cursor: pointer;
-
-            transition: .25s;
+            inset: 0;
+            background: #1e293b;
+            border-radius: 20px;
+            transition: 0.3s;
         }
 
         .slider:before {
-            content: "";
-
             position: absolute;
-
-            width: 19px;
-            height: 19px;
-
+            content: "";
+            height: 14px;
+            width: 14px;
             left: 3px;
-            top: 3px;
-
-            background: #64748b;
-
+            bottom: 3px;
+            background: #94a3b8;
             border-radius: 50%;
-
-            transition: .25s;
+            transition: 0.3s;
         }
 
-        .switch input:checked + .slider {
-            background: #0891b2;
-
-            box-shadow:
-                0 0 14px rgba(8,145,178,.45);
+        input:checked + .slider {
+            background: #06b6d4;
         }
 
-        .switch input:checked + .slider:before {
-            transform: translateX(23px);
+        input:checked + .slider:before {
+            transform: translateX(20px);
             background: white;
         }
 
-        /* LOCKED SECURITY */
-
-        .locked {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            color: #22c55e;
-            font-size: 10px;
-            white-space: nowrap;
-        }
-
-        .locked-icon {
-            font-size: 14px;
-        }
-
-        /* PREVIEW */
-
-        .preview-box {
-            margin-top: 18px;
-
-            padding: 16px;
-
-            background: #020617;
-
-            border: 1px solid #1e293b;
-
-            border-radius: 12px;
-        }
-
-        .preview-title {
-            color: #64748b;
-            font-size: 9px;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-        }
-
-        .preview-line {
-            display: flex;
-            justify-content: space-between;
-
-            padding: 6px 0;
-
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-        }
-
-        .preview-line span:first-child {
-            color: #64748b;
-        }
-
-        .preview-line span:last-child {
-            color: #38bdf8;
-        }
-
-        /* SYSTEM STATUS */
-
-        .component {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            padding: 14px 0;
-
-            border-bottom:
-                1px solid rgba(255,255,255,.05);
-        }
-
-        .component:last-child {
-            border-bottom: none;
-        }
-
-        .component-name {
-            font-size: 11px;
-            color: #e2e8f0;
-        }
-
-        .component-type {
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-            color: #64748b;
-
-            margin-top: 4px;
-        }
-
-        .available {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-
-            color: #4ade80;
-
-            font-size: 9px;
-        }
-
-        /* FULL WIDTH */
-
-        .full {
-            grid-column: 1 / -1;
-        }
-
-        /* ABOUT */
-
-        .about-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 12px;
-        }
-
-        .about-item {
-            padding: 16px;
-
-            background: #020617;
-
-            border: 1px solid #1e293b;
-
-            border-radius: 11px;
-        }
-
-        .about-label {
-            color: #475569;
-            font-size: 8px;
-
-            margin-bottom: 8px;
-
-            letter-spacing: 1px;
-        }
-
-        .about-value {
-            color: #38bdf8;
-            font-size: 11px;
-        }
-
-        /* ACTIONS */
-
-        .actions {
+        /* --- 5. BUTTONS & LINKS --- */
+        .button-group {
             display: flex;
             justify-content: flex-end;
-            align-items: center;
-
             gap: 12px;
-
             margin-top: 25px;
         }
 
         button {
-            border: none;
-            border-radius: 10px;
-
-            padding: 13px 24px;
-
-            font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
-            font-weight: 700;
-
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
-
-            transition: .3s;
+            border: none;
+            transition: 0.2s;
         }
 
         .reset-btn {
-            background: #0f172a;
-
+            background: #1e293b;
             color: #94a3b8;
-
-            border: 1px solid #1e293b;
         }
 
         .reset-btn:hover {
             color: white;
-            border-color: #38bdf8;
+            background: #334155;
         }
 
         .save-btn {
+            background: linear-gradient(90deg, #06b6d4, #6366f1);
             color: white;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #06b6d4,
-                    #6366f1
-                );
-
-            box-shadow:
-                0 0 18px rgba(56,189,248,.18);
         }
 
         .save-btn:hover {
-            transform: translateY(-3px);
-
-            box-shadow:
-                0 0 28px rgba(56,189,248,.4);
+            opacity: 0.9;
         }
 
-        /* NOTIFICATION */
-
-        .notification {
-            position: fixed;
-
-            right: 25px;
-            bottom: 25px;
-
-            min-width: 280px;
-
-            padding: 15px 18px;
-
-            background: #0f172a;
-
-            border: 1px solid rgba(34,197,94,.35);
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 10px 30px rgba(0,0,0,.4);
-
-            transform:
-                translateY(120px);
-
-            opacity: 0;
-
-            pointer-events: none;
-
-            transition: .35s;
-
-            z-index: 999;
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 12px;
         }
 
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
+        .back-link:hover {
+            text-decoration: underline;
         }
 
-        .notification-title {
-            color: #4ade80;
-
-            font-size: 11px;
-
-            margin-bottom: 5px;
+        /* --- 6. SUCCESS BANNER --- */
+        #alertBox {
+            display: none;
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 20px;
         }
-
-        .notification-text {
-            color: #94a3b8;
-
-            font-family: Arial, sans-serif;
-
-            font-size: 11px;
-        }
-
-        /* DISABLED */
-
-        .disabled {
-            opacity: .55;
-        }
-
-        /* RESPONSIVE */
-
-        @media(max-width: 850px) {
-
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full {
-                grid-column: auto;
-            }
-
-            .about-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-            .header-top {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-        }
-
-        @media(max-width: 550px) {
-
-            .container {
-                padding: 25px 15px;
-            }
-
-            .header h1 {
-                font-size: 25px;
-            }
-
-            .setting {
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            select {
-                min-width: 125px;
-            }
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-
-        }
-
-        /* REDUCED ANIMATION */
-
-        body.no-animation *,
-        body.no-animation *::before,
-        body.no-animation *::after {
-            transition: none !important;
-            animation: none !important;
-        }
-
-        /* NO GLOW */
-
-        body.no-glow .card,
-        body.no-glow .system-status,
-        body.no-glow .status-dot,
-        body.no-glow .save-btn {
-            box-shadow: none !important;
-        }
-
     </style>
-
 </head>
-
-
 <body>
 
-<div class="container">
+    <div class="container">
+        <h1>⚙️ System Settings</h1>
+        <p class="subtitle">Customize platform scanner presets, export templates, and security behavior.</p>
 
-    <!-- HEADER -->
+        <!-- Success Alert Popup -->
+        <div id="alertBox">Settings saved successfully!</div>
 
-    <div class="header">
-
-        <div class="header-top">
-
-            <div>
-
-                <h1>⚙ System Settings</h1>
-
-                <p>
-                    Configure Quantum Shield scanning and interface preferences.
-                </p>
-
-            </div>
-
-            <div class="system-status">
-
-                <span class="status-dot"></span>
-
-                SYSTEM ONLINE
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="settings-grid">
-
-
-        <!-- SCANNER SETTINGS -->
-
+        <!-- Card 1: Scanner Preferences -->
         <div class="card">
-
-            <div class="card-title">
-
-                <span class="icon">🌐</span>
-
-                Scanner Settings
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Default Scan Type
-                    </div>
-
-                    <div class="setting-description">
-                        Select the scan used when starting a new assessment.
-                    </div>
-
+            <div class="card-title">🌐 Scanner Configuration</div>
+            
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Default Scan Preset</div>
+                    <div class="setting-desc">Preset scan mode chosen upon startup.</div>
                 </div>
-
-
                 <select id="scanType">
-
-                    <option value="quick">
-                        Quick Scan
-                    </option>
-
-                    <option value="version">
-                        Version Detection
-                    </option>
-
-                    <option value="os">
-                        OS Detection
-                    </option>
-
-                    <option value="vuln">
-                        Vulnerability Scan
-                    </option>
-
+                    <option value="quick">Quick Scan (Common Ports)</option>
+                    <option value="stealth">TCP SYN / Stealth Scan</option>
+                    <option value="version">Service Version Detection</option>
+                    <option value="os">OS Detection</option>
+                    <option value="vuln">Vulnerability Audit Scan</option>
                 </select>
-
             </div>
 
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Scan Timeout
-                    </div>
-
-                    <div class="setting-description">
-                        Maximum time allowed for a scan operation.
-                    </div>
-
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Scan Timeout Limit</div>
+                    <div class="setting-desc">Max waiting duration per network task.</div>
                 </div>
-
-
                 <select id="timeout">
-
-                    <option value="30">
-                        30 seconds
-                    </option>
-
-                    <option value="60" selected>
-                        60 seconds
-                    </option>
-
-                    <option value="120">
-                        120 seconds
-                    </option>
-
-                    <option value="300">
-                        5 minutes
-                    </option>
-
+                    <option value="15">15 seconds (Fast)</option>
+                    <option value="30">30 seconds (Standard)</option>
+                    <option value="60">60 seconds (Recommended)</option>
+                    <option value="120">120 seconds (Deep)</option>
                 </select>
-
             </div>
 
-
-            <div class="preview-box">
-
-                <div class="preview-title">
-                    CURRENT CONFIGURATION
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Aggressiveness Level</div>
+                    <div class="setting-desc">Timing template (-T setting).</div>
                 </div>
-
-                <div class="preview-line">
-
-                    <span>Scan Method</span>
-
-                    <span id="previewScan">
-                        Quick Scan
-                    </span>
-
-                </div>
-
-                <div class="preview-line">
-
-                    <span>Timeout</span>
-
-                    <span id="previewTimeout">
-                        60 seconds
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- INTERFACE -->
-
-        <div class="card">
-
-            <div class="card-title">
-
-                <span class="icon">🎨</span>
-
-                Interface
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Animations
-                    </div>
-
-                    <div class="setting-description">
-                        Enable dashboard transition effects.
-                    </div>
-
-                </div>
-
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="animations"
-                        checked
-                    >
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Glow Effects
-                    </div>
-
-                    <div class="setting-description">
-                        Enable cyber-style interface glow effects.
-                    </div>
-
-                </div>
-
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="glow"
-                        checked
-                    >
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Compact Interface
-                    </div>
-
-                    <div class="setting-description">
-                        Reduce spacing between dashboard components.
-                    </div>
-
-                </div>
-
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="compact"
-                    >
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-        </div>
-
-
-        <!-- REPORT SETTINGS -->
-
-        <div class="card">
-
-            <div class="card-title">
-
-                <span class="icon">📄</span>
-
-                Report Settings
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Include AI Analysis
-                    </div>
-
-                    <div class="setting-description">
-                        Include AI-generated security recommendations.
-                    </div>
-
-                </div>
-
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="aiReport"
-                        checked
-                    >
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Include Scan Results
-                    </div>
-
-                    <div class="setting-description">
-                        Include detected ports and services.
-                    </div>
-
-                </div>
-
-
-                <label class="switch">
-
-                    <input
-                        type="checkbox"
-                        id="scanReport"
-                        checked
-                    >
-
-                    <span class="slider"></span>
-
-                </label>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Report Format
-                    </div>
-
-                    <div class="setting-description">
-                        Format generated by Quantum Shield.
-                    </div>
-
-                </div>
-
-
-                <select disabled>
-
-                    <option>
-                        PDF
-                    </option>
-
+                <select id="aggressiveness">
+                    <option value="T2">T2 - Polite (Slow & quiet)</option>
+                    <option value="T3" selected>T3 - Normal</option>
+                    <option value="T4">T4 - Aggressive (Fast)</option>
+                    <option value="T5">T5 - Insane (Very fast)</option>
                 </select>
-
             </div>
-
         </div>
 
-
-        <!-- SECURITY -->
-
+        <!-- Card 2: Report & Export Settings -->
         <div class="card">
+            <div class="card-title">📄 Report & Export Formatting</div>
 
-            <div class="card-title">
-
-                <span class="icon">🛡️</span>
-
-                Security
-
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Enforced Export Format</div>
+                    <div class="setting-desc">Primary file type format for downloaded reports.</div>
+                </div>
+                <select id="reportFormat">
+                    <option value="pdf">Executive PDF Document (.pdf)</option>
+                    <option value="html">Interactive Web Report (.html)</option>
+                    <option value="json">Structured Raw Data (.json)</option>
+                    <option value="csv">Auditing Spreadsheet (.csv)</option>
+                </select>
             </div>
 
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Input Validation
-                    </div>
-
-                    <div class="setting-description">
-                        Validate scan targets before execution.
-                    </div>
-
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Include AI Summary Matrix</div>
+                    <div class="setting-desc">Append AI-driven security tips to reports.</div>
                 </div>
-
-
-                <div class="locked">
-
-                    <span class="locked-icon">
-                        ✓
-                    </span>
-
-                    ENABLED
-
-                </div>
-
+                <label class="switch">
+                    <input type="checkbox" id="aiToggle" checked>
+                    <span class="slider"></span>
+                </label>
             </div>
 
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Command Protection
-                    </div>
-
-                    <div class="setting-description">
-                        Protect scanner commands from unsafe input.
-                    </div>
-
+            <div class="setting-row">
+                <div>
+                    <div class="setting-label">Include Raw Terminal Logs</div>
+                    <div class="setting-desc">Attach command line output in report appendix.</div>
                 </div>
-
-
-                <div class="locked">
-
-                    <span class="locked-icon">
-                        ✓
-                    </span>
-
-                    ENABLED
-
-                </div>
-
+                <label class="switch">
+                    <input type="checkbox" id="rawLogsToggle">
+                    <span class="slider"></span>
+                </label>
             </div>
-
-
-            <div class="setting">
-
-                <div class="setting-info">
-
-                    <div class="setting-name">
-                        Security Controls
-                    </div>
-
-                    <div class="setting-description">
-                        These protections cannot be disabled.
-                    </div>
-
-                </div>
-
-
-                <div class="locked">
-                    🔒 PROTECTED
-                </div>
-
-            </div>
-
         </div>
 
+        <!-- Card 3: Interface & Security Options -->
+        <div class="card">
+            <div class="card-title">🛡️ Security & Interface Options</div>
 
-        <!-- SYSTEM STATUS -->
-
-        <div class="card full">
-
-            <div class="card-title">
-
-                <span class="icon">💻</span>
-
-                System Components
-
-            </div>
-
-
-            <div class="component">
-
+            <div class="setting-row">
                 <div>
-
-                    <div class="component-name">
-                        Flask Application
-                    </div>
-
-                    <div class="component-type">
-                        Web Application Backend
-                    </div>
-
+                    <div class="setting-label">Display Language</div>
+                    <div class="setting-desc">Select the user interface display language.</div>
                 </div>
-
-                <div class="available">
-
-                    <span class="status-dot"></span>
-
-                    RUNNING
-
-                </div>
-
+                <select id="displayLanguage">
+                    <option value="en">English</option>
+                    <option value="es">Español (Spanish)</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="de">Deutsch (German)</option>
+                </select>
             </div>
 
-
-            <div class="component">
-
+            <div class="setting-row">
                 <div>
-
-                    <div class="component-name">
-                        SQLite Database
-                    </div>
-
-                    <div class="component-type">
-                        Scan History Storage
-                    </div>
-
+                    <div class="setting-label">Interface Theme Color</div>
+                    <div class="setting-desc">Accent layout style for your panels.</div>
                 </div>
-
-                <div class="available">
-
-                    <span class="status-dot"></span>
-
-                    CONNECTED
-
-                </div>
-
+                <select id="themeStyle">
+                    <option value="cyber">Cyber Blue (Default)</option>
+                    <option value="emerald">Emerald Green</option>
+                    <option value="purple">Neon Purple</option>
+                </select>
             </div>
 
-
-            <div class="component">
-
+            <div class="setting-row">
                 <div>
-
-                    <div class="component-name">
-                        Nmap
-                    </div>
-
-                    <div class="component-type">
-                        Network Reconnaissance Engine
-                    </div>
-
+                    <div class="setting-label">Strict Target Input Sanitization</div>
+                    <div class="setting-desc">Block invalid IP or domain structures automatically.</div>
                 </div>
-
-                <div class="available">
-
-                    <span class="status-dot"></span>
-
-                    AVAILABLE
-
-                </div>
-
+                <label class="switch">
+                    <input type="checkbox" id="sanitizeToggle" checked>
+                    <span class="slider"></span>
+                </label>
             </div>
-
         </div>
 
-
-        <!-- ABOUT -->
-
-        <div class="card full">
-
-            <div class="card-title">
-
-                <span class="icon">ℹ️</span>
-
-                About Quantum Shield
-
-            </div>
-
-
-            <div class="about-grid">
-
-                <div class="about-item">
-
-                    <div class="about-label">
-                        PROJECT
-                    </div>
-
-                    <div class="about-value">
-                        Quantum Shield
-                    </div>
-
-                </div>
-
-
-                <div class="about-item">
-
-                    <div class="about-label">
-                        PLATFORM
-                    </div>
-
-                    <div class="about-value">
-                        Flask / Python
-                    </div>
-
-                </div>
-
-
-                <div class="about-item">
-
-                    <div class="about-label">
-                        DATABASE
-                    </div>
-
-                    <div class="about-value">
-                        SQLite
-                    </div>
-
-                </div>
-
-
-                <div class="about-item">
-
-                    <div class="about-label">
-                        NETWORK SCANNER
-                    </div>
-
-                    <div class="about-value">
-                        Nmap
-                    </div>
-
-                </div>
-
-            </div>
-
+        <!-- Buttons -->
+        <div class="button-group">
+            <button class="reset-btn" onclick="resetSettings()">Reset Defaults</button>
+            <button class="save-btn" onclick="saveSettings()">Save Global Settings</button>
         </div>
 
+        <a href="/home" class="back-link">← Back to Dashboard Home</a>
     </div>
 
+    <script>
+        // 1. Save settings to browser storage globally
+        function saveSettings() {
+            const userSettings = {
+                scanType: document.getElementById("scanType").value,
+                timeout: document.getElementById("timeout").value,
+                aggressiveness: document.getElementById("aggressiveness").value,
+                reportFormat: document.getElementById("reportFormat").value,
+                aiToggle: document.getElementById("aiToggle").checked,
+                rawLogsToggle: document.getElementById("rawLogsToggle").checked,
+                displayLanguage: document.getElementById("displayLanguage").value,
+                themeStyle: document.getElementById("themeStyle").value,
+                sanitizeToggle: document.getElementById("sanitizeToggle").checked
+            };
 
-    <!-- BUTTONS -->
+            localStorage.setItem("quantumAppSettings", JSON.stringify(userSettings));
+            // Also save specifically for quick language lookups across pages
+            localStorage.setItem("preferred_language", userSettings.displayLanguage);
 
-    <div class="actions">
-
-        <button
-            class="reset-btn"
-            onclick="resetSettings()"
-        >
-            ↺ Reset
-        </button>
-
-
-        <button
-            class="save-btn"
-            onclick="saveSettings()"
-        >
-            ✓ Save Settings
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- NOTIFICATION -->
-
-<div
-    class="notification"
-    id="notification"
->
-
-    <div class="notification-title">
-        ✓ SETTINGS SAVED
-    </div>
-
-    <div
-        class="notification-text"
-        id="notificationText"
-    >
-        Your preferences have been saved.
-    </div>
-
-</div>
-
-
-<script>
-
-    const scanType =
-        document.getElementById("scanType");
-
-    const timeout =
-        document.getElementById("timeout");
-
-    const animations =
-        document.getElementById("animations");
-
-    const glow =
-        document.getElementById("glow");
-
-    const compact =
-        document.getElementById("compact");
-
-    const aiReport =
-        document.getElementById("aiReport");
-
-    const scanReport =
-        document.getElementById("scanReport");
-
-
-    /*
-    ========================================
-    UPDATE PREVIEW
-    ========================================
-    */
-
-    function updatePreview() {
-
-        const scanText =
-            scanType.options[
-                scanType.selectedIndex
-            ].text;
-
-        document.getElementById(
-            "previewScan"
-        ).textContent = scanText;
-
-
-        document.getElementById(
-            "previewTimeout"
-        ).textContent =
-            timeout.value + " seconds";
-
-    }
-
-
-    scanType.addEventListener(
-        "change",
-        updatePreview
-    );
-
-    timeout.addEventListener(
-        "change",
-        updatePreview
-    );
-
-
-    /*
-    ========================================
-    APPLY INTERFACE SETTINGS
-    ========================================
-    */
-
-    function applyInterfaceSettings() {
-
-        if (animations.checked) {
-
-            document.body.classList.remove(
-                "no-animation"
-            );
-
-        } else {
-
-            document.body.classList.add(
-                "no-animation"
-            );
-
+            // Show success alert message box
+            const alertBox = document.getElementById("alertBox");
+            alertBox.style.display = "block";
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 2500);
         }
 
-
-        if (glow.checked) {
-
-            document.body.classList.remove(
-                "no-glow"
-            );
-
-        } else {
-
-            document.body.classList.add(
-                "no-glow"
-            );
-
+        // 2. Load saved settings automatically when the page opens
+        function loadSettings() {
+            const savedData = localStorage.getItem("quantumAppSettings");
+            if (savedData) {
+                const s = JSON.parse(savedData);
+                if (s.scanType) document.getElementById("scanType").value = s.scanType;
+                if (s.timeout) document.getElementById("timeout").value = s.timeout;
+                if (s.aggressiveness) document.getElementById("aggressiveness").value = s.aggressiveness;
+                if (s.reportFormat) document.getElementById("reportFormat").value = s.reportFormat;
+                if (typeof s.aiToggle === "boolean") document.getElementById("aiToggle").checked = s.aiToggle;
+                if (typeof s.rawLogsToggle === "boolean") document.getElementById("rawLogsToggle").checked = s.rawLogsToggle;
+                if (s.displayLanguage) document.getElementById("displayLanguage").value = s.displayLanguage;
+                if (s.themeStyle) document.getElementById("themeStyle").value = s.themeStyle;
+                if (typeof s.sanitizeToggle === "boolean") document.getElementById("sanitizeToggle").checked = s.sanitizeToggle;
+            } else {
+                // Fallback to preferred_language if individual settings don't exist yet
+                const prefLang = localStorage.getItem("preferred_language");
+                if (prefLang) {
+                    document.getElementById("displayLanguage").value = prefLang;
+                }
+            }
         }
 
-
-        if (compact.checked) {
-
-            document.body.style.setProperty(
-                "--compact-mode",
-                "1"
-            );
-
-            document.querySelectorAll(
-                ".card"
-            ).forEach(card => {
-
-                card.style.padding = "20px";
-
-            });
-
-        } else {
-
-            document.querySelectorAll(
-                ".card"
-            ).forEach(card => {
-
-                card.style.padding = "28px";
-
-            });
-
+        // 3. Reset settings back to default values
+        function resetSettings() {
+            localStorage.removeItem("quantumAppSettings");
+            localStorage.removeItem("preferred_language");
+            document.getElementById("scanType").value = "quick";
+            document.getElementById("timeout").value = "60";
+            document.getElementById("aggressiveness").value = "T3";
+            document.getElementById("reportFormat").value = "pdf";
+            document.getElementById("aiToggle").checked = true;
+            document.getElementById("rawLogsToggle").checked = false;
+            document.getElementById("displayLanguage").value = "en";
+            document.getElementById("themeStyle").value = "cyber";
+            document.getElementById("sanitizeToggle").checked = true;
+            
+            alert("Settings reset to defaults!");
         }
 
-    }
-
-
-    animations.addEventListener(
-        "change",
-        applyInterfaceSettings
-    );
-
-    glow.addEventListener(
-        "change",
-        applyInterfaceSettings
-    );
-
-    compact.addEventListener(
-        "change",
-        applyInterfaceSettings
-    );
-
-
-    /*
-    ========================================
-    SAVE SETTINGS
-    ========================================
-    */
-
-    function saveSettings() {
-
-        const settings = {
-
-            scanType:
-                scanType.value,
-
-            timeout:
-                timeout.value,
-
-            animations:
-                animations.checked,
-
-            glow:
-                glow.checked,
-
-            compact:
-                compact.checked,
-
-            aiReport:
-                aiReport.checked,
-
-            scanReport:
-                scanReport.checked
-
-        };
-
-
-        localStorage.setItem(
-            "quantumShieldSettings",
-            JSON.stringify(settings)
-        );
-
-
-        applyInterfaceSettings();
-
-        showNotification(
-            "Your Quantum Shield preferences have been saved."
-        );
-
-    }
-
-
-    /*
-    ========================================
-    LOAD SETTINGS
-    ========================================
-    */
-
-    function loadSettings() {
-
-        const saved =
-            localStorage.getItem(
-                "quantumShieldSettings"
-            );
-
-
-        if (!saved) {
-
-            updatePreview();
-            applyInterfaceSettings();
-
-            return;
-
-        }
-
-
-        try {
-
-            const settings =
-                JSON.parse(saved);
-
-
-            if (settings.scanType) {
-
-                scanType.value =
-                    settings.scanType;
-
-            }
-
-
-            if (settings.timeout) {
-
-                timeout.value =
-                    settings.timeout;
-
-            }
-
-
-            if (
-                typeof settings.animations
-                === "boolean"
-            ) {
-
-                animations.checked =
-                    settings.animations;
-
-            }
-
-
-            if (
-                typeof settings.glow
-                === "boolean"
-            ) {
-
-                glow.checked =
-                    settings.glow;
-
-            }
-
-
-            if (
-                typeof settings.compact
-                === "boolean"
-            ) {
-
-                compact.checked =
-                    settings.compact;
-
-            }
-
-
-            if (
-                typeof settings.aiReport
-                === "boolean"
-            ) {
-
-                aiReport.checked =
-                    settings.aiReport;
-
-            }
-
-
-            if (
-                typeof settings.scanReport
-                === "boolean"
-            ) {
-
-                scanReport.checked =
-                    settings.scanReport;
-
-            }
-
-        } catch (error) {
-
-            console.log(
-                "Settings could not be loaded."
-            );
-
-        }
-
-
-        updatePreview();
-        applyInterfaceSettings();
-
-    }
-
-
-    /*
-    ========================================
-    RESET
-    ========================================
-    */
-
-    function resetSettings() {
-
-        localStorage.removeItem(
-            "quantumShieldSettings"
-        );
-
-
-        scanType.value =
-            "quick";
-
-        timeout.value =
-            "60";
-
-        animations.checked =
-            true;
-
-        glow.checked =
-            true;
-
-        compact.checked =
-            false;
-
-        aiReport.checked =
-            true;
-
-        scanReport.checked =
-            true;
-
-
-        updatePreview();
-        applyInterfaceSettings();
-
-
-        showNotification(
-            "Settings restored to default values."
-        );
-
-    }
-
-
-    /*
-    ========================================
-    NOTIFICATION
-    ========================================
-    */
-
-    function showNotification(message) {
-
-        const notification =
-            document.getElementById(
-                "notification"
-            );
-
-        const text =
-            document.getElementById(
-                "notificationText"
-            );
-
-
-        text.textContent =
-            message;
-
-
-        notification.classList.add(
-            "show"
-        );
-
-
-        setTimeout(() => {
-
-            notification.classList.remove(
-                "show"
-            );
-
-        }, 3000);
-
-    }
-
-
-    /*
-    ========================================
-    START
-    ========================================
-    */
-
-    loadSettings();
-
-</script>
-
+        // Load preferences on startup
+        window.onload = loadSettings;
+    </script>
+    <script src="{{ url_for('static', filename='js/language.js') }}"></script>
 </body>
-
 </html>

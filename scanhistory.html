@@ -992,678 +992,147 @@
 
 
 <script>
+let scanHistory = [];
 
+async function loadHistory() {
+    const table = document.getElementById("historyTable");
+    table.innerHTML = '<tr><td colspan="7" class="loading">Loading scan history...</td></tr>';
 
+    try {
+        const response = await fetch("/api/history");
+        if (!response.ok) throw new Error("Unable to load history");
 
+        const data = await response.json();
+        scanHistory = Array.isArray(data) ? data : (data.history || []);
 
-    /* =========================
-       HISTORY DATA
-    ========================= */
+        updateSummary();
 
-    let scanHistory = [];
+        if (!scanHistory.length) {
+            showEmpty();
+            return;
+        }
 
-
-    /* =========================
-       LOAD HISTORY
-    ========================= */
-
-    async function loadHistory() {
-
-
-        const table =
-            document.getElementById(
-                "historyTable"
-            );
-
-
+        table.innerHTML = scanHistory.map((scan, i) => createRow(scan, i)).join("");
+    } catch (error) {
+        console.error(error);
         table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="7"
-                    class="loading"
-                >
-
-                    Loading scan history...
-
-                </td>
-
-            </tr>
-
-        `;
-
-
-        try {
-
-
-            const response =
-                await fetch(
-                    "/api/history"
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to load history"
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            /*
-             * Supports either:
-             *
-             * [...]
-             *
-             * or:
-             *
-             * {history: [...]}
-             */
-
-            scanHistory =
-                Array.isArray(data)
-                    ? data
-                    : (
-                        data.history || []
-                    );
-
-
-            updateSummary();
-
-
-            if (
-                scanHistory.length === 0
-            ) {
-
-                showEmpty();
-
-                return;
-
-            }
-
-
-            table.innerHTML =
-                scanHistory
-                    .map(
-                        (scan, index) =>
-                            createRow(
-                                scan,
-                                index
-                            )
-                    )
-                    .join("");
-
-
-        }
-
-        catch (error) {
-
-
-            console.error(
-                error
-            );
-
-
-            table.innerHTML = `
-
-                <tr>
-
-                    <td
-                        colspan="7"
-                    >
-
-                        <div class="empty">
-
-                            <div class="empty-icon">
-                                ⚠️
-                            </div>
-
-                            <h3>
-                                Unable to Load History
-                            </h3>
-
-                            <p>
-                                Please make sure
-                                the Flask server
-                                is running.
-                            </p>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-
+            <tr><td colspan="7">
+                <div class="empty">
+                    <div class="empty-icon">⚠️</div>
+                    <h3>Unable to Load History</h3>
+                    <p>Please make sure the Flask server is running.</p>
+                </div>
+            </td></tr>`;
     }
-
-
-    /* =========================
-       CREATE ROW
-    ========================= */
-
-    function createRow(
-        scan,
-        index
-    ) {
-
-
-        const target =
-            scan.target ||
-            scan.ip ||
-            scan.hostname ||
-            "Unknown";
-
-
-        const type =
-            scan.scan_type ||
-            scan.type ||
-            "Network Scan";
-
-
-        const date =
-            scan.timestamp ||
-            scan.date ||
-            scan.created_at ||
-            "Unknown";
-
-
-       const risk =
-    String(
-        scan.risk ||
-        scan.risk_level ||
-        scan.threat_level ||
-        "Low"
-    );
-
-        const status =
-            scan.status ||
-            "Completed";
-
-
-        const riskStyle =
-            getRiskStyle(
-                risk
-            );
-
-
-        const statusStyle =
-            getStatusStyle(
-                status
-            );
-
-
-        return `
-
-            <tr>
-
-                <td>
-                    ${index + 1}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        target
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        type
-                    )}
-                </td>
-
-                <td>
-                    ${escapeHTML(
-                        formatDate(date)
-                    )}
-                </td>
-
-                <td>
-
-                    <span
-                        class="status ${statusStyle}"
-                    >
-
-                        <span class="dot"></span>
-
-                        ${escapeHTML(
-                            status
-                        )}
-
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <span
-                        class="status ${riskStyle}"
-                    >
-
-                        <span class="dot"></span>
-
-                        ${escapeHTML(
-                            risk
-                        )}
-
-                    </span>
-
-                </td>
-
-                <td>
-
-                    <button
-                        class="view-btn"
-                        onclick="viewScan(${index})"
-                    >
-
-                        View
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    }
-
-
-    /* =========================
-       SUMMARY
-    ========================= */
-
-    function updateSummary() {
-
-
-        document.getElementById(
-            "totalScans"
-        ).textContent =
-            scanHistory.length;
-
-
-        const successful =
-            scanHistory.filter(
-                scan => {
-
-                    const status =
-                        String(
-                            scan.status ||
-                            "Completed"
-                        ).toLowerCase();
-
-
-                    return (
-                        status ===
-                        "completed"
-                        ||
-                        status ===
-                        "success"
-                        ||
-                        status ===
-                        "successful"
-                    );
-
-                }
-            );
-
-
-        document.getElementById(
-            "successfulScans"
-        ).textContent =
-            successful.length;
-
-
-        const highRisk =
-            scanHistory.filter(
-                scan => {
-
-                   const risk =
-                 String(
-                scan.risk ||
-                scan.risk_level ||
-                scan.threat_level ||
-                 ""
-                ).toLowerCase();
-
-
-                    return (
-                        risk.includes(
-                            "high"
-                        )
-                        ||
-                        risk.includes(
-                            "critical"
-                        )
-                    );
-
-                }
-            );
-
-
-        document.getElementById(
-            "highRiskScans"
-        ).textContent =
-            highRisk.length;
-
-    }
-
-
-    /* =========================
-       RISK STYLE
-    ========================= */
-
-    function getRiskStyle(
-        risk
-    ) {
-
-
-        const value =
-            risk.toLowerCase();
-
-
-        if (
-            value.includes(
-                "critical"
-            )
-        ) {
-
-            return "danger";
-
-        }
-
-
-        if (
-            value.includes(
-                "high"
-            )
-        ) {
-
-            return "danger";
-
-        }
-
-
-        if (
-            value.includes(
-                "medium"
-            )
-        ) {
-
-            return "warning";
-
-        }
-
-
-        return "success";
-
-    }
-
-
-    /* =========================
-       STATUS STYLE
-    ========================= */
-
-    function getStatusStyle(
-        status
-    ) {
-
-
-        const value =
-            status.toLowerCase();
-
-
-        if (
-            value.includes(
-                "fail"
-            )
-            ||
-            value.includes(
-                "error"
-            )
-        ) {
-
-            return "danger";
-
-        }
-
-
-        if (
-            value.includes(
-                "running"
-            )
-        ) {
-
-            return "warning";
-
-        }
-
-
-        return "success";
-
-    }
-
-
-    /* =========================
-       EMPTY
-    ========================= */
-
-    function showEmpty() {
-
-
-        document.getElementById(
-            "historyTable"
-        ).innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="7"
-                >
-
-                    <div class="empty">
-
-                        <div class="empty-icon">
-                            🕘
-                        </div>
-
-                        <h3>
-                            No Scan History
-                        </h3>
-
-                        <p>
-                            Your completed scans
-                            will appear here.
-                        </p>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    }
-
-
-    /* =========================
-       VIEW SCAN
-    ========================= */
-
-   function viewScan(index) {
-
+}
+
+function createRow(scan, index) {
+    const target = scan.target || scan.ip || scan.hostname || "Unknown";
+    const type = scan.scan_type || scan.type || "Network Scan";
+    const date = scan.timestamp || scan.date || scan.created_at || "Unknown";
+    const risk = String(scan.risk || scan.risk_level || scan.threat_level || "Low");
+    const status = scan.status || "Completed";
+
+    return `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${safe(target)}</td>
+            <td>${safe(type)}</td>
+            <td>${safe(formatDate(date))}</td>
+            <td><span class="status ${statusStyle(status)}"><span class="dot"></span>${safe(status)}</span></td>
+            <td><span class="status ${riskStyle(risk)}"><span class="dot"></span>${safe(risk)}</span></td>
+            <td><button class="view-btn" onclick="viewScan(${index})">View</button></td>
+        </tr>`;
+}
+
+function updateSummary() {
+    document.getElementById("totalScans").textContent = scanHistory.length;
+
+    const successful = scanHistory.filter(s =>
+        ["completed", "success", "successful"].includes(
+            String(s.status || "Completed").toLowerCase()
+        )
+    ).length;
+
+    const highRisk = scanHistory.filter(s =>
+        ["high", "critical"].some(x =>
+            String(s.risk || s.risk_level || s.threat_level || "").toLowerCase().includes(x)
+        )
+    ).length;
+
+    document.getElementById("successfulScans").textContent = successful;
+    document.getElementById("highRiskScans").textContent = highRisk;
+}
+
+function riskStyle(risk) {
+    const r = risk.toLowerCase();
+    if (r.includes("high") || r.includes("critical")) return "danger";
+    if (r.includes("medium")) return "warning";
+    return "success";
+}
+
+function statusStyle(status) {
+    const s = status.toLowerCase();
+    if (s.includes("fail") || s.includes("error")) return "danger";
+    if (s.includes("running")) return "warning";
+    return "success";
+}
+
+function showEmpty() {
+    document.getElementById("historyTable").innerHTML = `
+        <tr><td colspan="7">
+            <div class="empty">
+                <div class="empty-icon">🕘</div>
+                <h3>No Scan History</h3>
+                <p>Your completed scans will appear here.</p>
+            </div>
+        </td></tr>`;
+}
+
+function viewScan(index) {
     const scan = scanHistory[index];
+    if (!scan) return;
 
-    if (!scan) {
-        return;
-    }
-
-    const target =
-        scan.target ||
-        scan.ip ||
-        scan.hostname ||
-        "Unknown";
-
-    const scanType =
-        scan.scan_type ||
-        scan.type ||
-        "Network Scan";
-
-    const date =
-        scan.timestamp ||
-        scan.date ||
-        scan.created_at ||
-        "Unknown";
-
-    const status =
-        scan.status ||
-        "Completed";
-
-    const risk =
-    scan.risk ||
-    scan.risk_level ||
-    scan.threat_level ||
-    "Low";
-
-    const ports =
-        scan.open_ports ||
-        scan.ports ||
-        "No port information available";
-
-    const vulnerabilities =
-        scan.vulnerabilities ||
-        "No vulnerability information available";
-
+    const target = scan.target || scan.ip || scan.hostname || "Unknown";
+    const type = scan.scan_type || scan.type || "Network Scan";
+    const date = scan.timestamp || scan.date || scan.created_at || "Unknown";
+    const status = scan.status || "Completed";
+    const risk = scan.risk || scan.risk_level || scan.threat_level || "Low";
+    const ports = scan.open_ports || scan.ports || "No port information available";
+    const vulnerabilities = scan.vulnerabilities || "No vulnerability information available";
 
     document.getElementById("detailTarget").textContent = target;
-
-    document.getElementById("detailType").textContent = scanType;
-
-    document.getElementById("detailDate").textContent =
-        formatDate(date);
-
+    document.getElementById("detailType").textContent = type;
+    document.getElementById("detailDate").textContent = formatDate(date);
     document.getElementById("detailStatus").textContent = status;
-
     document.getElementById("detailRisk").textContent = risk;
-
-    document.getElementById("detailPorts").textContent =
-        typeof ports === "object"
-            ? JSON.stringify(ports, null, 2)
-            : ports;
-
-    document.getElementById("detailVulnerabilities").textContent =
-        typeof vulnerabilities === "object"
-            ? JSON.stringify(vulnerabilities, null, 2)
-            : vulnerabilities;
-
+    document.getElementById("detailPorts").textContent = formatData(ports);
+    document.getElementById("detailVulnerabilities").textContent = formatData(vulnerabilities);
 
     document.getElementById("detailsModal").classList.add("show");
 }
 
 function closeDetails() {
-
-    document
-        .getElementById("detailsModal")
-        .classList.remove("show");
-
+    document.getElementById("detailsModal").classList.remove("show");
 }
 
+function formatDate(value) {
+    if (!value) return "Unknown";
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? String(value) : date.toLocaleString();
+}
 
-    /* =========================
-       DATE
-    ========================= */
+function formatData(value) {
+    return typeof value === "object" ? JSON.stringify(value, null, 2) : value;
+}
 
-    function formatDate(
-        value
-    ) {
+function safe(value) {
+    return String(value).replace(/[&<>"']/g, c => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+    }[c]));
+}
 
-
-        if (!value) {
-
-            return "Unknown";
-
-        }
-
-
-        const date =
-            new Date(value);
-
-
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return String(
-                value
-            );
-
-        }
-
-
-        return date.toLocaleString();
-
-    }
-
-
-    /* =========================
-       HTML SAFETY
-    ========================= */
-
-    function escapeHTML(
-        value
-    ) {
-
-
-        return String(value)
-
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-
-            .replace(
-                /</g,
-                "&lt;"
-            )
-
-            .replace(
-                />/g,
-                "&gt;"
-            )
-
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-    /* =========================
-       START
-    ========================= */
-    loadHistory();
-
-
+loadHistory();
 </script>
 
 

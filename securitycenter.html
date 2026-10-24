@@ -1,0 +1,719 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Shield | Security Center</title>
+
+<style>
+:root {
+    color-scheme: dark;
+    --bg: #020617;
+    --panel: #0f172a;
+    --line: #263449;
+    --blue: #38bdf8;
+    --muted: #94a3b8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: #e5eefb;
+    font: 14px/1.5 Arial, sans-serif;
+    background-image:
+        linear-gradient(#ffffff06 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff06 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.wrap {
+    max-width: 1400px;
+    margin: auto;
+    padding: 26px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.top h1 { color: var(--blue); margin: 0; }
+
+.links a {
+    color: var(--blue);
+    margin-right: 12px;
+}
+
+.panel {
+    background: #0f172aef;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 18px;
+    overflow: auto;
+}
+
+.panel h2 {
+    margin: 0 0 10px;
+    color: #d7efff;
+    font-size: 19px;
+}
+
+.muted { color: var(--muted); }
+
+input, select, textarea, button {
+    background: #07111f;
+    color: #e5eefb;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px;
+    font: inherit;
+}
+
+input, textarea { max-width: 100%; }
+
+button {
+    cursor: pointer;
+    background: #075985;
+    border-color: #0284c7;
+}
+
+button:hover { filter: brightness(1.2); }
+
+.formrow {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+.formrow input { flex: 1; min-width: 180px; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+
+th { color: var(--blue); }
+
+.msg {
+    margin-top: 10px;
+    color: #bae6fd;
+    white-space: pre-wrap;
+}
+
+.small { font-size: 12px; }
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 16px;
+}
+.chart-box { min-width: 0; }
+.chart-wrap { position: relative; height: 260px; }
+.chart-wrap canvas { width: 100%; height: 100%; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; color: #cbd5e1; font-size: 12px; }
+.legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+.cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 800px) {
+    .cols, .chart-grid { grid-template-columns: 1fr; }
+    .wrap { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+<main class="wrap">
+
+<div class="top">
+    <div>
+        <h1>QUANTUM SHIELD / SECURITY CENTER</h1>
+        <p class="muted">
+            Remediation tracking, scan comparison,
+            approved targets and audit history.
+        </p>
+    </div>
+
+    <div class="links">
+        <a href="/">Scan Home</a>
+        <a href="/history">Scan History</a>
+        <a href="/download_report">Latest PDF</a>
+    </div>
+</div>
+
+<!-- 1. Authorized target management -->
+<div class="panel">
+    <h2>1. Authorized Target Allowlist</h2>
+    <p class="muted">
+        Add only systems you own or have permission to test.
+        The backend must enforce this allowlist before scanning.
+    </p>
+
+    <div class="formrow">
+        <input id="allowTarget"
+               placeholder="example.com or 192.0.2.10">
+        <input id="allowNotes"
+               placeholder="Authorization / owner note">
+        <button onclick="addTarget()">Add Approved Target</button>
+    </div>
+
+    <div id="allowMsg" class="msg"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Target</th>
+            <th>Notes</th>
+            <th>Added</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="allowRows"></tbody>
+    </table>
+</div>
+
+<!-- 2. Remediation tracking -->
+<div class="panel">
+    <h2>2. Vulnerability Remediation Tracker</h2>
+    <p class="muted">
+        Severity and evidence depend on the scan output.
+        A manual Fixed status is not proof that the issue is resolved.
+    </p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Finding / Evidence</th>
+            <th>Scan</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Due date</th>
+            <th>Verification result</th>
+            <th>Save</th>
+        </tr>
+        </thead>
+        <tbody id="remRows"></tbody>
+    </table>
+
+    <div id="remMsg" class="msg"></div>
+</div>
+
+<!-- Security charts use saved scan and remediation data -->
+<div class="chart-grid">
+    <section class="panel chart-box">
+        <h2>3. Vulnerability Severity Distribution</h2>
+        <p class="muted">Severity counts are based on saved remediation findings.</p>
+        <div class="chart-wrap"><canvas id="severityChart" aria-label="Vulnerability severity doughnut chart"></canvas></div>
+        <div id="severityLegend" class="chart-legend"></div>
+        <div id="severitySummary" class="msg">Loading severity data…</div>
+    </section>
+    <section class="panel chart-box">
+        <h2>4. Security Score Trend</h2>
+        <p class="muted">Scores from saved scans, shown from oldest to newest. Compare similar scan types and scopes.</p>
+        <div class="chart-wrap"><canvas id="scoreChart" aria-label="Security score trend line chart"></canvas></div>
+        <div id="scoreSummary" class="msg">Loading scan history…</div>
+    </section>
+</div>
+
+<div class="cols">
+
+<!-- 5. Compare scans -->
+<section class="panel">
+    <h2>3. Compare Two Scans</h2>
+    <p class="muted">
+        Select two saved scans of the same target.
+        A finding missing from the newer scan is not
+        automatically confirmed as fixed.
+    </p>
+
+    <div class="formrow">
+        <select id="oldScan"></select>
+        <select id="newScan"></select>
+        <button onclick="compareScans()">Compare</button>
+    </div>
+
+    <div id="compareResult" class="msg"></div>
+</section>
+
+<!-- 4. Audit log -->
+<section class="panel">
+    <h2>4. Audit Log</h2>
+    <p class="muted">
+        Recent allowlist changes, scan events and remediation updates.
+    </p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>User</th>
+            <th>Action</th>
+            <th>Target</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody id="auditRows"></tbody>
+    </table>
+</section>
+
+</div>
+
+<!-- 5. Evidence-based AI assistant -->
+<div class="panel">
+    <h2>5. AI Assistant — Scan Evidence</h2>
+    <p class="muted">
+        Answers should use saved scan evidence and distinguish
+        possible risks from confirmed vulnerabilities.
+    </p>
+
+    <div class="formrow">
+        <input id="aiQuery"
+               style="flex:1"
+               placeholder="What findings need remediation?"
+               onkeydown="if(event.key==='Enter') askAI()">
+        <button onclick="askAI()">Ask about scan</button>
+    </div>
+
+    <div id="aiResult" class="msg"></div>
+</div>
+
+</main>
+
+<script>
+async function api(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch (error) {
+        // The server did not return JSON.
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.error || `Request failed (${response.status})`
+        );
+    }
+
+    return data;
+}
+
+function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[character]));
+}
+
+// Load approved targets.
+async function loadAllow() {
+    try {
+        const rows = await api("/api/allowlist");
+
+        document.getElementById("allowRows").innerHTML =
+            rows.map(item => `
+                <tr>
+                    <td>${esc(item.target)}</td>
+                    <td>${esc(item.notes)}</td>
+                    <td>${esc(item.created_at)}</td>
+                    <td>
+                        <button onclick="removeTarget(${item.id})">
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+            `).join("") ||
+            '<tr><td colspan="4">No approved targets yet.</td></tr>';
+
+    } catch (error) {
+        document.getElementById("allowMsg").textContent = error.message;
+    }
+}
+
+async function addTarget() {
+    const target = document.getElementById("allowTarget").value.trim();
+    const notes = document.getElementById("allowNotes").value.trim();
+
+    if (!target) {
+        document.getElementById("allowMsg").textContent =
+            "Enter a target first.";
+        return;
+    }
+
+    try {
+        await api("/api/allowlist", {
+            method: "POST",
+            body: JSON.stringify({ target, notes })
+        });
+
+        document.getElementById("allowMsg").textContent =
+            "Target added to the allowlist.";
+
+        document.getElementById("allowTarget").value = "";
+        document.getElementById("allowNotes").value = "";
+
+        await loadAllow();
+        await loadAudit();
+
+    } catch (error) {
+        document.getElementById("allowMsg").textContent = error.message;
+    }
+}
+
+async function removeTarget(id) {
+    if (!confirm("Remove this target from the allowlist?")) return;
+
+    try {
+        await api("/api/allowlist", {
+            method: "DELETE",
+            body: JSON.stringify({ id })
+        });
+
+        await loadAllow();
+        await loadAudit();
+
+    } catch (error) {
+        document.getElementById("allowMsg").textContent = error.message;
+    }
+}
+
+// Load remediation items.
+async function loadRem() {
+    try {
+        const rows = await api("/api/remediations");
+
+        document.getElementById("remRows").innerHTML =
+            rows.map(item => `
+                <tr>
+                    <td>
+                        <b>${esc(item.title)}</b><br>
+                        <span class="muted">
+                            ${esc(item.target)} · ${esc(item.evidence)}
+                        </span><br>
+                        <span class="small">
+                            Suggested: ${esc(item.recommendation)}
+                        </span>
+                    </td>
+
+                    <td>#${item.scan_id}</td>
+                    <td>${esc(item.severity)}</td>
+
+                    <td>
+                        <select id="st${item.id}">
+                            ${["Open", "In Progress", "Fixed",
+                               "Accepted Risk"].map(status => `
+                                <option ${status === item.status
+                                    ? "selected" : ""}>
+                                    ${status}
+                                </option>
+                            `).join("")}
+                        </select>
+                    </td>
+
+                    <td>
+                        <select id="pr${item.id}">
+                            ${["Low", "Medium", "High", "Critical"]
+                                .map(priority => `
+                                <option ${priority === item.priority
+                                    ? "selected" : ""}>
+                                    ${priority}
+                                </option>
+                            `).join("")}
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="date"
+                               id="du${item.id}"
+                               value="${esc(item.due_date)}">
+                    </td>
+
+                    <td>
+                        <input id="vr${item.id}"
+                               value="${esc(item.verification_result)}"
+                               placeholder="Verification notes">
+                    </td>
+
+                    <td>
+                        <button onclick="saveRem(${item.id})">Save</button>
+                    </td>
+                </tr>
+            `).join("") ||
+            '<tr><td colspan="8">No remediation items yet. Run an authorized scan first.</td></tr>';
+
+    } catch (error) {
+        document.getElementById("remMsg").textContent = error.message;
+    }
+}
+
+async function saveRem(id) {
+    try {
+        await api("/api/remediations", {
+            method: "PATCH",
+            body: JSON.stringify({
+                id,
+                status: document.getElementById("st" + id).value,
+                priority: document.getElementById("pr" + id).value,
+                due_date: document.getElementById("du" + id).value,
+                verification_result:
+                    document.getElementById("vr" + id).value
+            })
+        });
+
+        document.getElementById("remMsg").textContent =
+            "Remediation item saved.";
+
+        await loadAudit();
+
+    } catch (error) {
+        document.getElementById("remMsg").textContent = error.message;
+    }
+}
+
+// Load saved scan history into both selectors.
+async function loadScans() {
+    try {
+        const rows = await api("/api/history");
+
+        const options = rows.map(scan => `
+            <option value="${scan.id}">
+                #${scan.id} · ${esc(scan.target)} ·
+                ${esc(scan.timestamp)} · ${esc(scan.scan_type)}
+            </option>
+        `).join("");
+
+        document.getElementById("oldScan").innerHTML = options;
+        document.getElementById("newScan").innerHTML = options;
+
+        if (rows.length > 1) {
+            document.getElementById("oldScan").selectedIndex = 1;
+            document.getElementById("newScan").selectedIndex = 0;
+        }
+
+    } catch (error) {
+        document.getElementById("compareResult").textContent = error.message;
+    }
+}
+
+async function compareScans() {
+    const oldId = document.getElementById("oldScan").value;
+    const newId = document.getElementById("newScan").value;
+
+    if (!oldId || !newId) {
+        document.getElementById("compareResult").textContent =
+            "You need at least one saved scan to compare.";
+        return;
+    }
+
+    try {
+        const data = await api(
+            `/api/compare?old_id=${encodeURIComponent(oldId)}` +
+            `&new_id=${encodeURIComponent(newId)}`
+        );
+
+        const newFindings = data.new_findings
+            .map(item => JSON.stringify(item))
+            .join("\n") || "None";
+
+        const missingFindings = data.no_longer_reported
+            .map(item => JSON.stringify(item))
+            .join("\n") || "None";
+
+        document.getElementById("compareResult").textContent =
+`Target: ${data.target}
+
+Older scan #${data.old_scan.id}: ${data.old_scan.timestamp}
+Records: ${data.old_scan.count}
+Score: ${data.old_scan.threat_score} (${data.old_scan.threat_level})
+
+Newer scan #${data.new_scan.id}: ${data.new_scan.timestamp}
+Records: ${data.new_scan.count}
+Score: ${data.new_scan.threat_score} (${data.new_scan.threat_level})
+
+Score change: ${data.score_change > 0 ? "+" : ""}${data.score_change}
+New records: ${data.new_findings.length}
+No longer reported: ${data.no_longer_reported.length}
+
+${data.note}
+
+New records:
+${newFindings}
+
+No longer reported:
+${missingFindings}`;
+
+    } catch (error) {
+        document.getElementById("compareResult").textContent = error.message;
+    }
+}
+
+// Load audit history.
+async function loadAudit() {
+    try {
+        const rows = await api("/api/audit");
+
+        document.getElementById("auditRows").innerHTML =
+            rows.map(item => `
+                <tr>
+                    <td>${esc(item.created_at)}</td>
+                    <td>${esc(item.username)}</td>
+                    <td>${esc(item.action)}</td>
+                    <td>${esc(item.target)}</td>
+                    <td>${esc(item.details)}</td>
+                </tr>
+            `).join("") ||
+            '<tr><td colspan="5">No audit events yet.</td></tr>';
+
+    } catch (error) {
+        document.getElementById("auditRows").innerHTML =
+            `<tr><td colspan="5">${esc(error.message)}</td></tr>`;
+    }
+}
+
+// Ask the Flask AI endpoint about scan evidence.
+async function askAI() {
+    const query = document.getElementById("aiQuery").value.trim();
+
+    if (!query) return;
+
+    document.getElementById("aiResult").textContent =
+        "Analyzing saved scan evidence…";
+
+    try {
+        const data = await api("/api/chat", {
+            method: "POST",
+            body: JSON.stringify({ query })
+        });
+
+        document.getElementById("aiResult").textContent =
+            data.reply || data.error || "No response returned.";
+
+    } catch (error) {
+        document.getElementById("aiResult").textContent = error.message;
+    }
+}
+
+// Draw charts with native canvas so no chart library or external request is required.
+const chartColors = { Critical: "#fb7185", High: "#f97316", Medium: "#facc15", Low: "#34d399", Unknown: "#94a3b8" };
+function prepareCanvas(id) {
+    const canvas = document.getElementById(id);
+    const rect = canvas.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(rect.width * ratio));
+    canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    return { canvas, ctx, width: rect.width, height: rect.height };
+}
+function drawSeverityChart(rows) {
+    const levels = ["Critical", "High", "Medium", "Low", "Unknown"];
+    const counts = Object.fromEntries(levels.map(level => [level, 0]));
+    rows.forEach(item => {
+        const raw = String(item.severity || "Unknown").toLowerCase();
+        const level = levels.find(x => x.toLowerCase() === raw) || "Unknown";
+        counts[level]++;
+    });
+    const total = levels.reduce((sum, level) => sum + counts[level], 0);
+    const {ctx, width, height} = prepareCanvas("severityChart");
+    ctx.clearRect(0, 0, width, height);
+    const cx = width / 2, cy = height / 2, radius = Math.min(width * 0.29, height * 0.38);
+    if (!total) {
+        ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.strokeStyle = "#263449"; ctx.lineWidth = 24; ctx.stroke();
+        ctx.fillStyle = "#94a3b8"; ctx.font = "14px Arial"; ctx.textAlign = "center"; ctx.fillText("No findings yet", cx, cy + 5);
+    } else {
+        let start = -Math.PI / 2;
+        levels.forEach(level => {
+            if (!counts[level]) return;
+            const end = start + counts[level] / total * Math.PI * 2;
+            ctx.beginPath(); ctx.arc(cx, cy, radius, start, end); ctx.strokeStyle = chartColors[level]; ctx.lineWidth = 24; ctx.lineCap = "butt"; ctx.stroke(); start = end;
+        });
+        ctx.fillStyle = "#e5eefb"; ctx.font = "bold 27px Arial"; ctx.textAlign = "center"; ctx.fillText(String(total), cx, cy + 1);
+        ctx.fillStyle = "#94a3b8"; ctx.font = "12px Arial"; ctx.fillText("findings", cx, cy + 20);
+    }
+    document.getElementById("severityLegend").innerHTML = levels.map(level => `<span class="legend-item"><span class="legend-dot" style="background:${chartColors[level]}"></span>${level}: ${counts[level]}</span>`).join("");
+    document.getElementById("severitySummary").textContent = total ? `${total} saved remediation item(s) counted.` : "No remediation items yet. Run an authorized scan to populate this chart.";
+}
+function drawScoreChart(scans) {
+    const data = [...scans].reverse().filter(scan => Number.isFinite(Number(scan.threat_score)) && scan.threat_score !== null && scan.threat_score !== "");
+    const {ctx, width, height} = prepareCanvas("scoreChart");
+    ctx.clearRect(0, 0, width, height);
+    const pad = {left: 42, right: 14, top: 18, bottom: 42};
+    const plotW = Math.max(1, width - pad.left - pad.right), plotH = Math.max(1, height - pad.top - pad.bottom);
+    [0,25,50,75,100].forEach(value => {
+        const y = pad.top + plotH * (1 - value / 100);
+        ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(width - pad.right, y); ctx.strokeStyle = "#263449"; ctx.lineWidth = 1; ctx.stroke();
+        ctx.fillStyle = "#94a3b8"; ctx.font = "11px Arial"; ctx.textAlign = "right"; ctx.fillText(String(value), pad.left - 8, y + 4);
+    });
+    if (!data.length) {
+        ctx.fillStyle = "#94a3b8"; ctx.font = "14px Arial"; ctx.textAlign = "center"; ctx.fillText("No saved score data", width / 2, height / 2);
+        document.getElementById("scoreSummary").textContent = "Save scans with a threat score to see the trend.";
+        return;
+    }
+    const maxScore = Math.max(100, ...data.map(x => Number(x.threat_score)));
+    const xAt = i => pad.left + (data.length === 1 ? plotW / 2 : i * plotW / (data.length - 1));
+    const yAt = item => pad.top + plotH * (1 - Math.max(0, Number(item.threat_score)) / maxScore);
+    ctx.beginPath();
+    data.forEach((item, i) => i ? ctx.lineTo(xAt(i), yAt(item)) : ctx.moveTo(xAt(i), yAt(item)));
+    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5; ctx.stroke();
+    data.forEach((item, i) => {
+        ctx.beginPath(); ctx.arc(xAt(i), yAt(item), 4, 0, Math.PI * 2); ctx.fillStyle = "#38bdf8"; ctx.fill();
+        if (data.length <= 8 || i === 0 || i === data.length - 1) {
+            ctx.fillStyle = "#cbd5e1"; ctx.font = "11px Arial"; ctx.textAlign = "center"; ctx.fillText("#" + item.id, xAt(i), height - 18);
+        }
+    });
+    const latest = data[data.length - 1];
+    document.getElementById("scoreSummary").textContent = `${data.length} saved scan(s) plotted. Latest: scan #${latest.id}, score ${latest.threat_score} (${latest.threat_level || "level not provided"}).`;
+}
+async function refreshCharts() {
+    try {
+        const [remediations, scans] = await Promise.all([api("/api/remediations"), api("/api/history")]);
+        drawSeverityChart(remediations);
+        drawScoreChart(scans);
+    } catch (error) {
+        document.getElementById("severitySummary").textContent = error.message;
+        document.getElementById("scoreSummary").textContent = error.message;
+    }
+}
+window.addEventListener("resize", () => refreshCharts());
+
+// Load the page data.
+loadAllow();
+loadRem();
+loadScans();
+loadAudit();
+refreshCharts();
+</script>
+</body>
+</html>
