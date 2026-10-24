@@ -55,18 +55,23 @@ Computer Science (Cybersecurity), Universiti Tenaga Nasional (UNITEN)
 
 ## Application Screenshots
 
+## Application Screenshots
+
+### Home Page
+![Quantum Shield Home Page](screenshots/home%20page.jpg)
+
 ### Login Page
-![Quantum Shield Login](screenshots/login.image.png)
+![Quantum Shield Login](screenshots/login.image.jpg)
 
 ### Two-Factor Authentication
-![Two-Factor Authentication](screenshots/two factor authentication.png)
+![Two-Factor Authentication](screenshots/two%20factor%20authentication.jpg)
 
 ### Dashboard
-![Quantum Shield Dashboard](screenshots/dashboard.png)
+![Quantum Shield Dashboard](screenshots/dashboard.jpg)
 
-### Scanning Progress
-![Scanning Progress](screenshots/scan-progress.png)
+### Loading Page
+![Quantum Shield Loading Page](screenshots/loading%20page.jpg)
 
-### Scan Results
-![Scan Results](screenshots/scan-results.png)
+### AI Chatbox
+![Quantum Shield AI Chatbox](screenshots/ai%20chatbox.jpg)
 
