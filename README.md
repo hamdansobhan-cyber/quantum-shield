@@ -51,3 +51,22 @@ Use this application only on systems and networks you own or have explicit permi
 
 Hamdan Sobhan  
 Computer Science (Cybersecurity), Universiti Tenaga Nasional (UNITEN)
+
+
+## Application Screenshots
+
+### Login Page
+![Quantum Shield Login](screenshots/login.image.png)
+
+### Two-Factor Authentication
+![Two-Factor Authentication](screenshots/two factor authentication.png)
+
+### Dashboard
+![Quantum Shield Dashboard](screenshots/dashboard.png)
+
+### Scanning Progress
+![Scanning Progress](screenshots/scan-progress.png)
+
+### Scan Results
+![Scan Results](screenshots/scan-results.png)
+
